@@ -1,0 +1,3 @@
+[submodule "bitrate-viewer"]
+	path = bitrate-viewer
+	url = git@github.com:InB4DevOps/bitrate-viewer.git

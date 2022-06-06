@@ -98,7 +98,7 @@ for movie_name in movies:
 
     # data.append([movie_name, text_forum])
     print('Generating bitrate graph...')
-    subprocess.check_call(['python', '../_bitrate-viewer/main.py', '-i', movie_name])
+    subprocess.check_call(['python', '../bitrate-viewer/main.py', '-i', movie_name])
 
     with open(f'{movie_name}_TEXT.txt', 'a') as the_file:
         the_file.write(text_forum)
