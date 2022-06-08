@@ -1,0 +1,6 @@
+bencoding
+pandas
+tqdm
+ffmpeg-python
+ffprobe-python
+matplotlib
