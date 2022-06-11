@@ -2,6 +2,9 @@
 
 **makerelease** è un comodo script per velocizzare la pubblicazione di film sul forum MIRCrew! 🚀
 
+> **ATTENZIONE:**
+> Questo repository è pubblicato a scopo informativo e didattico.
+
 Funzionalità:
 
 - Crea il report MediaInfo
@@ -31,7 +34,7 @@ Funzionalità:
 4. Installa le dipendenze
     - `cd automatic-releaser`
     - `pip install -r requirements.txt`
-5. Scarica [FFmpeg](https://github.com/BtbN/FFmpeg-Builds/releases/latest) ed estrai **ffmpeg.exe** e **ffprobe.exe** nella cartella di makerelease
+5. Scarica [FFmpeg](https://github.com/BtbN/FFmpeg-Builds/releases/latest) ed estrai `ffmpeg.exe` e `ffprobe.exe` nella cartella di makerelease
 
 ### Linux
 
@@ -48,20 +51,30 @@ Funzionalità:
 
 ### macOS
 
-- Boh :)
+1. Installa Homebrew
+    - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+2. Installa Python usando Homebrew
+    - `brew install python3`
+3. Installa Git usando Homebrew
+    - `brew install git`
+4. Clona il repository
+    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
+5. Installa le dipendenze
+    - `cd automatic-releaser`
+    - `pip3 install -r requirements.txt`
 
 ## Utilizzo
 
-1. Configura lo script modificando i file nella cartella **config**
-    - **keys.json**
-        - Rinomina il file **keys.example.json** in **keys.json** e inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api)).
-    - **screenshots.txt**
+1. Configura lo script modificando i file nella cartella `config`
+    - `keys.json`
+        - Rinomina il file `keys.example.json` in `keys.json` e inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api)).
+    - `screenshots.txt`
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot.
-    - **template.txt**
-        - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio **$TITLE** verranno sostituite in automatico con i dati del film.
-    - **trackers.txt**
+    - `template.txt`
+        - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film.
+    - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet.
-2. Metti uno o più film che vuoi rellare nella cartella **movies**
+2. Metti uno o più film che vuoi rellare nella cartella `movies`
 3. Esegui `./makerelease.py`
 
 ## Autori
