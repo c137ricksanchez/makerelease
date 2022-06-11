@@ -1,0 +1,52 @@
+[b][size=200]$TITLE ($YEAR) [$SIZE][/size][/b]
+
+[img]$POSTER_URL[/img]
+
+[b]INFORMAZIONI[/b]
+
+IMDB: $IMDB_URL
+Titolo originale: [b]$ORIGINAL_TITLE[/b]
+Paese di produzione: [b]$COUNTRY[/b]
+Genere: [b]$GENRE[/b]
+Anno: [b]$YEAR[/b]
+Durata: [b]$RUNTIME[/b]
+Regia: [b]$DIRECTOR[/b]
+
+[b]CAST[/b]
+
+[list]
+$CAST
+[/list]
+
+
+[b]TRAMA[/b]
+
+$PLOT
+
+[b]TRAILER[/b]
+
+[media]$TRAILER[/media]
+
+[b]SCREENSHOTS[/b]
+
+[spoiler]
+$SCREENSHOTS
+[/spoiler]
+
+
+[b]REPORT[/b]
+
+[spoiler]
+$REPORT
+[/spoiler]
+
+
+[b]BITRATE[/b]
+
+[spoiler]
+[img]$BITRATE_GRAPH[/img]
+[/spoiler]
+
+
+[b]MAGNET[/b]
+[magnet]$MAGNET[/magnet]
