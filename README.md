@@ -1,5 +1,7 @@
 # makerelease
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **makerelease** è un comodo script per velocizzare la pubblicazione di film sul forum MIRCrew! 🚀
 
 > **ATTENZIONE:**
@@ -75,7 +77,9 @@ Funzionalità:
     - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet.
 2. Metti uno o più film che vuoi rellare nella cartella `movies`
-3. Esegui `./makerelease.py`
+3. Esegui `./makerelease.py` con Python
+    - Linux/Windows `python ./makerelease.py`
+    - macOS `python3 ./makerelease.py`
 
 ## Autori
 
