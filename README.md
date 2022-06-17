@@ -32,7 +32,7 @@ Funzionalità:
 2. Installa Git
     - `winget install Git.Git`
 3. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
+    - `git clone --recursive https://github.com/c137ricksanchez/automatic-releaser.git`
 4. Installa le dipendenze
     - `cd automatic-releaser`
     - `pip install -r requirements.txt`
@@ -46,7 +46,7 @@ Funzionalità:
     - Fedora: `dnf install python3 python3-pip git ffmpeg mediainfo`
         - **NOTA**: Per installare FFmpeg devi attivare i repository [RPM Fusion](https://docs.fedoraproject.org/en-US/quick-docs/setup_rpmfusion/)!
 2. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
+    - `git clone --recursive https://github.com/c137ricksanchez/automatic-releaser.git`
 3. Installa le dipendenze
     - `cd automatic-releaser`
     - `pip3 install -r requirements.txt`
@@ -60,7 +60,7 @@ Funzionalità:
 3. Installa Git usando Homebrew
     - `brew install git`
 4. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
+    - `git clone --recursive https://github.com/c137ricksanchez/automatic-releaser.git`
 5. Installa le dipendenze
     - `cd automatic-releaser`
     - `pip3 install -r requirements.txt`
