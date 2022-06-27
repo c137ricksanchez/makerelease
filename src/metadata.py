@@ -7,20 +7,28 @@ from src.api import themoviedb as tmdb
 def search(title: str, year: int) -> str:
     results = tmdb.search_movie(title, year)
 
+    # Alcuni releaser dopo il titolo in italiano mettono anche quello originale
+    # Se la ricerca fallisce, provo a cercare solo il primo
+    if results["total_results"] == 0 and "-" in title:
+        results = tmdb.search_movie(title.split("-")[0], year)
+
     if results["total_results"] == 0:
-        # Alcuni releaser dopo il titolo in italiano mettono anche quello originale
-        # Se la ricerca fallisce, provo a cercare solo il primo
-        if "-" in title:
-            results = tmdb.search_movie(title.split("-")[0], year)
-        else:
-            print("Nessun risultato.")
+        print("\nNessun risultato.")
 
-            id = input(
-                "Inserisci manualmente un ID di IMDb (lascia vuoto per terminare lo script): "
-            )
-            return id if id else exit(0)
+        id = input(
+            "Inserisci manualmente un ID di IMDb (lascia vuoto per terminare lo script): "
+        )
+        return id if id else exit(0)
 
-    print("Ho trovato", results["total_results"], "risultati:\n")
+    if results["total_results"] == 1:
+        print(
+            "Risultato:",
+            results["results"][0]["title"],
+            f"({results['results'][0]['release_date'][:4]})",
+        )
+        return results["results"][0]["id"]
+
+    print("\nHo trovato", results["total_results"], "risultati:\n")
 
     id = 1
     for result in results["results"]:
@@ -28,11 +36,18 @@ def search(title: str, year: int) -> str:
         id += 1
 
     value = check_input(input("\nSeleziona un film [default: 1]: "), id)
+    print("Film selezionato:", results["results"][value - 1]["title"] + "\n")
+
     return results["results"][value - 1]["id"]
 
 
 def get(id: str) -> dict:
-    data = tmdb.get_movie(id)
+    try:
+        data = tmdb.get_movie(id)
+    except Exception:
+        print("L'ID non è valido.")
+        exit(-1)
+
     credits = tmdb.get_movie_credits(id)
     videos = tmdb.get_movie_videos(id)
 
@@ -60,7 +75,7 @@ def get(id: str) -> dict:
             break
 
     return {
-        "imdb_url": f"https://www.imdb.com/title/{id}",
+        "imdb_url": "https://www.imdb.com/title/" + data["imdb_id"],
         "title": data["title"],
         "year": datetime.strptime(data["release_date"], "%Y-%m-%d").year,
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],

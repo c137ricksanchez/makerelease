@@ -1,50 +1,81 @@
+import argparse
 import os
 import re
-import sys
 from pathlib import Path
 
-from src import constants, images, metadata, post, torrent, utils
+import src.bitrateviewer as bv
+from src import constants, images, metadata, post, tag, torrent, utils
 
-sys.path.append(constants.bitrateviewer)
-from bitrateviewer._bitrate_analyzer import analyze_bitrate
-from bitrateviewer._plotter import plot_results
+# Instantiate the parser
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "-c",
+    "--crew",
+    type=str,
+    help="Release crew",
+)
+
+parser.add_argument(
+    "-r",
+    "--rename",
+    default=False,
+    action="store_true",
+    help="Rinomina il file",
+)
+
+args = parser.parse_args()
 
 for movie in utils.get_movies(constants.movies):
     file = Path(movie).name
     filename = Path(movie).stem
+    ext = Path(movie).suffix
 
     print("File:", file)
 
-    title = filename.split("(")[0].strip()
-    year = re.search("\(([0-9]{4})\)", filename).group(1)
+    title, year = utils.parse_title(filename)
+
     filesize = os.path.getsize(movie)
 
-    outputdir = os.path.join(constants.movies, title + "_files")
+    print("\n1. Ricezione dei metadati da TheMovieDB...")
+    movie_id = metadata.search(title, year)
+    data = metadata.get(movie_id)
+
+    outputdir = os.path.join(constants.movies, data["title"] + "_files")
     if os.path.exists(outputdir):
         print("ERRORE: Esiste già una cartella chiamata", outputdir)
         continue
     else:
         os.mkdir(outputdir)
 
-    print("\n1. Generazione del report con MediaInfo...")
+    title = tag.parse(movie, data["title"], data["year"], args.crew)
+
+    if args.rename:
+        old_movie = movie
+
+        filename = re.sub(r'[\\/*?:"<>|]', "", title)
+        movie = os.path.join(constants.movies, filename + ext)
+
+        os.rename(old_movie, movie)
+
+    print("2. Generazione del report con MediaInfo...")
     report = post.generate_report(movie, outputdir)
 
-    print("2. Generazione del file torrent...")
+    print("3. Generazione del file torrent...")
     magnet = torrent.generate(movie, outputdir, filename)
-
-    print("3. Ricezione dei metadati da TheMovieDB...")
-    movie_id = metadata.search(title, year)
-    data = metadata.get(movie_id)
 
     print("4. Estrazione degli screenshot...")
     screenshots = images.extract_screenshots(movie, outputdir)
 
     print("5. Generazione del grafico del bitrate...")
-    results = analyze_bitrate(movie)
-    plot_results(results, filename, os.path.join(outputdir, "bitrate"))
-    os.remove(os.path.join(constants.root, filename + ".xml"))
+    bitrate = bv.BitrateViewer(movie)
+    bitrate.analyze()
 
-    print("6. Caricamento delle immagini su Imgur...")
+    results = bitrate.parse()
+    bitrate.plot(results, outputdir)
+    os.remove(os.path.join(constants.movies, filename + ".xml"))
+
+    print("\n6. Caricamento delle immagini su Imgur...")
     uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
     bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
 
@@ -54,3 +85,6 @@ for movie in utils.get_movies(constants.movies):
     )
 
     print("8. Fine!")
+
+    print("\nIl file è stato rinominato con successo.")
+    print("\nTITOLO\n->", title + "\n")

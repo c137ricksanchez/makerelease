@@ -22,7 +22,10 @@ def extract_screenshots(path: str, outputdir: str) -> dict:
 
 
 def generate_thumbnail(
-    filename: str, outputdir: str, outputfile: str, time: str
+    filename: str,
+    outputdir: str,
+    outputfile: str,
+    time: str,
 ) -> None:
     try:
         (

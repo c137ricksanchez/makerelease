@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 from src import constants
 
@@ -25,3 +26,18 @@ def read_file(file: str) -> str:
 
     with open(file) as f:
         return f.read()
+
+
+def parse_title(filename: str) -> tuple[str, int]:
+    title = filename.replace(".", " ").split("(")[0].strip()
+    year = re.findall("([0-9]{4})", filename)
+
+    if len(year) == 1:
+        year = year[0]
+    elif len(year) == 2:
+        year = year[1]
+        title = title.split(year, 1)[0]
+    else:
+        year = ""
+
+    return title, year

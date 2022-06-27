@@ -9,13 +9,14 @@
 
 Funzionalità:
 
-- Crea il report MediaInfo
+- Ottiene i dati del film da TheMovieDB (titolo, anno, durata, trama, regista, cast, ecc.)
+- Crea il report con MediaInfo
 - Crea il file .torrent
-- Ottiene i metadati da TheMovieDB (titolo, anno, durata, trama, regista, cast, ecc.)
 - Estrae gli screenshot
 - Genera il grafico del bitrate
 - Carica tutte le immagini su Imgur
-- Prepara il testo del post da pubblicare sul forum con tutte le informazioni del film, poster, trailer, report e link magnet!
+- Prepara il testo del post da pubblicare sul forum con tutte le informazioni del film, poster, trailer, report e link magnet
+- Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
 
 ## Requisiti
 
@@ -55,9 +56,9 @@ Funzionalità:
 
 1. Installa Homebrew
     - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-2. Installa Python usando Homebrew
+2. Installa Python
     - `brew install python3`
-3. Installa Git usando Homebrew
+3. Installa Git
     - `brew install git`
 4. Clona il repository
     - `git clone --recursive https://github.com/c137ricksanchez/automatic-releaser.git`
@@ -69,17 +70,23 @@ Funzionalità:
 
 1. Configura lo script modificando i file nella cartella `config`
     - `keys.json`
-        - Rinomina il file `keys.example.json` in `keys.json` e inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api)).
+        - Rinomina il file `keys.example.json` in `keys.json` e inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
     - `screenshots.txt`
-        - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot.
+        - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
-        - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film.
+        - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
     - `trackers.txt`
-        - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet.
+        - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet
 2. Metti uno o più film che vuoi rellare nella cartella `movies`
 3. Esegui `./makerelease.py` con Python
-    - Linux/Windows `python ./makerelease.py`
-    - macOS `python3 ./makerelease.py`
+    - Linux/Windows: `python ./makerelease.py`
+    - macOS: `python3 ./makerelease.py`
+
+### Flag
+
+- `--rename`: Rinomina in automatico il file seguendo il formato consigliato da MIRCrew
+    - Esempio: **Spider-Man - No Way Home (2022) 1080p H265 ITA AC3 5.1 ENG AC3 5.1 Sub Ita Eng**
+- `--crew [nome]`: Inserisce il nome della crew alla fine del titolo/nome del file
 
 ## Autori
 
