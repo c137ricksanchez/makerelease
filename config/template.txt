@@ -37,7 +37,9 @@ $SCREENSHOTS
 [b]REPORT[/b]
 
 [spoiler]
+[code]
 $REPORT
+[/code]
 [/spoiler]
 
 
