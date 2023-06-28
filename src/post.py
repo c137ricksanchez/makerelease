@@ -47,6 +47,7 @@ def generate_text(
 
 def generate_report(path: str, outputdir: str) -> str:
     report = pymediainfo.MediaInfo.parse(path, full=False, output="Text")
+    report = report.rstrip("\n")
     report = report.replace(path, Path(path).name)
 
     with open(os.path.join(outputdir, "report.txt"), "wb") as file:
