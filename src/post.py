@@ -17,6 +17,12 @@ def generate_text(
     magnet: str,
     outputdir: str,
 ) -> None:
+    bitrate_graph = ""
+    if bitrate_img != {}:
+        bitrate_graph = (
+            f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]"
+        )
+
     values: Dict[str, str] = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
@@ -37,7 +43,7 @@ def generate_text(
                 for img in screenshots
             ]
         ),
-        "BITRATE_GRAPH": f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]",
+        "BITRATE_GRAPH": bitrate_graph,
         "REPORT": report,
         "MAGNET": magnet,
     }

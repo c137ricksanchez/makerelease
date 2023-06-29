@@ -14,7 +14,7 @@ Funzionalità:
 - Crea il file .torrent
 - Estrae gli screenshot
 - Genera il grafico del bitrate
-- Carica tutte le immagini su Imgur
+- Carica tutte le immagini su Imgur o ImgBB
 - Prepara il testo del post da pubblicare sul forum con tutte le informazioni del film, poster, trailer, report e link magnet
 - Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
 
@@ -77,6 +77,7 @@ Funzionalità:
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
         - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
+        - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
     - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet
 2. Metti uno o più film che vuoi rellare nella cartella `movies`

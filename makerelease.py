@@ -67,22 +67,32 @@ for movie in utils.get_movies(constants.movies):
     print("4. Estrazione degli screenshot...")
     screenshots = images.extract_screenshots(movie, outputdir)
 
-    print("5. Generazione del grafico del bitrate...")
-    bitrate = bv.BitrateViewer(movie)
-    bitrate.analyze()
+    # Salta la generazione del grafico del bitrate se non è presente la variabile $BITRATE_GRAPH nel file template.txt
+    skip_chart = "$BITRATE_GRAPH" not in utils.read_file(constants.template)
 
-    results = bitrate.parse()
-    bitrate.plot(results, outputdir)
-    os.remove(os.path.join(constants.movies, filename + ".xml"))
+    print("5. Generazione del grafico del bitrate...")
+    if skip_chart:
+        print("Operazione saltata.")
+    else:
+        bitrate = bv.BitrateViewer(movie)
+        bitrate.analyze()
+
+        results = bitrate.parse()
+        bitrate.plot(results, outputdir)
+        os.remove(os.path.join(constants.movies, filename + ".xml"))
+
+    bitrate_img = {}
 
     if utils.get_api_key("imgbb") != "":
         print("\n6. Caricamento delle immagini su ImgBB...")
         uploaded_imgs = [images.upload_to_imgbb(img) for img in screenshots]
-        bitrate_img = images.upload_to_imgbb(os.path.join(outputdir, "bitrate.png"))
+        if not skip_chart:
+            bitrate_img = images.upload_to_imgbb(os.path.join(outputdir, "bitrate.png"))
     else:
         print("\n6. Caricamento delle immagini su Imgur...")
         uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
-        bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
+        if not skip_chart:
+            bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
 
     print("7. Generazione del post...")
     post.generate_text(

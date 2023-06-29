@@ -189,10 +189,10 @@ class BitrateViewer:
 
         # format axes values
         ax.xaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x: timedelta(seconds=int(x)))
+            mticker.FuncFormatter(lambda x, _: timedelta(seconds=int(x)))
         )
         ax.yaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x: "{:,}".format(int(x)))
+            mticker.FuncFormatter(lambda x, _: "{:,}".format(int(x)))
         )
 
         output = os.path.join(outputdir, "bitrate.png")
