@@ -1,7 +1,7 @@
 import os
 import sys
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 import ffmpeg
 from pymediainfo import MediaInfo
@@ -51,9 +51,9 @@ def generate_thumbnail(
         exit(-1)
 
 
-def upload_to_imgbb(path: str) -> str:
+def upload_to_imgbb(path: str) -> Dict[str, str]:
     return imgbb.upload_image(path)
 
 
-def upload_to_imgur(path: str) -> str:
+def upload_to_imgur(path: str) -> Dict[str, str]:
     return imgur.upload_image(path)

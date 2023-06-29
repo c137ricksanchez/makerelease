@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from string import Template
-from typing import Dict
+from typing import Dict, List
 
 import pymediainfo
 
@@ -12,8 +12,8 @@ def generate_text(
     metadata: Dict[str, str],
     filesize: int,
     report: str,
-    screenshots: Dict[str, str],
-    bitrate_img: str,
+    screenshots: List[Dict[str, str]],
+    bitrate_img: Dict[str, str],
     magnet: str,
     outputdir: str,
 ) -> None:
@@ -31,8 +31,13 @@ def generate_text(
         "CAST": metadata["cast"],
         "PLOT": metadata["plot"],
         "TRAILER": metadata["trailer"],
-        "SCREENSHOTS": "\n".join(["[img]" + img + "[/img]" for img in screenshots]),
-        "BITRATE_GRAPH": bitrate_img,
+        "SCREENSHOTS": "\n".join(
+            [
+                "[url=" + img["full"] + "][img]" + img["thumb"] + "[/img][/url]"
+                for img in screenshots
+            ]
+        ),
+        "BITRATE_GRAPH": f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]",
         "REPORT": report,
         "MAGNET": magnet,
     }
