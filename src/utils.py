@@ -31,7 +31,7 @@ def read_file(file: str) -> str:
 
 def parse_title(filename: str) -> Tuple[str, str]:
     title = filename.replace(".", " ").split("(")[0].strip()
-    title_year: List[str] = re.findall("([0-9]{4})", filename)
+    title_year: List[str] = re.findall(r"\b\d{4}\b", filename)
     year = ""
 
     if len(title_year) == 1:
@@ -39,7 +39,5 @@ def parse_title(filename: str) -> Tuple[str, str]:
     elif len(title_year) == 2:
         year = title_year[1]
         title = title.split(year, 1)[0]
-    else:
-        year = ""
 
     return title, year

@@ -17,9 +17,9 @@ def search(title: str, year: str) -> str:
         print("\nNessun risultato.")
 
         id = input(
-            "Inserisci manualmente un ID di IMDb (lascia vuoto per terminare lo script): "
+            "Inserisci manualmente un ID di TMDB (lascia vuoto per terminare lo script): "
         )
-        return id if id else exit(0)
+        return id if is_tmdb_id(id) else exit(0)
 
     if results["total_results"] == 1:
         print(
@@ -27,16 +27,28 @@ def search(title: str, year: str) -> str:
             results["results"][0]["title"],
             f"({results['results'][0]['release_date'][:4]})",
         )
+
+        choice = input(
+            "\nSe il risultato è sbagliato, inserisci un ID di TMDB [lascia vuoto per confermare]: "
+        )
+        if is_tmdb_id(choice):
+            return choice
+
         return results["results"][0]["id"]
 
     print("\nHo trovato", results["total_results"], "risultati:\n")
 
     id = 1
     for result in results["results"]:
-        print(f"[{id}] {result['title']} ({result['release_date'][:4]})")
+        release_date = result["release_date"] if result.get("release_date") else "n.d."
+        print(f"[{id}] {result['title']} ({release_date[:4]})")
         id += 1
 
-    value = check_input(input("\nSeleziona un film [default: 1]: "), id)
+    choice = input("\nSeleziona un film o inserisci un ID di TMDB [default: 1]: ")
+    if is_tmdb_id(choice, True):
+        return choice
+
+    value = check_input(choice, id)
     print("Film selezionato:", results["results"][value - 1]["title"] + "\n")
 
     return results["results"][value - 1]["id"]
@@ -46,7 +58,7 @@ def get(id: str) -> Dict[str, str]:
     try:
         data = tmdb.get_movie(id)
     except Exception:
-        print("L'ID non è valido.")
+        print("Non esiste nessun film con questo ID.")
         exit(-1)
 
     credits = tmdb.get_movie_credits(id)
@@ -76,7 +88,7 @@ def get(id: str) -> Dict[str, str]:
             break
 
     return {
-        "imdb_url": "https://www.imdb.com/title/" + data["imdb_id"],
+        "tmdb_url": "https://www.themoviedb.org/movie/" + data["id"],
         "title": data["title"],
         "year": str(datetime.strptime(data["release_date"], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
@@ -111,3 +123,13 @@ def parse_runtime(mins: int) -> str:
     minutes = mins % 60
 
     return f"{hours}h {minutes}m"
+
+
+def is_tmdb_id(string: str, silent: bool = False) -> bool:
+    if string.isdigit():
+        return True
+    else:
+        if not silent and string:
+            print("ERRORE: Non è un ID di TMDB valido.")
+
+        return False

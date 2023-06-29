@@ -4,7 +4,7 @@
 
 [b]INFORMAZIONI[/b]
 
-IMDB: $IMDB_URL
+TMDB: $TMDB_URL
 Titolo originale: [b]$ORIGINAL_TITLE[/b]
 Paese di produzione: [b]$COUNTRY[/b]
 Genere: [b]$GENRE[/b]

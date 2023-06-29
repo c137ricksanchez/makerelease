@@ -18,7 +18,7 @@ def generate_text(
     outputdir: str,
 ) -> None:
     values: Dict[str, str] = {
-        "IMDB_URL": metadata["imdb_url"],
+        "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
         "YEAR": metadata["year"],
         "SIZE": sizeof_fmt(filesize),
