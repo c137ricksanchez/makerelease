@@ -75,9 +75,14 @@ for movie in utils.get_movies(constants.movies):
     bitrate.plot(results, outputdir)
     os.remove(os.path.join(constants.movies, filename + ".xml"))
 
-    print("\n6. Caricamento delle immagini su Imgur...")
-    uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
-    bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
+    if utils.get_api_key("imgbb") != "":
+        print("\n6. Caricamento delle immagini su ImgBB...")
+        uploaded_imgs = [images.upload_to_imgbb(img) for img in screenshots]
+        bitrate_img = images.upload_to_imgbb(os.path.join(outputdir, "bitrate.png"))
+    else:
+        print("\n6. Caricamento delle immagini su Imgur...")
+        uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
+        bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
 
     print("7. Generazione del post...")
     post.generate_text(

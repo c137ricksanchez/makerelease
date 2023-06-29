@@ -7,7 +7,7 @@ import ffmpeg
 from pymediainfo import MediaInfo
 
 from src import constants
-from src.api import imgur
+from src.api import imgbb, imgur
 
 
 def extract_screenshots(path: str, outputdir: str) -> List[str]:
@@ -49,6 +49,10 @@ def generate_thumbnail(
     except ffmpeg.Error as e:
         print(e.stderr.decode(), file=sys.stderr)
         exit(-1)
+
+
+def upload_to_imgbb(path: str) -> str:
+    return imgbb.upload_image(path)
 
 
 def upload_to_imgur(path: str) -> str:

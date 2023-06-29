@@ -68,9 +68,11 @@ Funzionalità:
 
 ## Utilizzo
 
-1. Configura lo script modificando i file nella cartella `config`
+1. Nella cartella `config`, rinomina `keys.example.json` in `keys.json`
+2. Configura lo script modificando i file nella cartella `config`
     - `keys.json`
-        - Rinomina il file `keys.example.json` in `keys.json` e inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
+        - `imgbb`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur.**
+        - `tmdb`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
     - `screenshots.txt`
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
