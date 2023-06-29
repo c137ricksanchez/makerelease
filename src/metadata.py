@@ -88,7 +88,7 @@ def get(id: str) -> Dict[str, str]:
             break
 
     return {
-        "tmdb_url": "https://www.themoviedb.org/movie/" + data["id"],
+        "tmdb_url": "https://www.themoviedb.org/movie/" + str(data["id"]),
         "title": data["title"],
         "year": str(datetime.strptime(data["release_date"], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],

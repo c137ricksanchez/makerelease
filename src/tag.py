@@ -1,8 +1,10 @@
-import pymediainfo
+from pymediainfo import MediaInfo
 
 
 def parse(filename: str, title: str, year: str, crew: str) -> str:
-    data = pymediainfo.MediaInfo.parse(filename)
+    data = MediaInfo.parse(filename)
+    if not isinstance(data, MediaInfo):
+        exit(-1)
 
     tags = {
         "v": "",  # video
@@ -11,9 +13,7 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
     }
 
     for t in data.tracks:
-
         if t.track_type == "Video":
-
             # may not be the height, but the correspondent 16:9 version
             fake_height = int(t.width / (16 / 9))
 
@@ -24,13 +24,12 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                     fake_height = res
 
             if fake_height <= 576:
-                tags["v"] += "SD"
+                tags["v"] += f"SD {t.internet_media_type.replace('video/', '')}"
             else:
-                scanType = "i" if t.scan_type == "Interlaced" else "p"
+                scan_type = "i" if t.scan_type == "Interlaced" else "p"
                 tags[
                     "v"
-                ] += f"{fake_height}{scanType} {t.internet_media_type.replace('video/', '')}"
-
+                ] += f"{fake_height}{scan_type} {t.internet_media_type.replace('video/', '')}"
         elif t.track_type == "Audio":
             lang = (
                 t.other_language[3].upper()
@@ -39,9 +38,8 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
             )
 
             tags["a"].append(
-                f"{lang} {t.format.replace('-', '')} {get_channels(t.channel_layout)}"
+                f"{lang} {t.format.replace('-', '')} {get_channels(t.channel_layout) if t.channel_layout else t.channel_s}"
             )
-
         elif t.track_type == "Text":
             tags["s"].append(f"{t.other_language[3].title()}")
 

@@ -54,7 +54,7 @@ for movie in utils.get_movies(constants.movies):
         old_movie = movie
 
         filename = re.sub(r'[\\/*?:"<>|]', "", title)
-        movie = os.path.join(constants.movies, filename + ext)
+        movie = str(os.path.join(constants.movies, filename + ext))
 
         os.rename(old_movie, movie)
 
@@ -101,5 +101,7 @@ for movie in utils.get_movies(constants.movies):
 
     print("8. Fine!")
 
-    print("\nIl file è stato rinominato con successo.")
+    if args.rename:
+        print("\nIl file è stato rinominato con successo.")
+
     print("\nTITOLO\n->", title + "\n")
