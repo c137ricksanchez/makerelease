@@ -15,7 +15,7 @@ def generate(filename: str, outputdir: str, outputfile: str) -> str:
     t.generate()
     t.write(os.path.join(outputdir, outputfile + ".torrent"))
 
-    return t.magnet()
+    return str(t.magnet())
 
 
 # https://cdn.discordapp.com/attachments/667734286543093760/915388777160142930/Torrent_Dimension.PNG

@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from string import Template
+from typing import Dict
 
 import pymediainfo
 
@@ -8,17 +9,15 @@ from src import constants, utils
 
 
 def generate_text(
-    metadata: dict,
+    metadata: Dict[str, str],
     filesize: int,
     report: str,
-    screenshots: dict,
+    screenshots: Dict[str, str],
     bitrate_img: str,
     magnet: str,
     outputdir: str,
 ) -> None:
-    screenshots = "\n".join(["[img]" + img + "[/img]" for img in screenshots])
-
-    values = {
+    values: Dict[str, str] = {
         "IMDB_URL": metadata["imdb_url"],
         "TITLE": metadata["title"],
         "YEAR": metadata["year"],
@@ -32,7 +31,7 @@ def generate_text(
         "CAST": metadata["cast"],
         "PLOT": metadata["plot"],
         "TRAILER": metadata["trailer"],
-        "SCREENSHOTS": screenshots,
+        "SCREENSHOTS": "\n".join(["[img]" + img + "[/img]" for img in screenshots]),
         "BITRATE_GRAPH": bitrate_img,
         "REPORT": report,
         "MAGNET": magnet,
@@ -47,8 +46,7 @@ def generate_text(
 
 def generate_report(path: str, outputdir: str) -> str:
     report = pymediainfo.MediaInfo.parse(path, full=False, output="Text")
-    report = report.rstrip("\n")
-    report = report.replace(path, Path(path).name)
+    report = str(report).rstrip("\r\n").replace(path, Path(path).name)
 
     with open(os.path.join(outputdir, "report.txt"), "wb") as file:
         file.write(str.encode(report))
@@ -57,7 +55,7 @@ def generate_report(path: str, outputdir: str) -> str:
 
 
 # https://stackoverflow.com/a/1094933
-def sizeof_fmt(num, suffix="B"):
+def sizeof_fmt(num: float, suffix: str = "B") -> str:
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
         if abs(num) < 1024.0:
             return f"{num:3.1f} {unit}{suffix}"

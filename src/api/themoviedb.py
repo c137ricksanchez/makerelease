@@ -1,3 +1,5 @@
+from typing import Dict
+
 import requests
 
 from .. import utils
@@ -5,7 +7,7 @@ from .. import utils
 api_key = utils.get_api_key("tmdb")
 
 
-def search_movie(title: str, year: int):
+def search_movie(title: str, year: str):
     return request_json(
         "https://api.themoviedb.org/3/search/movie",
         {"api_key": api_key, "language": "it-IT", "query": title, "year": year},
@@ -33,7 +35,7 @@ def get_movie_videos(id: str):
     )
 
 
-def request_json(url: str, params: dict):
+def request_json(url: str, params: Dict[str, str]):
     response = requests.get(url, params=params)
     if response.status_code != 200:
         raise Exception(f"Errore {response.status_code} - {response.text}")

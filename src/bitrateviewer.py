@@ -6,6 +6,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from datetime import timedelta
 from pathlib import Path
+from typing import Dict, List
 
 import ffmpeg
 import matplotlib.pyplot as plt
@@ -40,7 +41,7 @@ class BitrateViewer:
         ) as f:
             print(f"Now analyzing ~{total_frames} frames...")
 
-            with tqdm(total_frames, unit=" frames", ncols=80) as progress:
+            with tqdm(total_frames, unit=" frames", ncols=80) as progress:  # type: ignore
                 proc = subprocess.Popen(
                     [
                         "ffprobe",
@@ -62,6 +63,9 @@ class BitrateViewer:
                     stdout=subprocess.PIPE,
                 )
 
+                if proc.stdout is None:
+                    exit(-1)
+
                 for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
                     f.write(line)
 
@@ -73,7 +77,7 @@ class BitrateViewer:
         self.analyzed_file = os.path.join(self.dir, self.filename + ".xml")
 
     def get_duration(self) -> float:
-        duration = ffmpeg.probe(self.video_path)["format"]["duration"]
+        duration: float = ffmpeg.probe(self.video_path)["format"]["duration"]
         return float(duration)
 
     def get_framerate_float(self) -> float:
@@ -97,9 +101,9 @@ class BitrateViewer:
 
         return tuple([seconds, bitrates_per_sec, keyframes, encoder])
 
-    def calculate_bitrate_per_sec(self, bitrates):
-        seconds = []
-        bitrates_per_sec = []
+    def calculate_bitrate_per_sec(self, bitrates: List[int]):
+        seconds: List[int] = []
+        bitrates_per_sec: List[float] = []
         current_second = 0
         current_bitrate = 0
         frame_count = 0
@@ -117,7 +121,7 @@ class BitrateViewer:
 
         return seconds, bitrates_per_sec
 
-    def read_key_frame_time(self, frame) -> float:
+    def read_key_frame_time(self, frame: Dict[str, float]):
         frame_time = frame.get("pkt_pts_time")
         if not frame_time:
             frame_time = frame.get("pkt_dts_time")
@@ -125,16 +129,16 @@ class BitrateViewer:
         return float(frame_time) if frame_time else None
 
     def load_xml(self):
-        bitrates = []
-        keyframes = []
+        bitrates: List[int] = []
+        keyframes: List[float] = []
         root = ET.parse(self.analyzed_file).getroot()
 
         for frame in root.findall("frames/frame"):
-            value = int(frame.get("pkt_size"))
+            value = int(str(frame.get("pkt_size")))
             bitrates.append(value * 8)  # pkt_size is in byte
 
-            if int(frame.get("key_frame")) == 1:
-                keyframe_time = self.read_key_frame_time(frame)
+            if int(str(frame.get("key_frame"))) == 1:
+                keyframe_time = self.read_key_frame_time(frame)  # type: ignore
                 if keyframe_time:
                     keyframes.append(keyframe_time)
 
@@ -142,8 +146,8 @@ class BitrateViewer:
         encoder = streams[0].get("codec_name")
         return bitrates, keyframes, encoder
 
-    def plot(self, results, outputdir):
-        seconds, bitrates, keyframes, encoder = results
+    def plot(self, results, outputdir: str):
+        seconds, bitrates, _, _ = results
 
         avg_bitrate = self.get_mbit_str(round(np.mean(bitrates) / 1_000, 2))
         max_bitrate = self.get_mbit_str(round(max(bitrates) / 1_000, 2))
@@ -163,7 +167,7 @@ class BitrateViewer:
         ax.fill_between(seconds, bitrates, color="#4c72b0")
 
         ax.axhline(
-            np.mean(bitrates),
+            float(np.mean(bitrates)),
             lw=2,
             color="#c44e52",
             label=f"Average bitrate = {avg_bitrate}",
@@ -185,10 +189,10 @@ class BitrateViewer:
 
         # format axes values
         ax.xaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x, loc: timedelta(seconds=int(x)))
+            mticker.FuncFormatter(lambda x: timedelta(seconds=int(x)))
         )
         ax.yaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x, loc: "{:,}".format(int(x)))
+            mticker.FuncFormatter(lambda x: "{:,}".format(int(x)))
         )
 
         output = os.path.join(outputdir, "bitrate.png")
@@ -196,5 +200,5 @@ class BitrateViewer:
         # save the plot
         fig.savefig(output, bbox_inches="tight")
 
-    def get_mbit_str(self, megabits):
+    def get_mbit_str(self, megabits: np.floating) -> str:
         return f"{megabits} Mbps"

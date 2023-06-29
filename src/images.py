@@ -1,25 +1,25 @@
 import os
 import sys
+from datetime import datetime
+from typing import List
 
 import ffmpeg
-import pymediainfo
-import datetime
+from pymediainfo import MediaInfo
 
 from src import constants
 from src.api import imgur
 
 
-def extract_screenshots(path: str, outputdir: str) -> dict:
-    images = []
+def extract_screenshots(path: str, outputdir: str) -> List[str]:
+    images: List[str] = []
 
-    movie_ms = pymediainfo.MediaInfo.parse(path).tracks[0].duration
+    movie_ms = MediaInfo.parse(path).tracks[0].duration  # type: ignore
 
     with open(constants.screenshots, "r") as f:
         timecodes = f.read().splitlines()
 
         for time in timecodes:
-
-            t = datetime.datetime.strptime(time, "%H:%M:%S")
+            t = datetime.strptime(time, "%H:%M:%S")
             timecode_ms = (t.hour * 60 * 60 + t.minute * 60 + t.second) * 1000
 
             # check if timecode is shorter than film duration
@@ -48,7 +48,7 @@ def generate_thumbnail(
         )
     except ffmpeg.Error as e:
         print(e.stderr.decode(), file=sys.stderr)
-        sys.exit(1)
+        exit(-1)
 
 
 def upload_to_imgur(path: str) -> str:

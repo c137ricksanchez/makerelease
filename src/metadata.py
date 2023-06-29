@@ -1,10 +1,11 @@
 import math
 from datetime import datetime
+from typing import Dict, List
 
 from src.api import themoviedb as tmdb
 
 
-def search(title: str, year: int) -> str:
+def search(title: str, year: str) -> str:
     results = tmdb.search_movie(title, year)
 
     # Alcuni releaser dopo il titolo in italiano mettono anche quello originale
@@ -41,7 +42,7 @@ def search(title: str, year: int) -> str:
     return results["results"][value - 1]["id"]
 
 
-def get(id: str) -> dict:
+def get(id: str) -> Dict[str, str]:
     try:
         data = tmdb.get_movie(id)
     except Exception:
@@ -51,19 +52,19 @@ def get(id: str) -> dict:
     credits = tmdb.get_movie_credits(id)
     videos = tmdb.get_movie_videos(id)
 
-    countries = []
+    countries: List[str] = []
     for country in data["production_countries"]:
         countries.append(country["name"])
 
-    genres = []
+    genres: List[str] = []
     for genre in data["genres"]:
         genres.append(genre["name"])
 
-    cast = []
+    cast: List[str] = []
     for actor in credits["cast"][:10]:
         cast.append(f"[*]{actor['name']}: {actor['character']}")
 
-    director = []
+    director: List[str] = []
     for crew in credits["crew"]:
         if crew["job"] == "Director":
             director.append(crew["name"])
@@ -77,7 +78,7 @@ def get(id: str) -> dict:
     return {
         "imdb_url": "https://www.imdb.com/title/" + data["imdb_id"],
         "title": data["title"],
-        "year": datetime.strptime(data["release_date"], "%Y-%m-%d").year,
+        "year": str(datetime.strptime(data["release_date"], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
         "original_title": data["original_title"],
         "director": ", ".join(director),
@@ -94,10 +95,12 @@ def check_input(choice: str, max: int, default: int = 1) -> int:
     values = range(1, max)
 
     if choice == "":
-        choice = default
+        choice = "1"
 
-    if int(choice) in values:
-        return int(choice)
+    response = int(choice)
+
+    if response in values:
+        return response
     else:
         print(f"Scelta non valida. Seleziono {default}")
         return default

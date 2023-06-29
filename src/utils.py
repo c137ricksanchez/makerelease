@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from typing import List, Tuple
 
 from src import constants
 
@@ -11,7 +12,7 @@ def get_api_key(key: str) -> str:
     return keys[key] if key in keys else ""
 
 
-def get_movies(path: str) -> list:
+def get_movies(path: str) -> List[str]:
     return [
         os.path.join(path, f)
         for f in os.listdir(path)
@@ -28,14 +29,15 @@ def read_file(file: str) -> str:
         return f.read()
 
 
-def parse_title(filename: str) -> tuple[str, int]:
+def parse_title(filename: str) -> Tuple[str, str]:
     title = filename.replace(".", " ").split("(")[0].strip()
-    year = re.findall("([0-9]{4})", filename)
+    title_year: List[str] = re.findall("([0-9]{4})", filename)
+    year = ""
 
-    if len(year) == 1:
-        year = year[0]
-    elif len(year) == 2:
-        year = year[1]
+    if len(title_year) == 1:
+        year = title_year[0]
+    elif len(title_year) == 2:
+        year = title_year[1]
         title = title.split(year, 1)[0]
     else:
         year = ""
