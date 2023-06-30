@@ -1,3 +1,4 @@
+import json
 import math
 from datetime import datetime
 from typing import Dict, List
@@ -64,9 +65,12 @@ def get(id: str) -> Dict[str, str]:
     credits = tmdb.get_movie_credits(id)
     videos = tmdb.get_movie_videos(id)
 
-    countries: List[str] = []
-    for country in data["production_countries"]:
-        countries.append(country["name"])
+    with open("src/countries_ISO_3166-1_alpha2.json") as file:
+        country_codes = json.load(file)
+
+        countries: List[str] = []
+        for country in data["production_countries"]:
+            countries.append(country_codes[country["iso_3166_1"]])
 
     genres: List[str] = []
     for genre in data["genres"]:
