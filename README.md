@@ -103,12 +103,20 @@ Esegui il comando `git pull`.
 
 ### Flag
 
-| Argument | Description |
-| --- | --- |
-| `-c`, `--crew` `[NOME]`| Inserisce il nome della crew alla fine del titolo/nome del file |
-| `-r`, `--rename` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew |
-| `-t`, `--type` | Tipo di release, a scelta tra: `Movie (File)`, `Movie (Folder)`, `TV Series (Single Season)`, `TV Series (Multiple Seasons)` |
-| `-p`, `--path` | Indirizzo della cartella o del file |
+Utilizzo da linea di comando
+
+```
+makerelease.py [-h] [-c CREW] [-r] [-p PATH]
+               [-t {Movie File),Movie (Folder),TV Series (Single Season),TV Series (Multiple Seasons}]
+```
+
+| Short | Long       | Default | Description                                                                                                                  |
+| ----- | ---------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `-h`  | `--help`   |         | show this help message and exit                                                                                              |
+| `-p`  | `--path`   |         | Indirizzo della cartella o del file                                                                                          |
+| `-t`  | `--type`   |         | Tipo di release, a scelta tra: `Movie (File)`, `Movie (Folder)`, `TV Series (Single Season)`, `TV Series (Multiple Seasons)` |
+| `-r`  | `--rename` | `False` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew                                                    |
+| `-c`  | `--crew`   |         | Nome della crew da inserire alla fine del nome del file                                                                      |
 
 ## Autori
 
