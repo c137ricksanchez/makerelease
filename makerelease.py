@@ -1,111 +1,45 @@
 import argparse
-import os
-import re
-from pathlib import Path
 
-import src.bitrateviewer as bv
-from src import constants, images, metadata, post, tag, torrent, utils
+from src.app import MakeRelease, ReleaseType
 
-# Instantiate the parser
-parser = argparse.ArgumentParser()
+if __name__ == "__main__":
+    # Instantiate the parser
+    parser = argparse.ArgumentParser()
 
-parser.add_argument(
-    "-c",
-    "--crew",
-    type=str,
-    help="Release crew",
-)
-
-parser.add_argument(
-    "-r",
-    "--rename",
-    default=False,
-    action="store_true",
-    help="Rinomina il file",
-)
-
-args = parser.parse_args()
-
-for movie in utils.get_movies(constants.movies):
-    file = Path(movie).name
-    filename = Path(movie).stem
-    ext = Path(movie).suffix
-
-    print("File:", file)
-
-    title, year = utils.parse_title(filename)
-    duration = utils.get_duration(movie)
-    filesize = os.path.getsize(movie)
-
-    print("\n1. Ricezione dei metadati da TheMovieDB...")
-    movie_id = metadata.search(title, year)
-    data = metadata.get(movie_id)
-
-    outputdir = os.path.join(constants.movies, data["title"] + "_files")
-    if os.path.exists(outputdir):
-        print("ERRORE: Esiste già una cartella chiamata", outputdir)
-        continue
-    else:
-        os.mkdir(outputdir)
-
-    title = tag.parse(movie, data["title"], data["year"], args.crew)
-
-    if args.rename:
-        old_movie = movie
-
-        filename = re.sub(r'[\\/*?:"<>|]', "", title)
-        movie = str(os.path.join(constants.movies, filename + ext))
-
-        os.rename(old_movie, movie)
-
-    print("2. Generazione del report con MediaInfo...")
-    report = post.generate_report(movie, outputdir)
-
-    print("3. Generazione del file torrent...")
-    magnet = torrent.generate(movie, outputdir, filename)
-
-    print("4. Estrazione degli screenshot...")
-    screenshots = images.extract_screenshots(movie, outputdir)
-
-    # Salta la generazione del grafico del bitrate se non è presente la variabile $BITRATE_GRAPH nel file template.txt
-    skip_chart = "$BITRATE_GRAPH" not in utils.read_file(constants.template)
-
-    print("5. Generazione del grafico del bitrate...")
-    if skip_chart:
-        print("Operazione saltata.")
-    else:
-        bitrate = bv.BitrateViewer(movie)
-        bitrate.analyze()
-        bitrate.plot(outputdir)
-
-    bitrate_img = {}
-
-    if utils.get_api_key("imgbb") != "":
-        print("\n6. Caricamento delle immagini su ImgBB...")
-        uploaded_imgs = [images.upload_to_imgbb(img) for img in screenshots]
-        if not skip_chart:
-            bitrate_img = images.upload_to_imgbb(os.path.join(outputdir, "bitrate.png"))
-    else:
-        print("\n6. Caricamento delle immagini su Imgur...")
-        uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
-        if not skip_chart:
-            bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
-
-    print("7. Generazione del post...")
-    post.generate_text(
-        data,
-        filesize,
-        duration,
-        report,
-        uploaded_imgs,
-        bitrate_img,
-        magnet,
-        outputdir,
+    parser.add_argument(
+        "-c",
+        "--crew",
+        type=str,
+        help="Release crew",
     )
 
-    print("8. Fine!")
+    parser.add_argument(
+        "-r",
+        "--rename",
+        default=False,
+        action="store_true",
+        help="Rinomina il file",
+    )
 
-    if args.rename:
-        print("\nIl file è stato rinominato con successo.")
+    parser.add_argument(
+        "-p",
+        "--path",
+        type=str,
+        help="Path to the movie or folder",
+    )
 
-    print("\nTITOLO\n->", title + "\n")
+    parser.add_argument(
+        "-t",
+        "--type",
+        type=str,
+        choices=[t.value for t in ReleaseType],
+        help="Release type",
+    )
+
+    args = parser.parse_args()
+
+    # Instantiate the class
+    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path)
+
+    # Call the make_release method with the movie argument
+    release_maker.make_release()

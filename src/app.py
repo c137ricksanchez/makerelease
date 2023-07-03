@@ -1,4 +1,3 @@
-import argparse
 import os
 import re
 from enum import Enum
@@ -17,23 +16,18 @@ class ReleaseType(Enum):
 
 def parse_release_type(type_str: str) -> ReleaseType:
     try:
-        return ReleaseType(type_str.lower())
+        return ReleaseType(type_str)
     except ValueError:
         raise ValueError(
             f"Invalid release type: {type_str}. Must be one of: {', '.join([t.value for t in ReleaseType])}"
         )
 
 
-#type_str = input("Enter release type (movie/tv): ")
-#release_type = parse_release_type(type_str)
-#release = MakeRelease("crew", True, release_type, "path/to/file")
-
-
 class MakeRelease:
     def __init__(self, crew: str, rename: bool, type: ReleaseType, path: str):
         self.crew = crew
         self.rename = rename
-        self.type = type
+        self.type = parse_release_type(type)
 
         # Check if the path exists and is a file or directory
         if not os.path.exists(path):
@@ -55,10 +49,6 @@ class MakeRelease:
             # self.path should contain a directory with multiple seasons
             # return the first episode of the first season
             return utils.get_movies(utils.get_folders(self.path)[0])[0]
-        else:
-            raise ValueError(
-                f"Invalid release type: {self.type}. Must be one of: {', '.join([t.value for t in ReleaseType])}"
-            )
 
     def remove_temporary_files(self):
         for root, dirs, files in os.walk(self.path):
@@ -90,7 +80,7 @@ class MakeRelease:
         movie_id = metadata.search(title, year)
         data = metadata.get(movie_id)
 
-        outputdir = os.path.join(Path(self.path), Path(movie).name + "_files")
+        outputdir = os.path.join(Path(self.path).parent, Path(movie).name + "_files")
         if os.path.exists(outputdir):
             print("ERRORE: Esiste già una cartella chiamata", outputdir)
             return
@@ -125,10 +115,7 @@ class MakeRelease:
         else:
             bitrate = bv.BitrateViewer(movie)
             bitrate.analyze()
-
-            results = bitrate.parse()
-            bitrate.plot(results, outputdir)
-            os.remove(os.path.join(constants.movies, filename + ".xml"))
+            bitrate.plot(outputdir)
 
         bitrate_img = {}
 
@@ -175,44 +162,3 @@ class MakeRelease:
             print("\nIl file è stato rinominato con successo.")
 
         print("\nTITOLO\n->", title + "\n")
-
-
-if __name__ == "__main__":
-    # Instantiate the parser
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "-c",
-        "--crew",
-        type=str,
-        help="Release crew",
-    )
-
-    parser.add_argument(
-        "-r",
-        "--rename",
-        default=False,
-        action="store_true",
-        help="Rinomina il file",
-    )
-
-    parser.add_argument(
-        "path",
-        type=str,
-        help="Path to the movie or folder",
-    )
-
-    parser.add_argument(
-        "type",
-        type=str,
-        choices=[t.value for t in ReleaseType],
-        help="Release type",
-    )
-
-    args = parser.parse_args()
-
-    # Instantiate the class
-    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path)
-
-    # Call the make_release method with the movie argument
-    release_maker.make_release()
