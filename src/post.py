@@ -49,7 +49,7 @@ def generate_text(
         "BITRATE_GRAPH": bitrate_graph,
         "REPORT": report,
         "MAGNET": magnet,
-        "TREE": "[b]CONTENUTO[/b][code]\n" + tree + "\n[/code]" if tree != "" else "",
+        "TREE": "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else "",
     }
 
     template_text = utils.read_file(constants.template)

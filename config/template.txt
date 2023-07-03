@@ -47,7 +47,7 @@ $TREE
 [b]BITRATE[/b]
 
 [spoiler]
-[img]$BITRATE_GRAPH[/img]
+$BITRATE_GRAPH
 [/spoiler]
 
 
