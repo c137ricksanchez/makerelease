@@ -1,12 +1,26 @@
 import json
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from src.api import themoviedb as tmdb
 
 
+def get_keys(type: str) -> Tuple[str, str]:
+    if type == "movie":
+        title_key = "title"
+        release_date_key = "release_date"
+    elif type == "tv":
+        title_key = "name"
+        release_date_key = "first_air_date"
+    else:
+        raise ValueError("Invalid type")
+    return title_key, release_date_key
+
+
 def search(title: str, year: str, type: str) -> str:
     results = tmdb.search_movie(title, year, type)
+
+    title_key, release_date_key = get_keys(type)
 
     # Alcuni releaser dopo il titolo in italiano mettono anche quello originale
     # Se la ricerca fallisce, provo a cercare solo il primo
@@ -24,8 +38,8 @@ def search(title: str, year: str, type: str) -> str:
     if results["total_results"] == 1:
         print(
             "Risultato:",
-            results["results"][0]["title"],
-            f"({results['results'][0]['release_date'][:4]})",
+            results["results"][0][title_key],
+            f"({results['results'][0][release_date_key][:4]})",
         )
 
         choice = input(
@@ -40,8 +54,10 @@ def search(title: str, year: str, type: str) -> str:
 
     id = 1
     for result in results["results"]:
-        release_date = result["release_date"] if result.get("release_date") else "n.d."
-        print(f"[{id}] {result['title']} ({release_date[:4]})")
+        release_date = (
+            result[release_date_key] if result.get(release_date_key) else "n.d."
+        )
+        print(f"[{id}] {result[title_key]} ({release_date[:4]})")
         id += 1
 
     choice = input("\nSeleziona un film o inserisci un ID di TMDB [default: 1]: ")
@@ -49,12 +65,14 @@ def search(title: str, year: str, type: str) -> str:
         return choice
 
     value = check_input(choice, id)
-    print("Film selezionato:", results["results"][value - 1]["title"] + "\n")
+    print("Film selezionato:", results["results"][value - 1][title_key] + "\n")
 
     return results["results"][value - 1]["id"]
 
 
 def get(id: str, type: str) -> Dict[str, str]:
+    title_key, release_date_key = get_keys(type)
+
     try:
         data = tmdb.get_movie(id, type)
     except Exception:
@@ -90,17 +108,12 @@ def get(id: str, type: str) -> Dict[str, str]:
             trailer = "https://www.youtube.com/watch?v=" + video["key"]
             break
 
-    if type == "movie":
-        date = data["release_date"]
-    else:
-        date = data["first_air_date"]
-    
     return {
         "tmdb_url": "https://www.themoviedb.org/movie/" + str(data["id"]),
-        "title": data["title"] if type == "movie" else data["name"],
-        "year": str(datetime.strptime(date, "%Y-%m-%d").year),
+        "title": data[title_key],
+        "year": str(datetime.strptime(data[release_date_key], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
-        "original_title": data["original_title"] if type == "movie" else data["original_name"],
+        "original_title": data[title_key],
         "director": ", ".join(director),
         "country": ", ".join(countries),
         "genre": ", ".join(genres),
