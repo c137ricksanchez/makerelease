@@ -30,6 +30,21 @@ def get_folders(path: str) -> List[str]:
         if os.path.isdir(os.path.join(path, f))
     ]
 
+
+def get_size(path: str) -> int:
+    if os.path.isfile(path):
+        return os.path.getsize(path)
+    elif os.path.isdir(path):
+        total = 0
+        for root, dirs, files in os.walk(path):
+            for f in files:
+                fp = os.path.join(root, f)
+                total += os.path.getsize(fp)
+        return total
+    else:
+        raise Exception(f"Path {path} non trovato")
+
+
 def get_tree(path: str) -> str:
     # get all files and folders recursively
     # and output them in a tree structure
