@@ -42,6 +42,7 @@ $REPORT
 [/code]
 [/spoiler]
 
+$TREE
 
 [b]BITRATE[/b]
 
