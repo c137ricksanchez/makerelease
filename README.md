@@ -18,6 +18,16 @@ Funzionalità:
 - Prepara il testo del post da pubblicare sul forum con tutte le informazioni del film, poster, trailer, report e link magnet
 - Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
 
+[WIP] Possibilità di scegliere il tipo di release da effettuare:
+
+- **Film**
+  1. Film: seleziona un singolo file `mkv`, `mp4` o `avi` (ora che ci penso forse mp4 si può togliere 🤔)
+  2. Film + Extra: seleziona una directory contenente un file video e una cartella chiamata `Extra`. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
+
+- **Serie TV**
+  1. Stagione singola. Seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
+  2. Serie completa. Seleziona una directory contenente più cartelle. Lo script identifica la serie dal nome della cartella principale.
+
 ## Requisiti
 
 - Python 3
