@@ -21,7 +21,7 @@ Funzionalità:
 [WIP] Possibilità di scegliere il tipo di release da effettuare:
 
 - **Film**
-  1. Film: seleziona un singolo file `mkv`, `mp4` o `avi` (ora che ci penso forse mp4 si può togliere 🤔)
+  1. Film: seleziona un singolo file `mkv`, `mp4` o `avi`
   2. Film + Extra: seleziona una directory contenente un file video e una cartella chiamata `Extra`. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
 
 - **Serie TV**
@@ -76,6 +76,10 @@ Funzionalità:
     - `cd automatic-releaser`
     - `pip3 install -r requirements.txt`
 
+## Aggiornamento
+
+Esegui il comando `git pull`.
+
 ## Utilizzo
 
 1. Nella cartella `config`, rinomina `keys.example.json` in `keys.json`
@@ -97,9 +101,12 @@ Funzionalità:
 
 ### Flag
 
-- `--rename`: Rinomina in automatico il file seguendo il formato consigliato da MIRCrew
-    - Esempio: **Spider-Man - No Way Home (2022) 1080p H265 ITA AC3 5.1 ENG AC3 5.1 Sub Ita Eng**
-- `--crew [nome]`: Inserisce il nome della crew alla fine del titolo/nome del file
+| Argument | Description |
+| --- | --- |
+| `-c`, `--crew` `[NOME]`| Inserisce il nome della crew alla fine del titolo/nome del file |
+| `-r`, `--rename` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew |
+| `-t`, `--type` | Tipo di release, a scelta tra: `Movie (File)`, `Movie (Folder)`, `TV Series (Single Season)`, `TV Series (Multiple Seasons)` |
+| `-p`, `--path` | Indirizzo della cartella o del file |
 
 ## Autori
 
