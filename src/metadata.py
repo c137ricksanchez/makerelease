@@ -5,13 +5,13 @@ from typing import Dict, List
 from src.api import themoviedb as tmdb
 
 
-def search(title: str, year: str) -> str:
-    results = tmdb.search_movie(title, year)
+def search(title: str, year: str, type: str) -> str:
+    results = tmdb.search_movie(title, year, type)
 
     # Alcuni releaser dopo il titolo in italiano mettono anche quello originale
     # Se la ricerca fallisce, provo a cercare solo il primo
     if results["total_results"] == 0 and "-" in title:
-        results = tmdb.search_movie(title.split("-")[0], year)
+        results = tmdb.search_movie(title.split("-")[0], year, type)
 
     if results["total_results"] == 0:
         print("\nNessun risultato.")
@@ -54,15 +54,15 @@ def search(title: str, year: str) -> str:
     return results["results"][value - 1]["id"]
 
 
-def get(id: str) -> Dict[str, str]:
+def get(id: str, type: str) -> Dict[str, str]:
     try:
-        data = tmdb.get_movie(id)
+        data = tmdb.get_movie(id, type)
     except Exception:
         print("Non esiste nessun film con questo ID.")
         exit(-1)
 
-    credits = tmdb.get_movie_credits(id)
-    videos = tmdb.get_movie_videos(id)
+    credits = tmdb.get_movie_credits(id, type)
+    videos = tmdb.get_movie_videos(id, type)
 
     with open("src/countries_ISO_3166-1_alpha2.json") as file:
         country_codes = json.load(file)

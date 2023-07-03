@@ -36,6 +36,12 @@ class MakeRelease:
             self.folder_release = True
         else:
             self.folder_release = False
+        
+        if self.type == ReleaseType.MOVIE_FILE or \
+              self.type == ReleaseType.MOVIE_FOLDER:
+            self.type_id = "movie"
+        else:
+            self.type_id = "tv"
 
         # Check if the path exists and is a file or directory
         if not os.path.exists(path):
@@ -87,10 +93,10 @@ class MakeRelease:
         releasesize = utils.get_size(self.path)
 
         print("\n1. Ricezione dei metadati da TheMovieDB...")
-        movie_id = metadata.search(title, year)
-        data = metadata.get(movie_id)
+        movie_id = metadata.search(title, year, self.type_id)
+        data = metadata.get(movie_id, self.type_id)
 
-        outputdir = os.path.join(Path(self.path).parent, self.path) + "_files")
+        outputdir = os.path.join(Path(self.path).parent, self.path + "_files")
         if os.path.exists(outputdir):
             print("ERRORE: Esiste già una cartella chiamata", outputdir)
             return
