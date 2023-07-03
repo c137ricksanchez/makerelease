@@ -26,6 +26,13 @@ def generate_text(
             f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]"
         )
 
+    plot = metadata["plot"] if metadata["plot"] != "" else "<NON TROVATO>"
+
+    trailer = "[media]" + metadata["trailer"] + "[/media]"\
+        if metadata["trailer"] != "" else "<NON TROVATO>"
+    
+    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
+
     values: Dict[str, str] = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
@@ -38,8 +45,8 @@ def generate_text(
         "COUNTRY": metadata["country"],
         "GENRE": metadata["genre"],
         "CAST": metadata["cast"],
-        "PLOT": metadata["plot"] if metadata["plot"] != "" else "<NON TROVATO>",
-        "TRAILER": "[media]" + metadata["trailer"] + "[/media]" if metadata["trailer"] != "" else "<NON TROVATO>",
+        "PLOT": plot,
+        "TRAILER": trailer,
         "SCREENSHOTS": "\n".join(
             [
                 "[url=" + img["full"] + "][img]" + img["thumb"] + "[/img][/url]"
@@ -49,7 +56,7 @@ def generate_text(
         "BITRATE_GRAPH": bitrate_graph,
         "REPORT": report,
         "MAGNET": magnet,
-        "TREE": "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else "",
+        "TREE": tree,
     }
 
     template_text = utils.read_file(constants.template)

@@ -63,6 +63,8 @@ class MakeRelease:
             # self.path should contain a directory with multiple seasons
             # return the first episode of the first season
             return utils.get_movies(utils.get_folders(self.path)[0])[0]
+        else:
+            raise ValueError(f"Invalid release type: {self.type}")
 
     def remove_temporary_files(self):
         for root, dirs, files in os.walk(self.path):
