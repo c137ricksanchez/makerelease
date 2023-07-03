@@ -76,10 +76,7 @@ for movie in utils.get_movies(constants.movies):
     else:
         bitrate = bv.BitrateViewer(movie)
         bitrate.analyze()
-
-        results = bitrate.parse()
-        bitrate.plot(results, outputdir)
-        os.remove(os.path.join(constants.movies, filename + ".xml"))
+        bitrate.plot(outputdir)
 
     bitrate_img = {}
 
