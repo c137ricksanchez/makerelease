@@ -38,8 +38,8 @@ def generate_text(
         "COUNTRY": metadata["country"],
         "GENRE": metadata["genre"],
         "CAST": metadata["cast"],
-        "PLOT": metadata["plot"],
-        "TRAILER": metadata["trailer"],
+        "PLOT": metadata["plot"] if metadata["plot"] != "" else "<NON TROVATO>",
+        "TRAILER": "[media]" + metadata["trailer"] + "[/media]" if metadata["trailer"] != "" else "<NON TROVATO>",
         "SCREENSHOTS": "\n".join(
             [
                 "[url=" + img["full"] + "][img]" + img["thumb"] + "[/img][/url]"
