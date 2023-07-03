@@ -30,15 +30,16 @@ class MakeRelease:
         self.rename = rename
         self.type = parse_release_type(type)
 
-        if self.type == ReleaseType.MOVIE_FOLDER or \
-           self.type == ReleaseType.TV_SINGLE or \
-           self.type == ReleaseType.TV_MULTI:
+        if (
+            self.type == ReleaseType.MOVIE_FOLDER
+            or self.type == ReleaseType.TV_SINGLE
+            or self.type == ReleaseType.TV_MULTI
+        ):
             self.folder_release = True
         else:
             self.folder_release = False
-        
-        if self.type == ReleaseType.MOVIE_FILE or \
-              self.type == ReleaseType.MOVIE_FOLDER:
+
+        if self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER:
             self.type_id = "movie"
         else:
             self.type_id = "tv"
@@ -90,7 +91,7 @@ class MakeRelease:
 
         title, year = utils.parse_title(filename)
         duration = utils.get_duration(movie)
-        
+
         # Get the size of a directory
         releasesize = utils.get_size(self.path)
 
@@ -108,9 +109,9 @@ class MakeRelease:
         title = tag.parse(movie, data["title"], data["year"], self.crew)
 
         # Only rename the file if it is a movie file
-        if self.rename and \
-            (self.type == ReleaseType.MOVIE_FILE\
-              or self.type == ReleaseType.MOVIE_FOLDER):
+        if self.rename and (
+            self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER
+        ):
             old_movie = movie
 
             filename = re.sub(r'[\\/*?:"<>|]', "", title)
@@ -155,7 +156,6 @@ class MakeRelease:
                 bitrate_img = images.upload_to_imgur(
                     os.path.join(outputdir, "bitrate.png")
                 )
-
 
         if self.folder_release:
             tree = utils.get_tree(self.path)
