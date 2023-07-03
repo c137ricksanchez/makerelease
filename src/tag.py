@@ -24,6 +24,9 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                     fake_height = res
 
             if fake_height <= 576:
+                if "MP4V-ES" in t.internet_media_type:
+                    t.internet_media_type = "XviD"
+
                 tags["v"] += f"SD {t.internet_media_type.replace('video/', '')}"
             else:
                 scan_type = "i" if t.scan_type == "Interlaced" else "p"
@@ -33,13 +36,20 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
         elif t.track_type == "Audio":
             lang = (
                 t.other_language[3].upper()
-                if len(t.other_language) >= 4
-                else t.language
+                if t.other_language and len(t.other_language) >= 4
+                else (t.language if t.language else "UND")
             )
 
-            tags["a"].append(
-                f"{lang} {t.format.replace('-', '')} {get_channels(t.channel_layout) if t.channel_layout else t.channel_s}"
+            channels = (
+                get_channels(t.channel_layout)
+                if t.channel_layout
+                else f"{t.channel_s}.0"
             )
+
+            if t.format == "MPEG Audio" and t.format_profile == "Layer 3":
+                t.format = "MP3"
+
+            tags["a"].append(f"{lang} {t.format.replace('-', '')} {channels}")
         elif t.track_type == "Text":
             tags["s"].append(f"{t.other_language[3].title()}")
 
