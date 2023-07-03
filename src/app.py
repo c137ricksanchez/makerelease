@@ -99,7 +99,7 @@ class MakeRelease:
         movie_id = metadata.search(title, year, self.type_id)
         data = metadata.get(movie_id, self.type_id)
 
-        outputdir = os.path.join(Path(self.path).parent, self.path + "_files")
+        outputdir = os.path.join(Path(self.path).parent, filename + "_files")
         if os.path.exists(outputdir):
             print("ERRORE: Esiste già una cartella chiamata", outputdir)
             return
