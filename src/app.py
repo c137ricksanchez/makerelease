@@ -109,7 +109,8 @@ class MakeRelease:
 
         # Only rename the file if it is a movie file
         if self.rename and \
-            (self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER):
+            (self.type == ReleaseType.MOVIE_FILE\
+              or self.type == ReleaseType.MOVIE_FOLDER):
             old_movie = movie
 
             filename = re.sub(r'[\\/*?:"<>|]', "", title)
