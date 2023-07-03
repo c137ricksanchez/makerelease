@@ -34,7 +34,7 @@ for movie in utils.get_movies(constants.movies):
     print("File:", file)
 
     title, year = utils.parse_title(filename)
-
+    duration = utils.get_duration(movie)
     filesize = os.path.getsize(movie)
 
     print("\n1. Ricezione dei metadati da TheMovieDB...")
@@ -96,7 +96,14 @@ for movie in utils.get_movies(constants.movies):
 
     print("7. Generazione del post...")
     post.generate_text(
-        data, filesize, report, uploaded_imgs, bitrate_img, magnet, outputdir
+        data,
+        filesize,
+        duration,
+        report,
+        uploaded_imgs,
+        bitrate_img,
+        magnet,
+        outputdir,
     )
 
     print("8. Fine!")

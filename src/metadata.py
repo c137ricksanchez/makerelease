@@ -1,5 +1,4 @@
 import json
-import math
 from datetime import datetime
 from typing import Dict, List
 
@@ -98,7 +97,6 @@ def get(id: str) -> Dict[str, str]:
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
         "original_title": data["original_title"],
         "director": ", ".join(director),
-        "runtime": parse_runtime(data["runtime"]),
         "country": ", ".join(countries),
         "genre": ", ".join(genres),
         "cast": "\n".join(cast),
@@ -120,13 +118,6 @@ def check_input(choice: str, max: int, default: int = 1) -> int:
     else:
         print(f"Scelta non valida. Seleziono {default}")
         return default
-
-
-def parse_runtime(mins: int) -> str:
-    hours = math.floor(mins / 60)
-    minutes = mins % 60
-
-    return f"{hours}h {minutes}m"
 
 
 def is_tmdb_id(string: str, silent: bool = False) -> bool:

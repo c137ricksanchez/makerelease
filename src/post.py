@@ -1,9 +1,10 @@
+import math
 import os
 from pathlib import Path
 from string import Template
 from typing import Dict, List
 
-import pymediainfo
+from pymediainfo import MediaInfo
 
 from src import constants, utils
 
@@ -11,6 +12,7 @@ from src import constants, utils
 def generate_text(
     metadata: Dict[str, str],
     filesize: int,
+    duration: int,
     report: str,
     screenshots: List[Dict[str, str]],
     bitrate_img: Dict[str, str],
@@ -31,7 +33,7 @@ def generate_text(
         "POSTER_URL": metadata["poster_url"],
         "ORIGINAL_TITLE": metadata["original_title"],
         "DIRECTOR": metadata["director"],
-        "RUNTIME": metadata["runtime"],
+        "RUNTIME": parse_runtime(duration),
         "COUNTRY": metadata["country"],
         "GENRE": metadata["genre"],
         "CAST": metadata["cast"],
@@ -56,7 +58,7 @@ def generate_text(
 
 
 def generate_report(path: str, outputdir: str) -> str:
-    report = pymediainfo.MediaInfo.parse(path, full=False, output="Text")
+    report = MediaInfo.parse(path, full=False, output="Text")
     report = str(report).rstrip("\r\n").replace(path, Path(path).name)
 
     with open(os.path.join(outputdir, "report.txt"), "wb") as file:
@@ -72,3 +74,10 @@ def sizeof_fmt(num: float, suffix: str = "B") -> str:
             return f"{num:3.1f} {unit}{suffix}"
         num /= 1024.0
     return f"{num:.1f} Yi{suffix}"
+
+
+def parse_runtime(mins: int) -> str:
+    hours = math.floor(mins / 60)
+    minutes = mins % 60
+
+    return f"{hours}h {minutes}m"

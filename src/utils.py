@@ -3,6 +3,8 @@ import os
 import re
 from typing import List, Tuple
 
+from pymediainfo import MediaInfo
+
 from src import constants
 
 
@@ -41,3 +43,7 @@ def parse_title(filename: str) -> Tuple[str, str]:
         title = title.split(year, 1)[0]
 
     return title, year
+
+
+def get_duration(path: str) -> int:
+    return MediaInfo.parse(path).tracks[0].duration // 60000  # type: ignore
