@@ -9,7 +9,7 @@ api_key = utils.get_api_key("tmdb")
 
 def search_movie(title: str, year: str, type: str):
     return request_json(
-        "https://api.themoviedb.org/3/search/{type}",
+        f"https://api.themoviedb.org/3/search/{type}",
         {"api_key": api_key, "language": "it-IT", "query": title, "year": year},
     )
 
