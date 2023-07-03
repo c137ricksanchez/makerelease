@@ -7,25 +7,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-c",
-        "--crew",
-        type=str,
-        help="Release crew",
-    )
-
-    parser.add_argument(
-        "-r",
-        "--rename",
-        default=False,
-        action="store_true",
-        help="Rinomina il file",
-    )
-
-    parser.add_argument(
         "-p",
         "--path",
         type=str,
-        help="Path to the movie or folder",
+        help="Indirizzo della cartella o del file",
     )
 
     parser.add_argument(
@@ -33,7 +18,22 @@ if __name__ == "__main__":
         "--type",
         type=str,
         choices=[t.value for t in ReleaseType],
-        help="Release type",
+        help="Tipo di release",
+    )
+
+    parser.add_argument(
+        "-r",
+        "--rename",
+        default=False,
+        action="store_true",
+        help="Rinomina in automatico il file seguendo il formato consigliato da MIRCrew",
+    )
+
+    parser.add_argument(
+        "-c",
+        "--crew",
+        type=str,
+        help="Nome della crew da inserire alla fine del nome del file",
     )
 
     args = parser.parse_args()
