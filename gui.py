@@ -3,7 +3,7 @@ from tkinter import BooleanVar, StringVar, filedialog
 
 import customtkinter as ctk
 
-# from makerelease import MakeRelease
+from makerelease import MakeRelease
 
 
 def callback(url):
@@ -14,7 +14,7 @@ class MyApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("MakeRelease")
-        self.geometry("400x250")
+        self.geometry("400x300")
         self.grid_columnconfigure(0, weight=1)
 
         ctk.set_appearance_mode("System")  # Modes: system (default), light, dark
@@ -53,13 +53,21 @@ class MyApp(ctk.CTk):
         )
         self.rename_option_menu.grid(row=5, column=0, sticky="nsew", padx=10, pady=2)
 
+        # Add custom crew name
+        ctk.CTkLabel(
+            self, text="Add custom crew name (optional)", fg_color="transparent"
+        ).grid(row=6, column=0, sticky="w", padx=10, pady=0)
+        self.var_crew = StringVar(value="")
+        self.crew_entry = ctk.CTkEntry(self, textvariable=self.var_crew)
+        self.crew_entry.grid(row=7, column=0, sticky="nsew", padx=10, pady=2)
+
         self.author_label = ctk.CTkLabel(
             self,
             justify="left",
             text="Authors: RickSanchez & Norman",
             fg_color="transparent",
         )
-        self.author_label.grid(row=7, column=0, sticky="w", padx=10, pady=0)
+        self.author_label.grid(row=8, column=0, sticky="w", padx=10, pady=0)
 
         self.check_updates = ctk.CTkLabel(
             self,
@@ -69,9 +77,10 @@ class MyApp(ctk.CTk):
             text_color="green",
         )
         self.check_updates.bind(
-            "<Button-1>", lambda e: callback("http://www.github.com")
+            "<Button-1>",
+            lambda e: callback("https://github.com/c137ricksanchez/automatic-releaser"),
         )
-        self.check_updates.grid(row=8, column=0, sticky="w", padx=10, pady=0)
+        self.check_updates.grid(row=9, column=0, sticky="w", padx=10, pady=0)
 
         self.selected_path = StringVar(value="")
 
@@ -85,12 +94,23 @@ class MyApp(ctk.CTk):
             self.make_release_button.configure(state="normal")
             self.select_button.configure(text="Change Path")
 
-    def make_release(self):
-        print(f"Selected path: {self.selected_path.get()}")
-        print(f"Rename option: {self.var_rename.get()}")
-        print(f"Type: {self.var_type.get()}")
-        # releaser = MakeRelease(self.var_type.get(), self.selected_path.get(), self.var_rename.get())
-        # releaser.run()
+    def make_release(self, debug: bool = False):
+        if debug:
+            print(
+                f"Calling MakeRelease with:"
+                f"crew={self.var_crew.get()},"
+                f"rename={self.var_rename.get()},"
+                f"type={self.var_type.get()},"
+                f"path={self.selected_path.get()}"
+            )
+
+        releaser = MakeRelease(
+            crew=self.var_crew.get(),
+            rename=self.var_rename.get(),
+            type=self.var_type.get(),
+            path=self.selected_path.get(),
+        )
+        releaser.make_release()
 
 
 if __name__ == "__main__":
