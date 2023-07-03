@@ -23,6 +23,28 @@ def get_movies(path: str) -> List[str]:
     ]
 
 
+def get_folders(path: str) -> List[str]:
+    return [
+        os.path.join(path, f)
+        for f in os.listdir(path)
+        if os.path.isdir(os.path.join(path, f))
+    ]
+
+def get_tree(path: str) -> str:
+    # get all files and folders recursively
+    # and output them in a tree structure
+    tree = []
+    for root, dirs, files in os.walk(path):
+        level = root.replace(path, "").count(os.sep)
+        indent = " " * 4 * level
+        tree.append(f"{indent}{os.path.basename(root)}/")
+        subindent = " " * 4 * (level + 1)
+        for f in files:
+            tree.append(f"{subindent}{f}")
+
+    return "\n".join(tree)
+
+
 def read_file(file: str) -> str:
     if not os.path.exists(file):
         raise Exception(f"File {file} non trovato")
