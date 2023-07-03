@@ -8,7 +8,7 @@ from src import constants, utils
 def generate(filename: str, outputdir: str, outputfile: str) -> str:
     trackers = utils.read_file(constants.trackers).splitlines()
 
-    filesize = os.path.getsize(filename)
+    filesize = utils.get_size(filename)
     piece_size = calculate_piece_size(filesize)
 
     t = Torrent(path=filename, trackers=trackers, piece_size=piece_size)
