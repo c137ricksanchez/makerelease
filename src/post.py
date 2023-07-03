@@ -18,6 +18,7 @@ def generate_text(
     bitrate_img: Dict[str, str],
     magnet: str,
     outputdir: str,
+    tree: str,
 ) -> None:
     bitrate_graph = ""
     if bitrate_img != {}:
@@ -48,6 +49,7 @@ def generate_text(
         "BITRATE_GRAPH": bitrate_graph,
         "REPORT": report,
         "MAGNET": magnet,
+        "TREE": "[b]CONTENUTO[/b][code]\n" + tree + "\n[/code]" if tree != "" else "",
     }
 
     template_text = utils.read_file(constants.template)
