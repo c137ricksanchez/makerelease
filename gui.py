@@ -3,8 +3,6 @@ from tkinter import BooleanVar, StringVar, filedialog
 
 import customtkinter as ctk
 
-from makerelease import MakeRelease
-
 
 def callback(url):
     webbrowser.open_new(url)
@@ -24,13 +22,14 @@ class MyApp(ctk.CTk):
             self, text="Select the type of release", fg_color="transparent"
         ).grid(row=1, column=0, sticky="w", padx=10, pady=0)
 
-        self.var_type = StringVar(value="Movie (File)")
-        options = [
-            "Movie (File)",
-            "Movie (Folder)",
-            "TV Series (Single Season)",
-            "TV Series (Multiple Seasons)",
-        ]
+        self.option_map = {
+            "Movie (File)": "movie",
+            "Movie (Folder)": "movie_folder",
+            "TV Series (Single Season)": "tv_single",
+            "TV Series (Multiple Seasons)": "tv_multi",
+        }
+        options = list(self.option_map.keys())
+        self.var_type = StringVar(value=options[0])
         self.option_menu = ctk.CTkOptionMenu(
             self, variable=self.var_type, values=options
         )
@@ -105,17 +104,17 @@ class MyApp(ctk.CTk):
     def make_release(self, debug: bool = False):
         if debug:
             print(
-                f"Calling MakeRelease with:"
-                f"crew={self.var_crew.get()},"
-                f"rename={self.var_rename.get()},"
-                f"type={self.var_type.get()},"
+                f"Calling MakeRelease with:\n"
+                f"crew={self.var_crew.get()},\n"
+                f"rename={self.var_rename.get()},\n"
+                f"type={self.option_map[self.var_type.get()]},\n"
                 f"path={self.selected_path.get()}"
             )
 
         releaser = MakeRelease(
             crew=self.var_crew.get(),
             rename=self.var_rename.get(),
-            type=self.var_type.get(),
+            type=self.option_map[self.var_type.get()],
             path=self.selected_path.get(),
         )
         releaser.make_release()

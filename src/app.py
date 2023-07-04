@@ -8,10 +8,10 @@ from src import constants, images, metadata, post, tag, torrent, utils
 
 
 class ReleaseType(Enum):
-    MOVIE_FILE = "Movie (File)"
-    MOVIE_FOLDER = "Movie (Folder)"
-    TV_SINGLE = "TV Series (Single Season)"
-    TV_MULTI = "TV Series (Multiple Seasons)"
+    MOVIE_FILE = "movie"
+    MOVIE_FOLDER = "movie_folder"
+    TV_SINGLE = "tv_single"
+    TV_MULTI = "tv_multi"
 
 
 def parse_release_type(type_str: str) -> ReleaseType:
