@@ -60,9 +60,11 @@ def search(title: str, year: str, type: str) -> str:
         print(f"[{id}] {result[title_key]} ({release_date[:4]})")
         id += 1
 
-    choice = input("\nSeleziona un film o inserisci un ID di TMDB [default: 1]: ")
-    if is_tmdb_id(choice, True):
-        return choice
+    choice = input(
+        "\nSeleziona un film inserendo il numero della scelta (1, 2, ...) o un ID di TMDB con prefisso id: (es. id:123) [default: 1]: "
+    )
+    if choice.startswith("id:") and is_tmdb_id(choice[3:], True):
+        return choice[3:]
 
     value = check_input(choice, id)
     print("Film selezionato:", results["results"][value - 1][title_key] + "\n")
