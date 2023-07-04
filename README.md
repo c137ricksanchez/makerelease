@@ -1,11 +1,11 @@
 <!-- omit from toc -->
-# makerelease
+# MakeRelease
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
 
-**makerelease** è un comodo script per velocizzare la pubblicazione di film e serie tv sul forum MIRCrew! 🚀
+**MakeRelease** è un comodo script per velocizzare la pubblicazione di film e serie tv sul forum MIRCrew! 🚀
 
 > ⚠️ **ATTENZIONE:**
 > Questo repository è pubblicato a scopo informativo e didattico.
@@ -61,7 +61,7 @@ Possibilità di scegliere il tipo di release da effettuare:
 4. Installa le dipendenze
     - `cd automatic-releaser`
     - `pip install -r requirements.txt`
-5. Scarica [FFmpeg](https://github.com/BtbN/FFmpeg-Builds/releases/latest) ed estrai `ffmpeg.exe` e `ffprobe.exe` nella directory di makerelease
+5. Scarica [FFmpeg](https://github.com/BtbN/FFmpeg-Builds/releases/latest) ed estrai `ffmpeg.exe` e `ffprobe.exe` nella directory di MakeRelease
 
 ### Linux
 
