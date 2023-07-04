@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 # makerelease
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -8,6 +9,16 @@
 
 > **ATTENZIONE:**
 > Questo repository è pubblicato a scopo informativo e didattico.
+
+- [Requisiti](#requisiti)
+- [Installazione](#installazione)
+  - [Windows 10+](#windows-10)
+  - [Linux](#linux)
+  - [macOS](#macos)
+- [Aggiornamento](#aggiornamento)
+- [Utilizzo](#utilizzo)
+- [Autori](#autori)
+
 
 Funzionalità:
 
@@ -20,11 +31,11 @@ Funzionalità:
 - Prepara il testo del post da pubblicare sul forum con tutte le informazioni del film, poster, trailer, report e link magnet
 - Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
 
-[WIP] Possibilità di scegliere il tipo di release da effettuare:
+Possibilità di scegliere il tipo di release da effettuare:
 
 - **Film**
   1. Film: seleziona un singolo file `mkv`, `mp4` o `avi`
-  2. Film + Extra: seleziona una directory contenente un file video e una cartella chiamata `Extra`. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
+  2. Film + Extra: seleziona una directory contenente un file video un numero arbitrario di cartelle `Extra`, `Featurettes`, ecc. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
 
 - **Serie TV**
   1. Stagione singola. Seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
@@ -80,7 +91,10 @@ Funzionalità:
 
 ## Aggiornamento
 
-Esegui il comando `git pull`.
+1. Entra nella repository
+   - `cd automatic-releaser`
+3. Esegui il comando
+   - `git pull`
 
 ## Utilizzo
 
@@ -96,14 +110,15 @@ Esegui il comando `git pull`.
         - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
     - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet
-2. Metti uno o più film che vuoi rellare nella cartella `movies`
-3. Esegui `./makerelease.py` con Python
-    - Linux/Windows: `python ./makerelease.py`
-    - macOS: `python3 ./makerelease.py`
-
-### Flag
-
-Utilizzo da linea di comando
+3. Makerelease può essere usato sia tramite GUI che tramite linea di comando:
+   - GUI
+     - Apri il terminale ed esegui:
+       - Linux/Windows: `python ./gui.py`
+       - macOS: `python3 ./gui.py`
+   - Linea di comando
+     - Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
+       - Linux/Windows: `python ./makerelease.py`
+       - macOS: `python3 ./makerelease.py`
 
 ```
 makerelease.py [-h] [-c CREW] [-r] [-p PATH]
