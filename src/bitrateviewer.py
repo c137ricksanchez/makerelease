@@ -11,6 +11,9 @@ import ffmpeg
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
+from skfda import FDataGrid
+from skfda.misc.hat_matrix import NadarayaWatsonHatMatrix
+from skfda.preprocessing.smoothing import KernelSmoother
 from tqdm import tqdm
 
 
@@ -99,7 +102,7 @@ class BitrateViewer:
             if frame_count == self._fps_rounded:
                 self._seconds.append(current_second)
                 self._bitrates_per_sec.append(current_bitrate / 1_000)  # kilobit
-                self._avg_bitrate.append(float(np.mean(self._bitrates_per_sec)))
+                # self._avg_bitrate.append(float(np.mean(self._bitrates_per_sec)))
 
                 current_bitrate = 0
                 frame_count = 0
@@ -111,11 +114,22 @@ class BitrateViewer:
 
         ax.plot(self._seconds, self._bitrates_per_sec, label="Bitrate", color="#9e9e9e")
 
+        fd = FDataGrid(
+            data_matrix=np.array(self._bitrates_per_sec).reshape(1, -1),
+            grid_points=np.array(self._seconds),
+        )
+
+        fd_smoothed = KernelSmoother(
+            # bandwidth is the one that controls the smoothness of the curve,
+            # the higher the smoother, adjust it to your needs
+            kernel_estimator=NadarayaWatsonHatMatrix(bandwidth=30)
+        ).fit_transform(fd)
+
         ax.plot(
             self._seconds,
-            self._avg_bitrate,
-            label="Bitrate (avg.)",
-            color="#194488",
+            fd_smoothed.data_matrix[0, :, 0],
+            label="Bitrate (smoothed)",
+            color="red",
             lw=2,
         )
 
@@ -128,12 +142,15 @@ class BitrateViewer:
         ax.set_ylim(0)
 
         ax.set_xlabel("Time")
+        # mette 10 ticks sull'asse x
         ax.set_xticks(range(0, self._seconds[-1] + 1, max(self._seconds[-1] // 9, 1)))
+        # converte i secondi nel human-readable 0:01:44
         ax.xaxis.set_major_formatter(
             mticker.FuncFormatter(lambda x, _: timedelta(seconds=int(x)))
         )
 
         ax.set_ylabel("Bitrate (Kbps)")
+        # mettere il separatore delle migliaia
         ax.yaxis.set_major_formatter(
             mticker.FuncFormatter(lambda x, _: "{:,}".format(int(x)).replace(",", "."))
         )
