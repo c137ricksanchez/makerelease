@@ -94,8 +94,11 @@ Possibilità di scegliere il tipo di release da effettuare:
 
 1. Entra nella repository
    - `cd automatic-releaser`
-3. Esegui il comando
+2. Esegui il comando
    - `git pull`
+3. Aggiorna eventuali dipendenze
+   - Windows: `pip install -r requirements.txt`
+   - macOS/Linux: `pip3 install -r requirements.txt`
 
 ## Utilizzo
 
