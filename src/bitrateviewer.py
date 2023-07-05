@@ -63,10 +63,11 @@ class BitrateViewer:
 
             if proc.stdout:
                 for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
-                    if line.strip():
+                    if line.strip() and "," in line:
                         frame = line.split(",")[1]
-                        bitrates.append(int(frame) * 8)  # pkt_size is in byte
-                        progress.update()
+                        if frame.rstrip().isdigit():
+                            bitrates.append(int(frame) * 8)  # pkt_size is in byte
+                            progress.update()
 
             proc.poll()
 
