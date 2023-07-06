@@ -39,16 +39,28 @@ def generate_thumbnail(
     outputfile: str,
     time: str,
 ) -> None:
+    args = {}
+    if is_anamorphic(filename):
+        args = {"vf": "scale=iw*sar:ih"}
+
     try:
         (
             ffmpeg.input(filename, ss=time)
-            .output(os.path.join(outputdir, outputfile), vframes=1)
+            .output(os.path.join(outputdir, outputfile), vframes=1, **args)
             .overwrite_output()
             .run(capture_stdout=True, capture_stderr=True)
         )
     except ffmpeg.Error as e:
         print(e.stderr.decode(), file=sys.stderr)
         exit(-1)
+
+
+def is_anamorphic(path: str) -> bool:
+    data = MediaInfo.parse(path)
+    if not isinstance(data, MediaInfo):
+        exit(-1)
+
+    return float(data.tracks[1].pixel_aspect_ratio) != 1
 
 
 def upload_to_imgbb(path: str) -> Dict[str, str]:
