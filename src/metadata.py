@@ -111,7 +111,7 @@ def get(id: str, type: str) -> Dict[str, str]:
             break
 
     return {
-        "tmdb_url": "https://www.themoviedb.org/movie/" + str(data["id"]),
+        "tmdb_url": f"https://www.themoviedb.org/{type}/" + str(data["id"]),
         "title": data[title_key],
         "year": str(datetime.strptime(data[release_date_key], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
