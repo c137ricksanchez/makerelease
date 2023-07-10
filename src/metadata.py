@@ -115,7 +115,7 @@ def get(id: str, type: str) -> Dict[str, str]:
         "title": data[title_key],
         "year": str(datetime.strptime(data[release_date_key], "%Y-%m-%d").year),
         "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
-        "original_title": data[title_key],
+        "original_title": data["original_" + title_key],
         "director": ", ".join(director),
         "country": ", ".join(countries),
         "genre": ", ".join(genres),
