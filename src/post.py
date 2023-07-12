@@ -86,7 +86,10 @@ def sizeof_fmt(num: float, suffix: str = "B") -> str:
 
 
 def parse_runtime(mins: int) -> str:
-    hours = math.floor(mins / 60)
-    minutes = mins % 60
+    if mins < 60:
+        return f"{mins}m"
+    else:
+        hours = math.floor(mins / 60)
+        minutes = mins % 60
 
-    return f"{hours}h {minutes}m"
+        return f"{hours}h {minutes}m"
