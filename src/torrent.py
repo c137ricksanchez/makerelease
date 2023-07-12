@@ -12,10 +12,14 @@ def generate(filename: str, outputdir: str, outputfile: str) -> str:
     piece_size = calculate_piece_size(filesize)
 
     t = Torrent(path=filename, trackers=trackers, piece_size=piece_size)
-    t.generate()
+    t.generate(callback=cb, interval=1)
     t.write(os.path.join(outputdir, outputfile + ".torrent"))
 
     return str(t.magnet())
+
+
+def cb(torrent: Torrent, filepath: str, pieces_done: int, pieces_total: int):
+    print(f"{pieces_done/pieces_total*100:3.0f}% completato", end="\r")
 
 
 # https://cdn.discordapp.com/attachments/667734286543093760/915388777160142930/Torrent_Dimension.PNG
