@@ -11,6 +11,7 @@ Genere: [b]$GENRE[/b]
 Anno: [b]$YEAR[/b]
 Durata: [b]$RUNTIME[/b]
 Regia: [b]$DIRECTOR[/b]
+Numero episodi: [b]$EP_COUNT[/b]
 
 [b]CAST[/b]
 
