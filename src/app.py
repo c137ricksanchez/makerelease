@@ -159,8 +159,11 @@ class MakeRelease:
 
         if self.folder_release:
             tree = utils.get_tree(self.path)
+            if self.type == ReleaseType.TV_SINGLE or self.type == ReleaseType.TV_MULTI:
+                ep_count = utils.get_ep_count(self.path)
         else:
             tree = ""
+            ep_count = 0
 
         print("7. Generazione del post...")
         post.generate_text(
@@ -173,6 +176,7 @@ class MakeRelease:
             magnet,
             outputdir,
             tree,
+            ep_count
         )
 
         print("8. Fine!")

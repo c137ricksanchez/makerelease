@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 from pymediainfo import MediaInfo
 
-from src import constants, post
+from src import constants
 
 
 def get_api_key(key: str) -> str:
@@ -55,22 +55,12 @@ def get_tree(path: str) -> str:
         tree.append(f"{indent}{os.path.basename(root)}/")
         subindent = " " * 4 * (level + 1)
         for f in files:
-            file_path = os.path.join(root, f)
-
-            size = get_size(file_path)
-            pretty_size = post.sizeof_fmt(size)
-
-            if f.lower().endswith(("avi", "mkv", "mp4")):
-                duration = get_duration(file_path)
-                runtime = post.parse_runtime(duration)
-
-                file_info = f"{runtime}, {pretty_size}"
-            else:
-                file_info = pretty_size
-
-            tree.append(f"{subindent}{f} ({file_info})")
+            tree.append(f"{subindent}{f}")
 
     return "\n".join(tree)
+
+def get_ep_count(path: str) -> int:
+    return len(os.listdir(path))
 
 
 def read_file(file: str) -> str:

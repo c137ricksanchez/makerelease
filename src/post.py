@@ -19,6 +19,7 @@ def generate_text(
     magnet: str,
     outputdir: str,
     tree: str,
+    ep_count: int
 ) -> None:
     bitrate_graph = ""
     if bitrate_img != {}:
@@ -57,6 +58,7 @@ def generate_text(
         "REPORT": report,
         "MAGNET": magnet,
         "TREE": tree,
+        "EP_COUNT": str(ep_count)
     }
 
     template_text = utils.read_file(constants.template)
@@ -86,10 +88,7 @@ def sizeof_fmt(num: float, suffix: str = "B") -> str:
 
 
 def parse_runtime(mins: int) -> str:
-    if mins < 60:
-        return f"{mins}m"
-    else:
-        hours = math.floor(mins / 60)
-        minutes = mins % 60
+    hours = math.floor(mins / 60)
+    minutes = mins % 60
 
-        return f"{hours}h {minutes}m"
+    return f"{hours}h {minutes}m"
