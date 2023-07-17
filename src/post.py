@@ -34,6 +34,10 @@ def generate_text(
     
     tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
 
+    
+    ep_count = "Numero episodi: [b]"+str(ep_count)+"[/b]" if ep_count > 0 else ""
+
+
     values: Dict[str, str] = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
@@ -58,7 +62,7 @@ def generate_text(
         "REPORT": report,
         "MAGNET": magnet,
         "TREE": tree,
-        "EP_COUNT": str(ep_count)
+        "EP_COUNT": ep_count
     }
 
     template_text = utils.read_file(constants.template)
