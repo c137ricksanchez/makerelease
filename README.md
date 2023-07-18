@@ -112,7 +112,7 @@ Possibilità di scegliere il tipo di release da effettuare:
     - `template.txt`
         - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
         - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
-        - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_signle`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
+        - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
     - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet
 3. MakeRelease può essere usato sia tramite GUI che tramite linea di comando:
