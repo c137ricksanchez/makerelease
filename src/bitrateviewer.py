@@ -10,10 +10,7 @@ from typing import List
 import ffmpeg
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-import numpy as np
-from skfda import FDataGrid
-from skfda.misc.hat_matrix import NadarayaWatsonHatMatrix
-from skfda.preprocessing.smoothing import KernelSmoother
+from scipy.ndimage import gaussian_filter1d
 from tqdm import tqdm
 
 
@@ -114,20 +111,9 @@ class BitrateViewer:
 
         ax.plot(self._seconds, self._bitrates_per_sec, label="Bitrate", color="#9e9e9e")
 
-        fd = FDataGrid(
-            data_matrix=np.array(self._bitrates_per_sec).reshape(1, -1),
-            grid_points=np.array(self._seconds),
-        )
-
-        fd_smoothed = KernelSmoother(
-            # bandwidth is the one that controls the smoothness of the curve,
-            # the higher the smoother, adjust it to your needs
-            kernel_estimator=NadarayaWatsonHatMatrix(bandwidth=30)
-        ).fit_transform(fd)
-
         ax.plot(
             self._seconds,
-            fd_smoothed.data_matrix[0, :, 0],
+            gaussian_filter1d(input=self._bitrates_per_sec, sigma=64),
             label="Bitrate (smoothed)",
             color="red",
             lw=2,
