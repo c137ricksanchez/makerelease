@@ -39,7 +39,7 @@ $SCREENSHOTS
 
 [spoiler]
 [code]
-$REPORT
+$REPORT_MEDIAINFO
 [/code]
 [/spoiler]
 

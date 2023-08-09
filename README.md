@@ -25,7 +25,7 @@
 ## Funzionalità
 
 - Ottiene i dati del film o della serie tv da TheMovieDB
-- Crea il report con MediaInfo
+- Crea il report con MediaInfo (cross-platform) oppure AVInaptic (solo per Windows)
 - Crea il file .torrent
 - Estrae gli screenshot
 - Genera il grafico del bitrate
@@ -47,7 +47,7 @@ Possibilità di scegliere il tipo di release da effettuare:
 
 - Python 3.8 (o più recente)
 - FFmpeg
-- MediaInfo
+- MediaInfo (oppure AVInaptic)
 
 ## Installazione
 
@@ -112,6 +112,7 @@ Possibilità di scegliere il tipo di release da effettuare:
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
         - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
+        - Se vuoi creare un report con AVInaptic, inserisci la variabile `$REPORT_AVINAPTIC`. Assicurati che l'eseguibile `avinaptic2-cli.exe` sia in PATH.
         - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
         - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
     - `trackers.txt`

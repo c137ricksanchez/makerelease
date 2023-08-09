@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 from enum import Enum
 from pathlib import Path
 
@@ -119,8 +120,21 @@ class MakeRelease:
 
             os.rename(old_movie, movie)
 
-        print("2. Generazione del report con MediaInfo...")
-        report = post.generate_report(movie, outputdir)
+        report = ""
+        if "$REPORT_MEDIAINFO" in utils.read_file(constants.template):
+            print("2. Generazione del report con MediaInfo...")
+            report = post.generate_report(movie, outputdir)
+
+        report_avinaptic = ""
+        if (
+            "$REPORT_AVINAPTIC" in utils.read_file(constants.template)
+            and os.name == "nt"
+        ):
+            print("2. Generazione del report con AVInaptic...")
+            if shutil.which("avinaptic2-cli"):
+                report_avinaptic = post.generate_avinaptic_report(movie, outputdir)
+            else:
+                print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
         print("3. Generazione del file torrent...")
         magnet = torrent.generate(self.path, outputdir, filename)
@@ -172,6 +186,7 @@ class MakeRelease:
             releasesize,
             duration,
             report,
+            report_avinaptic,
             uploaded_imgs,
             bitrate_img,
             magnet,
