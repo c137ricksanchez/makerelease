@@ -26,10 +26,11 @@ def parse_release_type(type_str: str) -> ReleaseType:
 
 
 class MakeRelease:
-    def __init__(self, crew: str, rename: bool, type: str, path: str):
+    def __init__(self, crew: str, rename: bool, type: str, path: str, id: str):
         self.crew = crew
         self.rename = rename
         self.type = parse_release_type(type)
+        self.id = id
 
         if (
             self.type == ReleaseType.MOVIE_FOLDER
@@ -97,7 +98,12 @@ class MakeRelease:
         releasesize = utils.get_size(self.path)
 
         print("\n1. Ricezione dei metadati da TheMovieDB...")
-        movie_id = metadata.search(title, year, self.type_id)
+
+        if self.id and metadata.is_tmdb_id(self.id):
+            movie_id = self.id
+        else:
+            movie_id = metadata.search(title, year, self.type_id)
+
         data = metadata.get(movie_id, self.type_id)
 
         outputdir = os.path.join(Path(self.path).parent, filename + "_files")

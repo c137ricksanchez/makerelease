@@ -118,6 +118,7 @@ class MyApp(ctk.CTk):
             rename=self.var_rename.get(),
             type=self.option_map[self.var_type.get()],
             path=self.selected_path.get(),
+            id="",
         )
         releaser.make_release()
 

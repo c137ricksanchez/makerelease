@@ -36,10 +36,17 @@ if __name__ == "__main__":
         help="Nome della crew da inserire alla fine del nome del file",
     )
 
+    parser.add_argument(
+        "-i",
+        "--id",
+        type=str,
+        help="ID del titolo su TheMovieDB",
+    )
+
     args = parser.parse_args()
 
     # Instantiate the class
-    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path)
+    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path, args.id)
 
     # Call the make_release method with the movie argument
     release_maker.make_release()

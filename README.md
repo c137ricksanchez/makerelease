@@ -128,7 +128,7 @@ Possibilità di scegliere il tipo di release da effettuare:
        - macOS/Linux: `python3 ./makerelease.py`
 
 ```
-makerelease.py [-h] [-c CREW] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
+makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
 ```
 
 | Short | Long       | Default | Description                                                                     |
@@ -138,6 +138,7 @@ makerelease.py [-h] [-c CREW] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv
 | `-t`  | `--type`   |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi` |
 | `-r`  | `--rename` | `False` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew       |
 | `-c`  | `--crew`   |         | Nome della crew da inserire alla fine del nome del file                         |
+| `-i`  | `--id`     |         | ID del titolo su TheMovieDB                                                     |
 
 ## Autori
 
