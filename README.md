@@ -19,6 +19,8 @@
   - [macOS](#macos)
 - [Aggiornamento](#aggiornamento)
 - [Utilizzo](#utilizzo)
+  - [Tramite GUI](#tramite-gui)
+  - [Tramite linea di comando](#tramite-linea-di-comando)
 - [Autori](#autori)
 
 
@@ -117,15 +119,19 @@ Possibilità di scegliere il tipo di release da effettuare:
         - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
     - `trackers.txt`
         - Inserisci la *trackers list* che verrà usata per generare il file *.torrent* e il magnet
-3. MakeRelease può essere usato sia tramite GUI che tramite linea di comando:
-   - GUI
-     - Apri il terminale ed esegui:
-       - Windows: `python ./gui.py`
-       - macOS/Linux: `python3 ./gui.py`
-   - Linea di comando
-     - Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
-       - Windows: `python ./makerelease.py`
-       - macOS/Linux: `python3 ./makerelease.py`
+3. MakeRelease può essere usato sia tramite GUI che tramite linea di comando.
+
+### Tramite GUI
+
+![GUI](img/gui.png)
+Apri il terminale ed esegui:
+ - Windows: `python ./gui.py`
+ - macOS/Linux: `python3 ./gui.py`
+
+### Tramite linea di comando
+Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
+ - Windows: `python ./makerelease.py`
+ - macOS/Linux: `python3 ./makerelease.py`
 
 ```
 makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
