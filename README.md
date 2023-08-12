@@ -123,7 +123,8 @@ Possibilità di scegliere il tipo di release da effettuare:
 
 ### Tramite GUI
 
-![GUI](img/gui.png)
+<img src="img/gui.png" width="300"/>
+
 Apri il terminale ed esegui:
  - Windows: `python ./gui.py`
  - macOS/Linux: `python3 ./gui.py`
