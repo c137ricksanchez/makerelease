@@ -131,14 +131,14 @@ Possibilità di scegliere il tipo di release da effettuare:
 makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
 ```
 
-| Short | Long       | Default | Description                                                                     |
-| ----- | ---------- | ------- | ------------------------------------------------------------------------------- |
-| `-h`  | `--help`   |         | show this help message and exit                                                 |
-| `-p`  | `--path`   |         | Percorso della cartella o del file                                              |
-| `-t`  | `--type`   |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi` |
-| `-r`  | `--rename` | `False` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew       |
-| `-c`  | `--crew`   |         | Nome della crew da inserire alla fine del nome del file                         |
-| `-i`  | `--id`     |         | ID del titolo su TheMovieDB                                                     |
+| Short | Long       | Default | Description                                                                                                             |
+| ----- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `-h`  | `--help`   |         | Mostra il messaggio di aiuto con le informazioni su come usare il comando                                               |
+| `-p`  | `--path`   |         | Percorso della cartella o del file                                                                                      |
+| `-t`  | `--type`   |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                         |
+| `-r`  | `--rename` | `False` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew                                               |
+| `-c`  | `--crew`   |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                   |
+| `-i`  | `--id`     |         | ID del titolo su TheMovieDB (facoltativo, se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
 
 ## Autori
 
