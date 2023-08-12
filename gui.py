@@ -14,7 +14,7 @@ class MyApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("MakeRelease")
-        self.geometry("400x300")
+        self.geometry("400x360")
         self.grid_columnconfigure(0, weight=1)
 
         ctk.set_appearance_mode("System")  # Modes: system (default), light, dark
@@ -69,13 +69,21 @@ class MyApp(ctk.CTk):
         self.crew_entry = ctk.CTkEntry(self, textvariable=self.var_crew)
         self.crew_entry.grid(row=8, column=0, sticky="nsew", padx=10, pady=2)
 
+        # Add TMDB ID
+        ctk.CTkLabel(self, text="Add TMDB ID (optional)", fg_color="transparent").grid(
+            row=9, column=0, sticky="w", padx=10, pady=0
+        )
+        self.var_idtmdb = StringVar(value="")
+        self.idtmdb_entry = ctk.CTkEntry(self, textvariable=self.var_idtmdb)
+        self.idtmdb_entry.grid(row=10, column=0, sticky="nsew", padx=10, pady=2)
+
         self.author_label = ctk.CTkLabel(
             self,
             justify="left",
             text="Authors: RickSanchez & Norman",
             fg_color="transparent",
         )
-        self.author_label.grid(row=9, column=0, sticky="w", padx=10, pady=0)
+        self.author_label.grid(row=11, column=0, sticky="w", padx=10, pady=0)
 
         self.check_updates = ctk.CTkLabel(
             self,
@@ -88,7 +96,7 @@ class MyApp(ctk.CTk):
             "<Button-1>",
             lambda e: callback("https://github.com/c137ricksanchez/automatic-releaser"),
         )
-        self.check_updates.grid(row=10, column=0, sticky="w", padx=10, pady=0)
+        self.check_updates.grid(row=12, column=0, sticky="w", padx=10, pady=0)
 
     def select(self):
         if self.var_type.get() == "Movie (File)":
@@ -118,7 +126,7 @@ class MyApp(ctk.CTk):
             rename=self.var_rename.get(),
             type=self.option_map[self.var_type.get()],
             path=self.selected_path.get(),
-            id="",
+            id=self.var_idtmdb.get(),
         )
         releaser.make_release()
 
