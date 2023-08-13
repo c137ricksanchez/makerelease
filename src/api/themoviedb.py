@@ -17,21 +17,11 @@ def search_movie(title: str, year: str, type: str):
 def get_movie(id: str, type: str):
     return request_json(
         f"https://api.themoviedb.org/3/{type}/{id}",
-        {"api_key": api_key, "language": "it-IT"},
-    )
-
-
-def get_movie_credits(id: str, type: str):
-    return request_json(
-        f"https://api.themoviedb.org/3/{type}/{id}/credits",
-        {"api_key": api_key, "language": "it-IT"},
-    )
-
-
-def get_movie_videos(id: str, type: str):
-    return request_json(
-        f"https://api.themoviedb.org/3/{type}/{id}/videos",
-        {"api_key": api_key, "language": "it-IT"},
+        {
+            "api_key": api_key,
+            "language": "it-IT",
+            "append_to_response": "credits,videos",
+        },
     )
 
 

@@ -81,9 +81,6 @@ def get(id: str, type: str) -> Dict[str, str]:
         print("Non esiste nessun film con questo ID.")
         exit(-1)
 
-    credits = tmdb.get_movie_credits(id, type)
-    videos = tmdb.get_movie_videos(id, type)
-
     with open("src/countries_ISO_3166-1_alpha2.json") as file:
         country_codes = json.load(file)
 
@@ -96,16 +93,16 @@ def get(id: str, type: str) -> Dict[str, str]:
         genres.append(genre["name"])
 
     cast: List[str] = []
-    for actor in credits["cast"][:10]:
+    for actor in data["credits"]["cast"][:10]:
         cast.append(f"[*]{actor['name']}: {actor['character']}")
 
     director: List[str] = []
-    for crew in credits["crew"]:
+    for crew in data["credits"]["crew"]:
         if crew["job"] == "Director":
             director.append(crew["name"])
 
     trailer = ""
-    for video in videos["results"]:
+    for video in data["videos"]["results"]:
         if video["type"] == "Trailer" and video["site"] == "YouTube":
             trailer = "https://www.youtube.com/watch?v=" + video["key"]
             break
