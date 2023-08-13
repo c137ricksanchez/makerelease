@@ -110,11 +110,15 @@ def get(id: str, type: str) -> Dict[str, str]:
             trailer = "https://www.youtube.com/watch?v=" + video["key"]
             break
 
+    poster = ""
+    if data["poster_path"]:
+        poster = "https://image.tmdb.org/t/p/w500" + data["poster_path"]
+
     return {
         "tmdb_url": f"https://www.themoviedb.org/{type}/" + str(data["id"]),
         "title": data[title_key],
         "year": str(datetime.strptime(data[release_date_key], "%Y-%m-%d").year),
-        "poster_url": "https://image.tmdb.org/t/p/w500" + data["poster_path"],
+        "poster_url": poster,
         "original_title": data["original_" + title_key],
         "director": ", ".join(director),
         "country": ", ".join(countries),
