@@ -41,6 +41,17 @@ def generate_text(
 
     ep_count_str = f"Numero episodi: [b]{ep_count}[/b]" if ep_count > 0 else ""
 
+    is_first_empty = True
+    for key, val in metadata.items():
+        if val == "":
+            if is_first_empty:
+                print(
+                    "Queste informazioni sono da riempire manualmente perché non trovate su TMDB:"
+                )
+                is_first_empty = False
+
+            print("  -", key)
+
     values: Dict[str, str] = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
