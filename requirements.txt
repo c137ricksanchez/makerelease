@@ -1,8 +1,8 @@
 customtkinter==5.2.0
 ffmpeg_python==0.2.0
-matplotlib==3.5.2
-pymediainfo==5.1.0
+matplotlib==3.7.2
+pymediainfo==6.0.1
 Requests==2.31.0
-scipy==1.11.1
-torf==4.0.2
-tqdm==4.64.0
+scipy==1.9.3
+torf==4.2.1
+tqdm==4.66.1
