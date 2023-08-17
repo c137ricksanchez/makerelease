@@ -122,7 +122,7 @@ class MakeRelease:
             old_movie = movie
 
             filename = re.sub(r'[\\/*?:"<>|]', "", title)
-            movie = str(os.path.join(constants.movies, filename + ext))
+            movie = str(os.path.join(Path(self.path).parent, filename + ext))
 
             os.rename(old_movie, movie)
 
@@ -143,7 +143,7 @@ class MakeRelease:
                 print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
         print("3. Generazione del file torrent...")
-        magnet = torrent.generate(self.path, outputdir, filename)
+        magnet = torrent.generate(movie, outputdir, filename)
 
         print("4. Estrazione degli screenshot...")
         screenshots = images.extract_screenshots(movie, outputdir)
