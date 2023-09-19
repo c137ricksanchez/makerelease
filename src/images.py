@@ -34,7 +34,7 @@ def extract_screenshots(path: str, outputdir: str) -> List[str]:
             if timecode_ms > movie_ms:
                 break
 
-            name = time.replace(":", ".") + ".png"
+            name = time.replace(":", ".") + f".{constants.image_extension}"
             generate_thumbnail(path, outputdir, name, time)
             images.append(os.path.join(outputdir, name))
 
