@@ -7,7 +7,7 @@ import ffmpeg
 from pymediainfo import MediaInfo
 
 from src import constants
-from src.api import imgbb, imgur
+from src.api import imgbb, imgur, imgbly
 
 
 def extract_screenshots(path: str, outputdir: str) -> List[str]:
@@ -34,7 +34,7 @@ def extract_screenshots(path: str, outputdir: str) -> List[str]:
             if timecode_ms > movie_ms:
                 break
 
-            name = time.replace(":", ".") + ".png"
+            name = time.replace(":", ".") + f".{constants.image_extension}"
             generate_thumbnail(path, outputdir, name, time)
             images.append(os.path.join(outputdir, name))
 
@@ -77,3 +77,7 @@ def upload_to_imgbb(path: str) -> Dict[str, str]:
 
 def upload_to_imgur(path: str) -> Dict[str, str]:
     return imgur.upload_image(path)
+
+
+def upload_to_imgbly(path: str) -> Dict[str,str]: 
+    return imgbly.imgbly_upload(path)

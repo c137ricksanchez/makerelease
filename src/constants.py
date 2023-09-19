@@ -3,6 +3,8 @@ import os
 root = os.getcwd()
 config = os.path.join(root, "config")
 movies = os.path.join(root, "movies")
+crew = ""
+image_extension = "png" # Puoi usare `jpg` come alternativa
 
 keys = os.path.join(config, "keys.json")
 screenshots = os.path.join(config, "screenshots.txt")

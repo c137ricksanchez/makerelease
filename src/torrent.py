@@ -4,6 +4,10 @@ from torf import Torrent
 
 from src import constants, utils
 
+def get_torrent(filename: str, outputdir: str, outputfile: str) -> bool:
+    if (os.path.exists(os.path.join(outputdir, outputfile + ".torrent"))):
+        return True
+    else: return False
 
 def generate(filename: str, outputdir: str, outputfile: str) -> str:
     trackers = utils.read_file(constants.trackers).splitlines()
@@ -17,6 +21,9 @@ def generate(filename: str, outputdir: str, outputfile: str) -> str:
 
     return str(t.magnet())
 
+def get_magnet_only(filename: str, outputdir: str, outputfile: str) -> str:
+    t = Torrent.read(os.path.join(outputdir, outputfile + ".torrent"))
+    return str(t.magnet())
 
 def cb(torrent: Torrent, filepath: str, pieces_done: int, pieces_total: int):
     print(f"{pieces_done/pieces_total*100:3.0f}% completato", end="\r")

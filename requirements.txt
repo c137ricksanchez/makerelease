@@ -6,3 +6,6 @@ Requests==2.31.0
 scipy==1.9.3
 torf==4.2.1
 tqdm==4.66.1
+pillow
+Image
+beautifulsoup4

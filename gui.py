@@ -4,6 +4,7 @@ from tkinter import BooleanVar, StringVar, filedialog
 import customtkinter as ctk
 
 from src.app import MakeRelease
+from src.constants import crew
 
 
 def callback(url):
@@ -65,7 +66,7 @@ class MyApp(ctk.CTk):
         ctk.CTkLabel(
             self, text="Add custom crew name (optional)", fg_color="transparent"
         ).grid(row=7, column=0, sticky="w", padx=10, pady=0)
-        self.var_crew = StringVar(value="")
+        self.var_crew = StringVar(value=crew)
         self.crew_entry = ctk.CTkEntry(self, textvariable=self.var_crew)
         self.crew_entry.grid(row=8, column=0, sticky="nsew", padx=10, pady=2)
 
@@ -129,6 +130,7 @@ class MyApp(ctk.CTk):
             id=self.var_idtmdb.get(),
         )
         releaser.make_release()
+        exit()
 
 
 if __name__ == "__main__":
