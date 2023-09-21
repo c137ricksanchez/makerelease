@@ -22,10 +22,10 @@ def upload_image(path: str) -> Dict[str, str]:
         resp = response.json()
 
         if not resp["success"]:
-            print("errore Imgur nel tentativo di caricare l'immagine: ", path, "  -->  ", resp["data"]["error"])
+            print("errore Imgur nel tentativo di caricare l'immagine: ",
+                  path, "  -->  ", resp["data"]["error"])
             print("Tentativo di caricamento alternativo su https://imgbly.com/")
-            imgbly_upload = imgbly.imgbly_upload(path)
-            return imgbly_upload
+            return imgbly.imgbly_upload(path)
             # raise Exception("Errore Imgur:", resp["data"]["error"])
 
         full_image = resp["data"]["link"]
