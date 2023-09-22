@@ -110,6 +110,8 @@ def get(id: str, type: str) -> Dict[str, str]:
     poster = ""
     if data["poster_path"]:
         poster = "https://image.tmdb.org/t/p/w500" + data["poster_path"]
+    else:
+        poster = "https://i.imgur.com/iDhevbK.jpg"
 
     return {
         "tmdb_url": f"https://www.themoviedb.org/{type}/" + str(data["id"]),
