@@ -144,8 +144,6 @@ class MakeRelease:
         ):
             print("2. Generazione del report con AVInaptic...")
             if shutil.which("avinaptic2-cli"):
-                print(movie)
-                print(outputdir)
                 report_avinaptic = post.generate_avinaptic_report(
                     movie, outputdir)
             else:
@@ -179,7 +177,7 @@ class MakeRelease:
 
         bitrate_img = {}
 
-        if utils.get_api_key("imgbly"):
+        if (utils.get_api_key("imgbly") and utils.get_api_key("imgbb") == ""):
             print("\n6. Caricamento delle immagini su ImgBly...")
             uploaded_imgs = [images.upload_to_imgbly(
                 img) for img in screenshots]

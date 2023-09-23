@@ -87,4 +87,8 @@ def upload_to_imgur(path: str) -> Dict[str, str]:
 
 
 def upload_to_imgbly(path: str) -> Dict[str, str]:
-    return imgbly.imgbly_upload(path)
+    if (os.path.getsize(path)/1024/1024 > 50):
+        print(f"Lo screenshot: {os.path.basename(path)} - {round(os.path.getsize(path)/1024/1024,2)} MB \nsupera la massima dimensione supportata da ImgBly (50 MB), effettuare il caricamento manualmente, puoi usare https://www.imagebam.com/\n")
+        return {"full": "", "thumb": ""}
+    else:
+        return imgbly.imgbly_upload(path)
