@@ -74,20 +74,12 @@ def get_tree(path: str) -> str:
 
 def get_ep_count(path: str) -> int:
     ep_count = 0
-    rel_files = os.listdir(path)
-    for file in rel_files:
-        if(os.path.isdir(os.path.join(path + "/" + file))):
-            ep_count += cycle_folder(os.path.join(path + "/" + file))
-        if(file.endswith(("avi", "mkv", "mp4"))):
-            ep_count += 1
-    return ep_count
 
-def cycle_folder(path: str) -> int:
-    ep_count = 0
-    rel_files = os.listdir(path)
-    for file in rel_files:
-        if(file.endswith(("avi", "mkv", "mp4"))):
-            ep_count += 1
+    for _, _, files in os.walk(path):
+        for file in files:
+            if file.endswith(("avi", "mkv", "mp4")):
+                ep_count += 1
+
     return ep_count
 
 def read_file(file: str) -> str:
