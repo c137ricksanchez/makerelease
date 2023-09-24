@@ -1,6 +1,8 @@
 from typing import Dict
 from urllib.parse import urlparse, urlunparse
+
 import requests
+
 from . import imgbly
 
 client_id = "bcad66c82e13805"
@@ -22,10 +24,14 @@ def upload_image(path: str) -> Dict[str, str]:
         resp = response.json()
 
         if not resp["success"]:
-            print("errore Imgur nel tentativo di caricare l'immagine: ",
-                  path, "  -->  ", resp["data"]["error"])
+            print(
+                "errore Imgur nel tentativo di caricare l'immagine: ",
+                path,
+                "  -->  ",
+                resp["data"]["error"],
+            )
             print("Tentativo di caricamento alternativo su https://imgbly.com/")
-            return imgbly.imgbly_upload(path)
+            return imgbly.upload_image(path)
             # raise Exception("Errore Imgur:", resp["data"]["error"])
 
         full_image = resp["data"]["link"]

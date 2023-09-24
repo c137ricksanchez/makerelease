@@ -1,10 +1,10 @@
 import base64
 from typing import Dict
-from . import imgbly
 
 import requests
 
 from .. import utils
+from . import imgbly
 
 api_key = utils.get_api_key("imgbb")
 
@@ -29,9 +29,14 @@ def upload_image(path: str) -> Dict[str, str]:
             print(
                 "Si è verificato un errore durante il caricamento delle immagini su ImgBB"
             )
-            print("errore ImgBB nel tentativo di caricare l'immagine: ", path, "  -->  ", resp["error"]["message"])
+            print(
+                "errore ImgBB nel tentativo di caricare l'immagine: ",
+                path,
+                "  -->  ",
+                resp["error"]["message"],
+            )
             print("Tentativo di caricamento alternativo su https://imgbly.com/")
-            imgbly_upload = imgbly.imgbly_upload(path)
+            imgbly_upload = imgbly.upload_image(path)
             return imgbly_upload
             # exit(-1)
 

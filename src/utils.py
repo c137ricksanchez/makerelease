@@ -72,6 +72,7 @@ def get_tree(path: str) -> str:
 
     return "\n".join(tree)
 
+
 def get_ep_count(path: str) -> int:
     ep_count = 0
 
@@ -81,6 +82,7 @@ def get_ep_count(path: str) -> int:
                 ep_count += 1
 
     return ep_count
+
 
 def read_file(file: str) -> str:
     if not os.path.exists(file):

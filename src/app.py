@@ -50,8 +50,7 @@ class MakeRelease:
         if not os.path.exists(path):
             raise ValueError(f"Invalid path: {path}. Path does not exist.")
         if not os.path.isfile(path) and not os.path.isdir(path):
-            raise ValueError(
-                f"Invalid path: {path}. Path is not a file or directory.")
+            raise ValueError(f"Invalid path: {path}. Path is not a file or directory.")
 
         self.path = path
 
@@ -130,10 +129,11 @@ class MakeRelease:
         report = ""
         if "$REPORT_MEDIAINFO" in utils.read_file(constants.template):
             print("\n2. Generazione del report con MediaInfo...")
-            if (os.path.exists(os.path.join(outputdir, "report_mediainfo.txt"))):
+            if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
                 print("  |---> File Mediainfo già presente, skip step")
-                report = utils.read_file(os.path.join(
-                    outputdir, "report_mediainfo.txt"))
+                report = utils.read_file(
+                    os.path.join(outputdir, "report_mediainfo.txt")
+                )
             else:
                 report = post.generate_report(movie, outputdir)
 
@@ -144,15 +144,14 @@ class MakeRelease:
         ):
             print("2. Generazione del report con AVInaptic...")
             if shutil.which("avinaptic2-cli"):
-                report_avinaptic = post.generate_avinaptic_report(
-                    movie, outputdir)
+                report_avinaptic = post.generate_avinaptic_report(movie, outputdir)
             else:
                 print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
         print("\n3. Generazione del file torrent...")
-        if (torrent.get_torrent(movie, outputdir, filename)):
+        if os.path.exists(os.path.join(outputdir, filename + ".torrent")):
             print("  |---> File Torrent già presente, skip step")
-            magnet = torrent.get_magnet_only(movie, outputdir, filename)
+            magnet = torrent.get_magnet(outputdir, filename)
         else:
             magnet = torrent.generate(movie, outputdir, filename)
 
@@ -161,14 +160,13 @@ class MakeRelease:
 
         # Salta la generazione del grafico del bitrate se non è presente
         # la variabile $BITRATE_GRAPH nel file template.txt
-        skip_chart = "$BITRATE_GRAPH" not in utils.read_file(
-            constants.template)
+        skip_chart = "$BITRATE_GRAPH" not in utils.read_file(constants.template)
 
         print("\n5. Generazione del grafico del bitrate...")
         if skip_chart:
             print("Operazione saltata.")
         else:
-            if (os.path.exists(os.path.join(outputdir, "bitrate.png"))):
+            if os.path.exists(os.path.join(outputdir, "bitrate.png")):
                 print("  |---> Grafico già generato, skip step")
             else:
                 bitrate = bv.BitrateViewer(movie)
@@ -177,33 +175,33 @@ class MakeRelease:
 
         bitrate_img = {}
 
-        if (utils.get_api_key("imgbly") and utils.get_api_key("imgbb") == ""):
+        if utils.get_api_key("imgbly"):
             print("\n6. Caricamento delle immagini su ImgBly...")
-            uploaded_imgs = [images.upload_to_imgbly(
-                img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgbly(img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgbly(
-                    os.path.join(outputdir, "bitrate.png"))
-        if utils.get_api_key("imgbb") != "":
+                    os.path.join(outputdir, "bitrate.png")
+                )
+        elif utils.get_api_key("imgbb") != "":
             print("\n6. Caricamento delle immagini su ImgBB...")
-            uploaded_imgs = [images.upload_to_imgbb(
-                img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgbb(img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgbb(
-                    os.path.join(outputdir, "bitrate.png"))
-        if (utils.get_api_key("imgbb") == "" and not utils.get_api_key("imgbly")):
+                    os.path.join(outputdir, "bitrate.png")
+                )
+        else:
             print("\n6. Caricamento delle immagini su Imgur...")
-            uploaded_imgs = [images.upload_to_imgur(
-                img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgur(
-                    os.path.join(outputdir, "bitrate.png"))
+                    os.path.join(outputdir, "bitrate.png")
+                )
 
         ep_count = 0
 
         if self.folder_release:
             tree = utils.get_tree(self.path)
-            if (self.type == ReleaseType.TV_SINGLE or self.type == ReleaseType.TV_MULTI):
+            if self.type == ReleaseType.TV_SINGLE or self.type == ReleaseType.TV_MULTI:
                 ep_count = utils.get_ep_count(self.path)
         else:
             tree = ""

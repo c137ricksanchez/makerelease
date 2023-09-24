@@ -1,39 +1,44 @@
-from typing import Dict
-import json
 import http.client
-from codecs import encode
-import requests
 import io
-from PIL import Image
+import json
+from codecs import encode
+from typing import Dict
+
+import requests
 from bs4 import BeautifulSoup
+from PIL import Image
 
 BASE_URL = "https://www.imgbly.com/"
 
-def imgbly_upload(path: str) -> Dict[str, str]:
+
+def upload_image(path: str) -> Dict[str, str]:
     print("Avvio caricamento con ImgBly di:", path)
-    
+
     # Apri l'immagine originale
     original_image = Image.open(path)
-    
+
     # Carica l'immagine originale
     with open(path, "rb") as f:
         image_data = f.read()
 
-    full_res = upload(path, image_data)
-    thumb_res = upload_thumb(path, original_image)
+    full_res = upload(image_data)
+    thumb_res = upload_thumb(original_image)
 
     full_url = f"{BASE_URL}ib/{full_res['data']['id']}.png"
     thumb_url = f"{BASE_URL}ib/{thumb_res['data']['id']}.png"
-    res = {"full":full_url, "thumb":thumb_url}
-    print(f'  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}')
-    return res
+
+    print(
+        f"  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}"
+    )
+
+    return {"full": full_url, "thumb": thumb_url}
 
 
-def upload(path, image_data) -> str:
+def upload(image_data: bytes):
     # Effettua una richiesta GET alla pagina principale di ImgBly
     response = requests.get(BASE_URL)
 
-    csrf_token_value = ''
+    csrf_token_value = ""
     # Verifica se la richiesta è andata a buon fine
     if response.status_code == 200:
         # Parsa il contenuto HTML della pagina
@@ -45,7 +50,7 @@ def upload(path, image_data) -> str:
         imgbly_session = response.cookies["imgbly_session"]
         # Estrai il valore del token CSRF
         if csrf_token:
-            csrf_token_value = csrf_token["content"]
+            csrf_token_value = csrf_token["content"]  # type: ignore
             # print("CSRF Token:", csrf_token_value) #enable it for debug
         else:
             print("Token CSRF non trovato nella pagina.")
@@ -53,25 +58,27 @@ def upload(path, image_data) -> str:
         print("Errore nella richiesta GET:", response.status_code)
         exit(-1)
     conn = http.client.HTTPSConnection("www.imgbly.com")
-    dataList = []
-    boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
+
+    boundary = "wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T"
 
     # caricamento immagine full resolution
-    dataList.append(encode('--' + boundary))
-    dataList.append(encode('Content-Disposition: form-data; name=uploads; filename=image.png'))
-    dataList.append(encode('Content-Type: image/png'))
-    dataList.append(encode(''))
-    dataList.append(image_data)
-    dataList.append(encode('--'+boundary+'--'))
-    dataList.append(encode(''))
+    dataList = [
+        encode("--" + boundary),
+        encode("Content-Disposition: form-data; name=uploads; filename=image.png"),
+        encode("Content-Type: image/png"),
+        encode(""),
+        image_data,
+        encode("--" + boundary + "--"),
+        encode(""),
+    ]
 
-    body = b'\r\n'.join(dataList)
+    body = b"\r\n".join(dataList)
     payload = body
     headers = {
-        'accept': 'application/json',
-        'x-csrf-token': f'{csrf_token_value}',
-        'Cookie': f'XSRF-TOKEN={xsrf_token}; imgbly_session={imgbly_session}',
-        'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
+        "accept": "application/json",
+        "x-csrf-token": f"{csrf_token_value}",
+        "Cookie": f"XSRF-TOKEN={xsrf_token}; imgbly_session={imgbly_session}",
+        "Content-type": "multipart/form-data; boundary={}".format(boundary),
     }
     conn.request("POST", "/upload", payload, headers)
     res = conn.getresponse()
@@ -83,23 +90,23 @@ def upload(path, image_data) -> str:
     else:
         # Gestisci qui eventuali errori di stato della risposta
         print(f"Errore nella richiesta: {res.status}")
-        return None
+        exit(-1)
 
 
-def upload_thumb(path, original) -> str:
+def upload_thumb(original: Image.Image):
     # Calcola le dimensioni della thumbnail mantenendo il rapporto d'aspetto
     width = 960
     ratio = width / float(original.size[0])
     height = int(float(original.size[1]) * ratio)
-    
+
     # Crea la thumbnail
     thumbnail = original.resize((width, height), Image.LANCZOS)
-    
+
     # Salva la thumbnail in un buffer di memoria
     thumbnail_buffer = io.BytesIO()
     thumbnail.save(thumbnail_buffer, format="PNG")
-    
+
     # Carica la thumbnail
     thumbnail_data = thumbnail_buffer.getvalue()
 
-    return upload(path, thumbnail_data)
+    return upload(thumbnail_data)
