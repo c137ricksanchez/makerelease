@@ -7,7 +7,7 @@ import ffmpeg
 from pymediainfo import MediaInfo
 
 from src import constants
-from src.api import imgbb, imgur
+from src.api import imgbb, imgbly, imgur
 
 
 def extract_screenshots(path: str, outputdir: str) -> List[str]:
@@ -34,7 +34,7 @@ def extract_screenshots(path: str, outputdir: str) -> List[str]:
             if timecode_ms > movie_ms:
                 break
 
-            name = time.replace(":", ".") + ".jpg"
+            name = time.replace(":", ".") + ".png"
             generate_thumbnail(path, outputdir, name, time)
             images.append(os.path.join(outputdir, name))
 
@@ -72,8 +72,32 @@ def is_anamorphic(path: str) -> bool:
 
 
 def upload_to_imgbb(path: str) -> Dict[str, str]:
+    if get_filesize(path) > 32:
+        print(
+            f"Lo screenshot: {os.path.basename(path)} - {get_filesize(path)} MB \nsupera la massima dimensione supportata da ImgBB (32 MB), effettuo il caricamento con ImgBly\n"
+        )
+        return imgbly.upload_image(path)
     return imgbb.upload_image(path)
 
 
 def upload_to_imgur(path: str) -> Dict[str, str]:
+    if get_filesize(path) > 20:
+        print(
+            f"Lo screenshot: {os.path.basename(path)} - {round(get_filesize(path), 2)} MB \nsupera la massima dimensione supportata da Imgur (20 MB), effettuo il caricamento con ImgBly\n"
+        )
+        return imgbly.upload_image(path)
     return imgur.upload_image(path)
+
+
+def upload_to_imgbly(path: str) -> Dict[str, str]:
+    if get_filesize(path) > 50:
+        print(
+            f"Lo screenshot: {os.path.basename(path)} - {round(get_filesize(path), 2)} MB \nsupera la massima dimensione supportata da ImgBly (50 MB), effettuare il caricamento manualmente, puoi usare https://www.imagebam.com/\n"
+        )
+        return {"full": "", "thumb": ""}
+    else:
+        return imgbly.upload_image(path)
+
+
+def get_filesize(path: str) -> float:
+    return os.path.getsize(path) / 1024 / 1024

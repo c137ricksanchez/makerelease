@@ -1,6 +1,9 @@
+beautifulsoup4==4.12.2
 customtkinter==5.2.0
 ffmpeg_python==0.2.0
+Image==1.5.33
 matplotlib==3.7.2
+pillow==10.0.1
 pymediainfo==6.0.1
 Requests==2.31.0
 scipy==1.9.3

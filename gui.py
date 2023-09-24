@@ -129,6 +129,7 @@ class MyApp(ctk.CTk):
             id=self.var_idtmdb.get(),
         )
         releaser.make_release()
+        exit()
 
 
 if __name__ == "__main__":

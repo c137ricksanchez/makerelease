@@ -18,6 +18,11 @@ def generate(filename: str, outputdir: str, outputfile: str) -> str:
     return str(t.magnet())
 
 
+def get_magnet(outputdir: str, outputfile: str) -> str:
+    magnet = Torrent.read(os.path.join(outputdir, outputfile + ".torrent")).magnet()
+    return str(magnet)
+
+
 def cb(torrent: Torrent, filepath: str, pieces_done: int, pieces_total: int):
     print(f"{pieces_done/pieces_total*100:3.0f}% completato", end="\r")
 
