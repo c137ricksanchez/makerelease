@@ -136,6 +136,9 @@ class MakeRelease:
         for t in constants.templates:
             template = utils.read_file(os.path.join(constants.config, t))
 
+            if "$BITRATE_GRAPH" in template:
+                skip_chart = False
+
             if "$REPORT_MEDIAINFO" in template:
                 print("\n2. Generazione del report con MediaInfo...")
                 if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
@@ -156,9 +159,6 @@ class MakeRelease:
                         movie, outputdir)
                 else:
                     print("Errore: avinaptic2-cli.exe non è stato trovato.")
-
-            if "$BITRATE_GRAPH" not in template:
-                skip_chart = False
 
         print("\n3. Generazione del file torrent...")
         if os.path.exists(os.path.join(outputdir, filename + ".torrent")):
