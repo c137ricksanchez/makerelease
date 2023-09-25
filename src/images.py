@@ -25,7 +25,8 @@ def extract_screenshots(path: str, outputdir: str) -> List[str]:
             try:
                 t = datetime.strptime(time, "%H:%M:%S")
             except ValueError:
-                print(f"Il timestamp '{time}' non è nel formato valido HH:MM:SS")
+                print(
+                    f"Il timestamp '{time}' non è nel formato valido HH:MM:SS")
                 continue
 
             timecode_ms = (t.hour * 60 * 60 + t.minute * 60 + t.second) * 1000
@@ -81,7 +82,7 @@ def upload_to_imgbb(path: str) -> Dict[str, str]:
 
 
 def upload_to_imgur(path: str) -> Dict[str, str]:
-    if get_filesize(path) > 20:
+    if get_filesize(path) > 10:
         print(
             f"Lo screenshot: {os.path.basename(path)} - {round(get_filesize(path), 2)} MB \nsupera la massima dimensione supportata da Imgur (20 MB), effettuo il caricamento con ImgBly\n"
         )

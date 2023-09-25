@@ -50,7 +50,8 @@ class MakeRelease:
         if not os.path.exists(path):
             raise ValueError(f"Invalid path: {path}. Path does not exist.")
         if not os.path.isfile(path) and not os.path.isdir(path):
-            raise ValueError(f"Invalid path: {path}. Path is not a file or directory.")
+            raise ValueError(
+                f"Invalid path: {path}. Path is not a file or directory.")
 
         self.path = path
 
@@ -127,26 +128,37 @@ class MakeRelease:
             os.rename(old_movie, movie)
 
         report = ""
-        if "$REPORT_MEDIAINFO" in utils.read_file(constants.template):
-            print("\n2. Generazione del report con MediaInfo...")
-            if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
-                print("  |---> File Mediainfo già presente, skip step")
-                report = utils.read_file(
-                    os.path.join(outputdir, "report_mediainfo.txt")
-                )
-            else:
-                report = post.generate_report(movie, outputdir)
-
         report_avinaptic = ""
-        if (
-            "$REPORT_AVINAPTIC" in utils.read_file(constants.template)
-            and os.name == "nt"
-        ):
-            print("2. Generazione del report con AVInaptic...")
-            if shutil.which("avinaptic2-cli"):
-                report_avinaptic = post.generate_avinaptic_report(movie, outputdir)
-            else:
-                print("Errore: avinaptic2-cli.exe non è stato trovato.")
+        # Salta la generazione del grafico del bitrate se non è presente
+        # la variabile $BITRATE_GRAPH nel file template.txt
+        # controllo in anticipo skip_chart per evitare cicli sui template successivi
+        skip_chart = True
+        for t in constants.templates:
+            template = utils.read_file(os.path.join(constants.config, t))
+
+            if "$REPORT_MEDIAINFO" in template:
+                print("\n2. Generazione del report con MediaInfo...")
+                if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
+                    print("  |---> File Mediainfo già presente, skip step")
+                    report = utils.read_file(
+                        os.path.join(outputdir, "report_mediainfo.txt")
+                    )
+                else:
+                    report = post.generate_report(movie, outputdir)
+
+            if (
+                "$REPORT_AVINAPTIC" in template
+                and os.name == "nt"
+            ):
+                print("2. Generazione del report con AVInaptic...")
+                if shutil.which("avinaptic2-cli"):
+                    report_avinaptic = post.generate_avinaptic_report(
+                        movie, outputdir)
+                else:
+                    print("Errore: avinaptic2-cli.exe non è stato trovato.")
+
+            if "$BITRATE_GRAPH" not in template:
+                skip_chart = False
 
         print("\n3. Generazione del file torrent...")
         if os.path.exists(os.path.join(outputdir, filename + ".torrent")):
@@ -160,8 +172,6 @@ class MakeRelease:
 
         # Salta la generazione del grafico del bitrate se non è presente
         # la variabile $BITRATE_GRAPH nel file template.txt
-        skip_chart = "$BITRATE_GRAPH" not in utils.read_file(constants.template)
-
         print("\n5. Generazione del grafico del bitrate...")
         if skip_chart:
             print("Operazione saltata.")
@@ -177,21 +187,24 @@ class MakeRelease:
 
         if utils.get_api_key("imgbly"):
             print("\n6. Caricamento delle immagini su ImgBly...")
-            uploaded_imgs = [images.upload_to_imgbly(img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgbly(
+                img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgbly(
                     os.path.join(outputdir, "bitrate.png")
                 )
         elif utils.get_api_key("imgbb") != "":
             print("\n6. Caricamento delle immagini su ImgBB...")
-            uploaded_imgs = [images.upload_to_imgbb(img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgbb(
+                img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgbb(
                     os.path.join(outputdir, "bitrate.png")
                 )
         else:
             print("\n6. Caricamento delle immagini su Imgur...")
-            uploaded_imgs = [images.upload_to_imgur(img) for img in screenshots]
+            uploaded_imgs = [images.upload_to_imgur(
+                img) for img in screenshots]
             if not skip_chart:
                 bitrate_img = images.upload_to_imgur(
                     os.path.join(outputdir, "bitrate.png")
