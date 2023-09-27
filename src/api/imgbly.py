@@ -24,14 +24,16 @@ def upload_image(path: str) -> Dict[str, str]:
     full_res = upload(image_data)
     thumb_res = upload_thumb(original_image)
 
-    full_url = f"{BASE_URL}ib/{full_res['data']['id']}.png"
-    thumb_url = f"{BASE_URL}ib/{thumb_res['data']['id']}.png"
+    if (full_res and thumb_res):
+        full_url = f"{BASE_URL}ib/{full_res['data']['id']}.png"
+        thumb_url = f"{BASE_URL}ib/{thumb_res['data']['id']}.png"
+        print(
+            f"  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}"
+        )
+        return {"full": full_url, "thumb": thumb_url}
 
-    print(
-        f"  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}"
-    )
-
-    return {"full": full_url, "thumb": thumb_url}
+    else:
+        return {"full": "", "thumb": ""}
 
 
 def upload(image_data: bytes):
@@ -55,7 +57,8 @@ def upload(image_data: bytes):
         else:
             print("Token CSRF non trovato nella pagina.")
     else:
-        print("Errore nella richiesta GET:", response.status_code)
+        print("Errore nella richiesta GET:",
+              f"{response.status_code}: {response.text}")
         exit(-1)
     conn = http.client.HTTPSConnection("www.imgbly.com")
 
@@ -89,8 +92,9 @@ def upload(image_data: bytes):
         return resp
     else:
         # Gestisci qui eventuali errori di stato della risposta
-        print(f"Errore nella richiesta: {res.status}")
-        exit(-1)
+        print(
+            f"Errore nella richiesta: {res.status} - Caricare questa immagine manualmente.")
+        return False
 
 
 def upload_thumb(original: Image.Image):
