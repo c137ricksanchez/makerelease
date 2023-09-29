@@ -1,6 +1,7 @@
 import http.client
 import io
 import json
+import os
 from codecs import encode
 from typing import Dict
 
@@ -12,7 +13,7 @@ BASE_URL = "https://www.imgbly.com/"
 
 
 def upload_image(path: str) -> Dict[str, str]:
-    print("Avvio caricamento con ImgBly di:", path)
+    print("Avvio caricamento con ImgBly di:", os.path.basename(path))
 
     # Apri l'immagine originale
     original_image = Image.open(path)
