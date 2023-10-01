@@ -1,6 +1,13 @@
 import argparse
+import update_check
+
 
 from src.app import MakeRelease, ReleaseType
+
+def main():
+
+    # Controlla gli aggiornamenti
+    update_check.check_for_update()
 
 if __name__ == "__main__":
     # Instantiate the parser
