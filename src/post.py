@@ -88,7 +88,10 @@ def generate_text(
         template_text = utils.read_file(template_path)
         template = Template(template_text).substitute(**values)
 
-        with open(os.path.join(outputdir, f"post_{t.replace('.txt','')}.txt"), "wb") as t:
+        post_filename = "post.txt"
+        if t != "template.txt":
+            post_filename = f"post_{t.replace('template_','')}"
+        with open(os.path.join(outputdir, post_filename), "wb") as t:
             t.write(str.encode(template))
 
 
