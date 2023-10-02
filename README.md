@@ -116,7 +116,7 @@ Possibilità di scegliere il tipo di release da effettuare:
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
         - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
-        - Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere `_` esempio: `template_mirc.txt` oppure `template_mionome.txt` il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_mirc.txt` oppure `post_mionome.txt`
+        - Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere `_` esempio: `template_mircrew.txt` oppure `template_mionome.txt` il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_mircrew.txt` oppure `post_mionome.txt`
         - Se vuoi creare un report con AVInaptic, inserisci la variabile `$REPORT_AVINAPTIC`. Assicurati che l'eseguibile `avinaptic2-cli.exe` sia in PATH.
         - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
         - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.

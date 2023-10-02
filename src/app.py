@@ -139,7 +139,7 @@ class MakeRelease:
             if "$BITRATE_GRAPH" in template:
                 skip_chart = False
 
-            if "$REPORT_MEDIAINFO" in template:
+            if ("$REPORT_MEDIAINFO" in template and report == ""):
                 print("\n2. Generazione del report con MediaInfo...")
                 if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
                     print("  |---> File Mediainfo già presente, skip step")
@@ -151,12 +151,18 @@ class MakeRelease:
 
             if (
                 "$REPORT_AVINAPTIC" in template
-                and os.name == "nt"
+                and os.name == "nt" and report_avinaptic == ""
             ):
                 print("2. Generazione del report con AVInaptic...")
                 if shutil.which("avinaptic2-cli"):
-                    report_avinaptic = post.generate_avinaptic_report(
-                        movie, outputdir)
+                    if os.path.exists(os.path.join(outputdir, "report_avinaptic.txt")):
+                        print("  |---> File AVInaptic già presente, skip step")
+                        report_avinaptic = utils.read_file(
+                            os.path.join(outputdir, "report_avinaptic.txt")
+                        )
+                    else:
+                        report_avinaptic = post.generate_avinaptic_report(
+                            movie, outputdir)
                 else:
                     print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
