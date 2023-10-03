@@ -12,44 +12,45 @@
 > ⚠️ **ATTENZIONE:**
 > Questo repository è pubblicato a scopo informativo e didattico.
 
-- [Funzionalità](#funzionalità)
-- [Requisiti](#requisiti)
-- [Installazione](#installazione)
-    - [Windows](#windows)
-    - [Linux](#linux)
-    - [macOS](#macos)
-- [Aggiornamento](#aggiornamento)
-- [Utilizzo](#utilizzo)
-    - [Tramite GUI](#tramite-gui)
-    - [Tramite linea di comando](#tramite-linea-di-comando)
-- [Autori](#autori)
+-   [Funzionalità](#funzionalità)
+-   [Requisiti](#requisiti)
+-   [Installazione](#installazione)
+    -   [Windows](#windows)
+    -   [Linux](#linux)
+    -   [macOS](#macos)
+-   [Aggiornamento](#aggiornamento)
+-   [Utilizzo](#utilizzo)
+    -   [Tramite GUI](#tramite-gui)
+    -   [Tramite linea di comando](#tramite-linea-di-comando)
+-   [Autori](#autori)
 
 ## Funzionalità
 
-- Ottiene i dati del film o della serie tv da TheMovieDB
-- Crea il report con MediaInfo (cross-platform) oppure AVInaptic (solo per Windows)
-- Crea il file .torrent
-- Estrae gli screenshot
-- Genera il grafico del bitrate
-- Carica tutte le immagini su Imgur, ImgBB o ImgBly
-- Prepara il testo del post da pubblicare sul forum con tutte le informazioni
-- Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
+-   Ottiene i dati del film o della serie tv da TheMovieDB
+-   Crea il report con MediaInfo (cross-platform) oppure AVInaptic (solo per Windows)
+-   Crea il file .torrent
+-   Estrae gli screenshot
+-   Genera il grafico del bitrate
+-   Carica tutte le immagini su Imgur, ImgBB o ImgBly
+-   Prepara il testo del post da pubblicare sul forum con tutte le informazioni
+-   Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
 
 Possibilità di scegliere il tipo di release da effettuare:
 
-- **Film**
+-   **Film**
+
     1. **Film**: seleziona un singolo file `mkv`, `mp4` o `avi`
     2. **Film + Extra**: seleziona una directory contenente un file video e un numero arbitrario di cartelle `Extra`, `Featurettes`, ecc. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
 
-- **Serie TV**
+-   **Serie TV**
     1. **Stagione singola**: seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
     2. **Serie completa**: seleziona una directory contenente più cartelle. Lo script identifica la serie dal nome della cartella principale.
 
 ## Requisiti
 
-- Python 3.8 (o più recente)
-- FFmpeg
-- MediaInfo (oppure AVInaptic)
+-   Python 3.8 (o più recente)
+-   FFmpeg
+-   MediaInfo (oppure AVInaptic)
 
 ## Installazione
 
@@ -96,12 +97,12 @@ Possibilità di scegliere il tipo di release da effettuare:
 ## Aggiornamento
 
 1. Entra nella repository
-   - `cd automatic-releaser`
+    - `cd automatic-releaser`
 2. Esegui il comando
-   - `git pull`
+    - `git pull`
 3. Aggiorna eventuali dipendenze
-   - Windows: `pip install -r requirements.txt`
-   - macOS/Linux: `pip3 install -r requirements.txt`
+    - Windows: `pip install -r requirements.txt`
+    - macOS/Linux: `pip3 install -r requirements.txt`
 
 ## Utilizzo
 
@@ -115,6 +116,7 @@ Possibilità di scegliere il tipo di release da effettuare:
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
         - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
+        - Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere `_` esempio: `template_mircrew.txt` oppure `template_mionome.txt` il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_mircrew.txt` oppure `post_mionome.txt`
         - Se vuoi creare un report con AVInaptic, inserisci la variabile `$REPORT_AVINAPTIC`. Assicurati che l'eseguibile `avinaptic2-cli.exe` sia in PATH.
         - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
         - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
@@ -128,15 +130,15 @@ Possibilità di scegliere il tipo di release da effettuare:
 
 Apri il terminale ed esegui:
 
-- Windows: `python ./gui.py`
-- macOS/Linux: `python3 ./gui.py`
+-   Windows: `python ./gui.py`
+-   macOS/Linux: `python3 ./gui.py`
 
 ### Tramite linea di comando
 
 Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
 
-- Windows: `python ./makerelease.py`
-- macOS/Linux: `python3 ./makerelease.py`
+-   Windows: `python ./makerelease.py`
+-   macOS/Linux: `python3 ./makerelease.py`
 
 ```
 makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
@@ -153,5 +155,5 @@ makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder
 
 ## Autori
 
-- Rick Sanchez
-- Norman
+-   Rick Sanchez
+-   Norman

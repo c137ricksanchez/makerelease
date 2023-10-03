@@ -37,7 +37,8 @@ def generate_text(
         else "<NON TROVATO>"
     )
 
-    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
+    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + \
+        tree + "\n[/code]" if tree != "" else ""
 
     ep_count_str = f"Numero episodi: [b]{ep_count}[/b]" if ep_count > 0 else ""
 
@@ -68,7 +69,8 @@ def generate_text(
         "TRAILER": trailer,
         "SCREENSHOTS": "\n".join(
             [
-                "[url=" + img["full"] + "][img]" + img["thumb"] + "[/img][/url]"
+                "[url=" + img["full"] + "][img]" +
+                img["thumb"] + "[/img][/url]"
                 for img in screenshots
             ]
         ),
@@ -80,11 +82,17 @@ def generate_text(
         "EP_COUNT": ep_count_str,
     }
 
-    template_text = utils.read_file(constants.template)
-    template = Template(template_text).substitute(**values)
+    # ciclo di generazione dei template
+    for t in constants.templates:
+        template_path = os.path.join(constants.config, t)
+        template_text = utils.read_file(template_path)
+        template = Template(template_text).substitute(**values)
 
-    with open(os.path.join(outputdir, "post.txt"), "wb") as t:
-        t.write(str.encode(template))
+        post_filename = "post.txt"
+        if t != "template.txt":
+            post_filename = f"post_{t.replace('template_','')}"
+        with open(os.path.join(outputdir, post_filename), "wb") as t:
+            t.write(str.encode(template))
 
 
 def generate_report(path: str, outputdir: str) -> str:

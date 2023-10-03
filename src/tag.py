@@ -51,7 +51,13 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
 
             tags["a"].append(f"{lang} {t.format.replace('-', '')} {channels}")
         elif t.track_type == "Text":
-            tags["s"].append(f"{t.other_language[3].title()}")
+            if len(t.other_language) > 3:
+                tags["s"].append(f"{t.other_language[3].title()}")
+            else:
+                filtered_strings = filter(
+                    lambda x: len(x) == 3, t.other_language)
+                tag_s = next(filtered_strings, None)
+                tags["s"].append(tag_s)
 
     tags["a"] = list(dict.fromkeys(tags["a"]))
     tags["s"] = list(dict.fromkeys(tags["s"]))
