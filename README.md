@@ -112,6 +112,7 @@ Possibilità di scegliere il tipo di release da effettuare:
         - `imgbb`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur.**
         - `tmdb`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
         - `imgbly`: Il caricamento su ImgBly è impostato di default a `false` ma impostandolo a `true` verrà utilizzato come scelta primaria. ImgBly verrà utilizzato anche in caso di fallimento nel caricamento delle immagini su Imgur o su ImgBB, anche in caso di screenshot troppo grandi (Imgur supporta al max 20MB mentre ImgBB 32MB) il programma sceglierà automaticamente ImgBly che ha un limite superiore (50MB)
+        - `imgbly_thumb_size`: definisce la dimensione della larghezza della thumbnail generata dall'uso di ImgBly, è personalizzabile e mantiene il rapporto d'aspetto dell'immagine originale.
     - `screenshots.txt`
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
