@@ -9,6 +9,8 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
+from .. import utils
+
 BASE_URL = "https://www.imgbly.com/"
 
 
@@ -100,7 +102,7 @@ def upload(image_data: bytes):
 
 def upload_thumb(original: Image.Image):
     # Calcola le dimensioni della thumbnail mantenendo il rapporto d'aspetto
-    width = 960
+    width = int(utils.get_api_key("imgbly_thumb_size"))
     ratio = width / float(original.size[0])
     height = int(float(original.size[1]) * ratio)
 

@@ -26,7 +26,7 @@ $PLOT
 
 [b]TRAILER[/b]
 
-$TRAILER
+[bbvideo]$TRAILER[/bbvideo]
 
 [b]SCREENSHOTS[/b]
 
