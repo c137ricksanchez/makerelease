@@ -62,7 +62,10 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
     tags["a"] = list(dict.fromkeys(tags["a"]))
     tags["s"] = list(dict.fromkeys(tags["s"]))
 
-    tags["s"] = "Sub " + " ".join(tags["s"]) if tags["s"] else ""
+    if len(tags["s"]) > 3:
+        tags["s"] = "MultiSub"
+    else:
+        tags["s"] = "Sub " + " ".join(tags["s"]) if tags["s"] else ""
 
     tag = tags["v"] + " " + " ".join(tags["a"]) + " " + tags["s"]
 
