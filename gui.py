@@ -3,6 +3,7 @@ from tkinter import BooleanVar, StringVar, filedialog
 
 import customtkinter as ctk
 
+from src import utils
 from src.app import MakeRelease
 
 
@@ -17,8 +18,10 @@ class MyApp(ctk.CTk):
         self.geometry("400x360")
         self.grid_columnconfigure(0, weight=1)
 
-        ctk.set_appearance_mode("System")  # Modes: system (default), light, dark
-        ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
+        # Modes: system (default), light, dark
+        ctk.set_appearance_mode("System")
+        # Themes: blue (default), dark-blue, green
+        ctk.set_default_color_theme("blue")
 
         ctk.CTkLabel(
             self, text="Select the type of release", fg_color="transparent"
@@ -40,7 +43,8 @@ class MyApp(ctk.CTk):
         self.select_button = ctk.CTkButton(
             self, text="Select Path", command=self.select
         )
-        self.select_button.grid(row=3, column=0, sticky="nsew", padx=10, pady=2)
+        self.select_button.grid(
+            row=3, column=0, sticky="nsew", padx=10, pady=2)
 
         self.selected_path = StringVar(value="")
         self.selected_path_label = ctk.CTkLabel(
@@ -48,18 +52,21 @@ class MyApp(ctk.CTk):
             text="Path not selected",
             fg_color="transparent",
         )
-        self.selected_path_label.grid(row=4, column=0, sticky="w", padx=10, pady=0)
+        self.selected_path_label.grid(
+            row=4, column=0, sticky="w", padx=10, pady=0)
 
         self.make_release_button = ctk.CTkButton(
             self, text="Make Release!", state="disabled", command=self.make_release
         )
-        self.make_release_button.grid(row=5, column=0, sticky="nsew", padx=10, pady=2)
+        self.make_release_button.grid(
+            row=5, column=0, sticky="nsew", padx=10, pady=2)
 
         self.var_rename = BooleanVar(value=False)
         self.rename_option_menu = ctk.CTkSwitch(
             self, text="Rename the file", variable=self.var_rename
         )
-        self.rename_option_menu.grid(row=6, column=0, sticky="nsew", padx=10, pady=2)
+        self.rename_option_menu.grid(
+            row=6, column=0, sticky="nsew", padx=10, pady=2)
 
         # Add custom crew name
         ctk.CTkLabel(
@@ -75,7 +82,8 @@ class MyApp(ctk.CTk):
         )
         self.var_idtmdb = StringVar(value="")
         self.idtmdb_entry = ctk.CTkEntry(self, textvariable=self.var_idtmdb)
-        self.idtmdb_entry.grid(row=10, column=0, sticky="nsew", padx=10, pady=2)
+        self.idtmdb_entry.grid(
+            row=10, column=0, sticky="nsew", padx=10, pady=2)
 
         self.author_label = ctk.CTkLabel(
             self,
@@ -94,7 +102,8 @@ class MyApp(ctk.CTk):
         )
         self.check_updates.bind(
             "<Button-1>",
-            lambda e: callback("https://github.com/c137ricksanchez/automatic-releaser"),
+            lambda e: callback(
+                "https://github.com/c137ricksanchez/automatic-releaser"),
         )
         self.check_updates.grid(row=12, column=0, sticky="w", padx=10, pady=0)
 
@@ -129,7 +138,8 @@ class MyApp(ctk.CTk):
             id=self.var_idtmdb.get(),
         )
         releaser.make_release()
-        exit()
+        if utils.get_api_key("automatic_exit"):
+            exit()
 
 
 if __name__ == "__main__":

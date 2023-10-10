@@ -2,5 +2,6 @@
 	"imgbb": "",
 	"tmdb": "",
 	"imgbly": false,
-	"imgbly_thumb_size": 960
+	"imgbly_thumb_size": 960,
+	"automatic_exit": false
 }
