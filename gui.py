@@ -3,7 +3,6 @@ from tkinter import BooleanVar, StringVar, filedialog
 
 import customtkinter as ctk
 
-from src import utils
 from src.app import MakeRelease
 
 
@@ -138,8 +137,6 @@ class MyApp(ctk.CTk):
             id=self.var_idtmdb.get(),
         )
         releaser.make_release()
-        if utils.get_api_key("automatic_exit"):
-            exit()
 
 
 if __name__ == "__main__":
