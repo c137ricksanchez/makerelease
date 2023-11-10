@@ -75,7 +75,7 @@ def is_anamorphic(path: str) -> bool:
 def upload_to_imgbb(path: str) -> Dict[str, str]:
     if get_filesize(path) > 32:
         print(
-            f"Lo screenshot: {os.path.basename(path)} - {get_filesize(path)} MB \nsupera la massima dimensione supportata da ImgBB (32 MB), effettuo il caricamento con ImgBly\n"
+            f"Lo screenshot: {os.path.basename(path)} - {get_filesize(path)} MB \nsupera la massima dimensione supportata da ImgBB (32 MB), effettuo il caricamento con ImgBly"
         )
         return imgbly.upload_image(path)
     return imgbb.upload_image(path)
@@ -84,7 +84,7 @@ def upload_to_imgbb(path: str) -> Dict[str, str]:
 def upload_to_imgur(path: str) -> Dict[str, str]:
     if get_filesize(path) > 10:
         print(
-            f"Lo screenshot: {os.path.basename(path)} - {round(get_filesize(path), 2)} MB \nsupera la massima dimensione supportata da Imgur (10 MB), effettuo il caricamento con ImgBly\n"
+            f"Lo screenshot: {os.path.basename(path)} - {round(get_filesize(path), 2)} MB \nsupera la massima dimensione supportata da Imgur (10 MB), effettuo il caricamento con ImgBly"
         )
         return imgbly.upload_image(path)
     return imgur.upload_image(path)
