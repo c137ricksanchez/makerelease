@@ -29,7 +29,7 @@ def upload_image(path: str) -> Dict[str, str]:
         full_url = f"{BASE_URL}ib/{full_res['data']['id']}.png"
         thumb_url = f"{BASE_URL}ib/{thumb_res['data']['id']}.png"
         print(
-            f"  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}"
+            f"  |---> Caricamento completato con successo:\n    |---> Piena risoluzione: {full_url} - Risoluzione ridotta: {thumb_url}\n"
         )
         return {"full": full_url, "thumb": thumb_url}
 
@@ -100,7 +100,7 @@ def upload(image_data: bytes):
 
 def upload_thumb(original: Image.Image):
     # Calcola le dimensioni della thumbnail mantenendo il rapporto d'aspetto
-    width = 960
+    width = 640
     ratio = width / float(original.size[0])
     height = int(float(original.size[1]) * ratio)
 

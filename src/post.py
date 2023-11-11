@@ -32,7 +32,7 @@ def generate_text(
     plot = metadata["plot"] if metadata["plot"] != "" else "<NON TROVATO>"
 
     trailer = (
-        "[media]" + metadata["trailer"] + "[/media]"
+        metadata["trailer"]
         if metadata["trailer"] != ""
         else "<NON TROVATO>"
     )

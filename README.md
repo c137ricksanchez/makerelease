@@ -109,9 +109,9 @@ Possibilità di scegliere il tipo di release da effettuare:
 1. Rinomina la cartella `config_example` in `config`
 2. Configura lo script modificando i file nella cartella `config`
     - `keys.json`
-        - `imgbb`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur.**
-        - `tmdb`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
-        - `imgbly`: Il caricamento su ImgBly è impostato di default a `false` ma impostandolo a `true` verrà utilizzato come scelta primaria. ImgBly verrà utilizzato anche in caso di fallimento nel caricamento delle immagini su Imgur o su ImgBB, anche in caso di screenshot troppo grandi (Imgur supporta al max 20MB mentre ImgBB 32MB) il programma sceglierà automaticamente ImgBly che ha un limite superiore (50MB)
+        - `imgbb: String`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur.**
+        - `tmdb: String`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
+        - `imgbly: Bool`: Il caricamento su ImgBly è impostato di default a `false` ma impostandolo a `true` verrà utilizzato come scelta primaria. ImgBly verrà utilizzato anche in caso di fallimento nel caricamento delle immagini su Imgur o su ImgBB, anche in caso di screenshot troppo grandi (Imgur supporta al max 20MB mentre ImgBB 32MB) il programma sceglierà automaticamente ImgBly che ha un limite superiore (50MB)
     - `screenshots.txt`
         - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
     - `template.txt`
