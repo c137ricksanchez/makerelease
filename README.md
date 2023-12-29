@@ -48,7 +48,7 @@ Possibilità di scegliere il tipo di release da effettuare:
 
 ## Requisiti
 
--   Python 3.8 (o più recente)
+-   Python 3.9 (o più recente)
 -   FFmpeg
 -   MediaInfo (oppure AVInaptic)
 
@@ -57,7 +57,7 @@ Possibilità di scegliere il tipo di release da effettuare:
 ### Windows
 
 1. Installa Python
-    - `winget install Python.Python.3.11`
+    - `winget install Python.Python.3.12`
 2. Installa Git
     - `winget install Git.Git`
 3. Clona il repository

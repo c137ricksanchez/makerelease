@@ -1,10 +1,10 @@
 beautifulsoup4==4.12.2
-customtkinter==5.2.0
+customtkinter==5.2.1
 ffmpeg_python==0.2.0
-matplotlib==3.7.3
-pillow==10.0.1
-pymediainfo==6.0.1
+matplotlib==3.8.2
+pillow==10.1.0
+pymediainfo==6.1.0
 Requests==2.31.0
-scipy==1.9.3
-torf==4.2.2
+scipy==1.11.4
+torf==4.2.4
 tqdm==4.66.1
