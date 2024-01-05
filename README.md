@@ -92,7 +92,7 @@ Possibilità di scegliere il tipo di release da effettuare:
     - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
 5. Installa le dipendenze
     - `cd automatic-releaser`
-    - `python -m venv venv`
+    - `python3 -m venv venv`
     - `source venv/bin/activate` 
     - `pip install -r requirements.txt`
     - (per uscire dalla env comando -> deactivate)
