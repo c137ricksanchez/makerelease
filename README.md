@@ -86,16 +86,16 @@ Possibilità di scegliere il tipo di release da effettuare:
     - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 2. Installa Python
     - `brew install python3`
-2.1 Verificare versione python e pip
+3. Verificare versione python e pip
     - `python -V`
     - `pip -V`
     -  dovreste avere come feedback qualcosa del genere:
       <img width="537" alt="image" src="https://github.com/SiNaPsEr0x/automatic-releaser/assets/5438823/2e50ea71-b85e-436f-ac0e-3c1b4e84747e">
-3. Installa Git
+4. Installa Git
     - `brew install git`
-4. Clona il repository
+5. Clona il repository
     - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
-5. Installa le dipendenze
+6. Installa le dipendenze
     - `cd automatic-releaser`
     - `python -m venv venv`
     - `source venv/bin/activate` 
