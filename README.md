@@ -110,7 +110,8 @@ Possibilità di scegliere il tipo di release da effettuare:
     - `git pull`
 3. Aggiorna eventuali dipendenze
     - Windows: `pip install -r requirements.txt`
-    - macOS/Linux: `pip3 install -r requirements.txt`
+    - Mac: `source venv/bin/activate` e poi `pip install -r requirements.txt`
+    - Linux: `pip3 install -r requirements.txt`
 
 ## Utilizzo
 
