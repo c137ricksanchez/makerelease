@@ -149,7 +149,8 @@ Apri il terminale ed esegui:
 Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
 
 -   Windows: `python ./makerelease.py`
--   macOS/Linux: `python3 ./makerelease.py`
+-   macOS: `python ./makerelease.py`
+-   Linux: `python3 ./makerelease.py`
 
 ```
 makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
