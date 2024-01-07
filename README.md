@@ -89,7 +89,7 @@ Possibilità di scegliere il tipo di release da effettuare:
 2.1 Verificare versione python e pip
     - `python -V`
     - `pip -V`
-      dovreste avere come feedback qualcosa del genere:
+    -  dovreste avere come feedback qualcosa del genere:
       <img width="537" alt="image" src="https://github.com/SiNaPsEr0x/automatic-releaser/assets/5438823/2e50ea71-b85e-436f-ac0e-3c1b4e84747e">
 3. Installa Git
     - `brew install git`
