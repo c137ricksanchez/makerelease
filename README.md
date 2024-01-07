@@ -140,7 +140,9 @@ Possibilità di scegliere il tipo di release da effettuare:
 Apri il terminale ed esegui:
 
 -   Windows: `python ./gui.py`
--   macOS/Linux: `python3 ./gui.py`
+-   macOS: `python ./gui.py`
+-   Linux: `python3 ./gui.py`
+
 
 ### Tramite linea di comando
 
