@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.2
-customtkinter==5.2.1
+customtkinter==5.2.2
 ffmpeg_python==0.2.0
 matplotlib==3.8.2
 pillow==10.1.0
