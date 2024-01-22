@@ -1,4 +1,4 @@
-beautifulsoup4==4.12.2
+beautifulsoup4==4.12.3
 customtkinter==5.2.1
 ffmpeg_python==0.2.0
 matplotlib==3.8.2
