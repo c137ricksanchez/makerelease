@@ -256,7 +256,7 @@ python makerelease.py [PATH] -t [TYPE]
 ## 🧑‍💻 Autori
 
 - [Rick Sanchez](https://github.com/c137ricksanchez)
-- [Norman](https://github.com/Norman)
+- [Norman](https://github.com/Norman2034)
 
 ### ❤️ Contributors
 
