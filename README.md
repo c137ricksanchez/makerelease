@@ -1,159 +1,268 @@
-<!-- omit from toc -->
-
-# MakeRelease
+# makerelease
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
-[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/jQmm9jhbyu)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Discord](https://img.shields.io/badge/discord-5865f2.svg?logo=discord&logoColor=white)](https://discord.gg/jQmm9jhbyu)
 
-**MakeRelease** è un comodo script per velocizzare la pubblicazione di film e serie tv sul forum MIRCrew! 🚀
+**makerelease** è un comodo script per velocizzare la pubblicazione di film e serie tv sui forum P2P italiani.
 
-> ⚠️ **ATTENZIONE:**
-> Questo repository è pubblicato a scopo informativo e didattico.
+> ⚠️ **ATTENZIONE**: Questo repository è pubblicato a scopo informativo e didattico.
 
--   [Funzionalità](#funzionalità)
--   [Requisiti](#requisiti)
--   [Installazione](#installazione)
-    -   [Windows](#windows)
-    -   [Linux](#linux)
-    -   [macOS](#macos)
--   [Aggiornamento](#aggiornamento)
--   [Utilizzo](#utilizzo)
-    -   [Tramite GUI](#tramite-gui)
-    -   [Tramite linea di comando](#tramite-linea-di-comando)
--   [Autori](#autori)
+## 🚩 Indice
 
-## Funzionalità
+- [Funzionalità](#-funzionalità)
+- [Requisiti](#-requisiti)
+- [Installazione](#%EF%B8%8F-installazione)
+  - [Windows](#-windows)
+  - [macOS](#-macos)
+  - [Linux](#-linux)
+- [Aggiornamento](#-aggiornamento)
+- [Configurazione](#%EF%B8%8F-configurazione)
+- [Utilizzo](#-utilizzo)
+  - [GUI](#gui)
+  - [Linea di comando](#linea-di-comando)
+- [Autori](#-autori)
+  - [Contributors](#%EF%B8%8F-contributors)
+- [Licenza](#-licenza)
 
--   Ottiene i dati del film o della serie tv da TheMovieDB
--   Crea il report con MediaInfo (cross-platform) oppure AVInaptic (solo per Windows)
--   Crea il file .torrent
--   Estrae gli screenshot
--   Genera il grafico del bitrate
--   Carica tutte le immagini su Imgur, ImgBB o ImgBly
--   Prepara il testo del post da pubblicare sul forum con tutte le informazioni
--   Formatta il titolo (e opzionalmente rinomina anche il nome del file) seguendo il formato consigliato da MIRCrew
+## ✨ Funzionalità
 
-Possibilità di scegliere il tipo di release da effettuare:
+- Ottiene i dati di film e serie tv da TheMovieDB
+- Crea il report con MediaInfo o AVInaptic
+- Crea il file .torrent e genera il link magnet
+- Estrae gli screenshot
+- Genera il grafico del bitrate
+- Carica tutte le immagini su Imgur, ImgBB o Imgbly
+- Prepara il testo del post da pubblicare sul forum con template completamente personalizzabili
+- Formatta il titolo della release seguendo un formato consigliato
 
--   **Film**
+Sono supportati diversi tipi di release:
 
+- **Film**
     1. **Film**: seleziona un singolo file `mkv`, `mp4` o `avi`
     2. **Film + Extra**: seleziona una directory contenente un file video e un numero arbitrario di cartelle `Extra`, `Featurettes`, ecc. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
-
--   **Serie TV**
+- **Serie TV**
     1. **Stagione singola**: seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
     2. **Serie completa**: seleziona una directory contenente più cartelle. Lo script identifica la serie dal nome della cartella principale.
 
-## Requisiti
+## 📦 Requisiti
 
--   Python 3.9 (o più recente)
--   FFmpeg
--   MediaInfo (oppure AVInaptic)
+- [Python](https://www.python.org) (3.9 o più recente)
+- [FFmpeg](https://ffmpeg.org)
+- [MediaInfo](https://mediaarea.net/MediaInfo) / [AVInaptic](http://fsinapsi.altervista.org/code/avinaptic/)
 
-## Installazione
+## ⚒️ Installazione
 
-### Windows
+### 🪟 Windows
 
 1. Installa Python
-    - `winget install Python.Python.3.12`
+
+    ```bash
+    winget install Python.Python.3.12
+    ```
+
 2. Installa Git
-    - `winget install Git.Git`
-3. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
-4. Installa le dipendenze
-    - `cd automatic-releaser`
-    - `pip install -r requirements.txt`
-5. Scarica [FFmpeg](https://github.com/BtbN/FFmpeg-Builds/releases/latest) ed estrai `ffmpeg.exe` e `ffprobe.exe` nella directory di MakeRelease
 
-### Linux
+    ```bash
+    winget install Git.Git
+    ```
 
-1. Installa Python, Git, FFmpeg e MediaInfo
-    - Arch: `pacman -S python python-pip git ffmpeg mediainfo`
-    - Debian/Ubuntu: `apt install python3 python3-pip git ffmpeg mediainfo`
-    - Fedora: `dnf install python3 python3-pip git ffmpeg mediainfo`
-        - _Per installare FFmpeg devi attivare i repository [RPM Fusion](https://docs.fedoraproject.org/en-US/quick-docs/setup_rpmfusion/)_
-2. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
-3. Installa le dipendenze
-    - `cd automatic-releaser`
-    - `pip3 install -r requirements.txt`
+3. Installa FFmpeg
 
-### macOS
+    ```bash
+    winget install Gyan.FFmpeg
+    ```
+
+4. Clona il repository
+
+    ```bash
+    git clone https://github.com/c137ricksanchez/makerelease.git
+    ```
+
+5. Entra nella directory
+
+    ```bash
+    cd makerelease
+    ```
+
+6. Installa le dipendenze
+
+    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### 🍎 macOS
 
 1. Installa Homebrew
-    - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
 2. Installa Python
-    - `brew install python3`
+
+    ```bash
+    brew install python
+    ```
+
 3. Installa Git
-    - `brew install git`
-4. Clona il repository
-    - `git clone https://github.com/c137ricksanchez/automatic-releaser.git`
-5. Installa le dipendenze
-    - `cd automatic-releaser`
-    - `pip3 install -r requirements.txt`
 
-## Aggiornamento
+    ```bash
+    brew install git
+    ```
 
-1. Entra nella repository
-    - `cd automatic-releaser`
-2. Esegui il comando
-    - `git pull`
-3. Aggiorna eventuali dipendenze
-    - Windows: `pip install -r requirements.txt`
-    - macOS/Linux: `pip3 install -r requirements.txt`
+4. Installa FFmpeg
 
-## Utilizzo
+    ```bash
+    brew install ffmpeg
+    ```
 
-1. Rinomina la cartella `config_example` in `config`
-2. Configura lo script modificando i file nella cartella `config`
-    - `keys.json`
-        - `imgbb: String`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur.**
-        - `tmdb: String`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
-        - `imgbly: Bool`: Il caricamento su ImgBly è impostato di default a `false` ma impostandolo a `true` verrà utilizzato come scelta primaria. ImgBly verrà utilizzato anche in caso di fallimento nel caricamento delle immagini su Imgur o su ImgBB, anche in caso di screenshot troppo grandi (Imgur supporta al max 20MB mentre ImgBB 32MB) il programma sceglierà automaticamente ImgBly che ha un limite superiore (50MB)
-    - `screenshots.txt`
-        - Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot
-    - `template.txt`
-        - Scrivi il template base del post da pubblicare sul forum. Le variabili come ad esempio `$TITLE` verranno sostituite in automatico con i dati del film
-        - Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere `_` esempio: `template_mircrew.txt` oppure `template_mionome.txt` il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_mircrew.txt` oppure `post_mionome.txt`
-        - Se vuoi creare un report con AVInaptic, inserisci la variabile `$REPORT_AVINAPTIC`. Assicurati che l'eseguibile `avinaptic2-cli.exe` sia in PATH.
-        - Se non vuoi generare il grafico del bitrate, rimuovi la variabile `$BITRATE_GRAPH`
-        - La variabile `$EP_COUNT` stamperà `Numero episodi: ...`, solo se la release è di tipo `tv_single`, altrimenti non stamperà niente, naturalmente è possibile rimuoverla.
-    - `trackers.txt`
-        - Inserisci la _trackers list_ che verrà usata per generare il file _.torrent_ e il magnet
-3. MakeRelease può essere usato sia tramite GUI che tramite linea di comando.
+5. Clona il repository
 
-### Tramite GUI
+    ```bash
+    git clone https://github.com/c137ricksanchez/makerelease.git
+    ```
 
-<img src="img/gui.png" width="300"/>
+6. Entra nella directory
+
+    ```bash
+    cd makerelease
+    ```
+
+7. Installa le dipendenze
+
+    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### 🐧 Linux
+
+1. Installa Git, FFmpeg e MediaInfo
+2. Clona il repository
+
+    ```bash
+    git clone https://github.com/c137ricksanchez/makerelease.git
+    ```
+
+3. Entra nella directory
+
+    ```bash
+    cd makerelease
+    ```
+
+4. Installa le dipendenze
+
+    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## 🔄 Aggiornamento
+
+1. Aggiorna il repository
+
+    ```bash
+    git pull
+    ```
+
+2. Aggiorna eventuali dipendenze
+
+    ```bash
+    pip install --upgrade -r requirements.txt
+    ```
+
+## ⚙️ Configurazione
+
+Crea una copia della cartella `config_example` chiamandola `config` e modifica i file all'interno per configurare lo script.
+
+### `keys.json`
+
+- `imgbb`: Se desideri caricare le immagini su ImgBB, ottieni la [chiave API](https://api.imgbb.com/) e inseriscila qui. **Lascia vuoto per utilizzare Imgur!**
+- `tmdb`: Inserisci la chiave delle API di TheMovieDB (se non ne hai una, registrati e [ottienila qui](https://www.themoviedb.org/settings/api))
+- `imgbly`: Il caricamento su ImgBly è disattivato di default, attivandolo verrà utilizzato come scelta primaria. ImgBly verrà sempre utilizzato in caso di fallimento nel caricamento delle immagini su Imgur o su ImgBB, o in caso di screenshot troppo grandi (Imgur supporta al max. 20 MB mentre ImgBB 32 MB)
+
+### `screenshots.txt`
+
+Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot (nel formato `HH:MM:SS`).
+
+### `template.txt`
+
+Modifica il template del post in base alle tue preferenze. Le variabili verranno sostituite in automatico con i dati del film o della serie tv.
+
+#### Variabili supportate
+
+- `$TITLE` - Titolo
+- `$ORIGINAL_TITLE` - Titolo originale
+- `$YEAR` - Anno di uscita
+- `$RUNTIME` - Durata
+- `$PLOT` - Trama
+- `$GENRE` - Genere
+- `$DIRECTOR` - Regista
+- `$CAST` - Cast
+- `$COUNTRY` - Paese di produzione
+- `$POSTER_URL` - URL del poster
+- `$TMDB_URL` - URL della pagina TheMovieDB
+- `$TRAILER` - URL al trailer su YouTube
+- `$SCREENSHOTS` - URL degli screenshot
+- `$BITRATE_GRAPH` - URL del grafico del bitrate (se non presente, la generazione del grafico verrà saltata)
+- `$REPORT_MEDIAINFO` - Report generato con MediaInfo
+- `$REPORT_AVINAPTIC` - Report generato con AVInaptic
+- `$SIZE` - Dimensione del torrent
+- `$MAGNET` - Link magnet
+- `$TREE` - Elenco dei file (verrà stampato solo se la release è di tipo `movie_folder`, `tv_single` oppure `tv_multi`)
+- `$EP_COUNT` - Numero degli episodi (verrà stampato solo se la release è una serie tv)
+
+#### Multi-template
+
+Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere underscore (`_`). Esempio: `template_a.txt` oppure `template_b.txt`. Il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_a.txt` oppure `post_b.txt`.
+
+### `trackers.txt`
+
+Inserisci la _trackers list_ da usare durante la creazione del torrent.
+
+## 🚀 Utilizzo
+
+### GUI
 
 Apri il terminale ed esegui:
 
--   Windows: `python ./gui.py`
--   macOS/Linux: `python3 ./gui.py`
+```bash
+python gui.py
+```
 
-### Tramite linea di comando
+<img src=".github/assets/gui.png" alt="Screenshot" width="300px">
+
+### Linea di comando
 
 Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
 
--   Windows: `python ./makerelease.py`
--   macOS/Linux: `python3 ./makerelease.py`
-
-```
-makerelease.py [-h] [-c CREW] [-i TMDB_ID] [-r] [-p PATH] [-t movie,movie_folder,tv_single,tv_multi]
+```bash
+python makerelease.py [PATH] -t [TYPE]
 ```
 
-| Short | Long       | Default | Description                                                                                                             |
-| ----- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `-h`  | `--help`   |         | Mostra il messaggio di aiuto con le informazioni su come usare il comando                                               |
-| `-p`  | `--path`   |         | Percorso della cartella o del file                                                                                      |
-| `-t`  | `--type`   |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                         |
-| `-r`  | `--rename` | `False` | Rinomina in automatico il file seguendo il formato consigliato da MIRCrew                                               |
-| `-c`  | `--crew`   |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                   |
-| `-i`  | `--id`     |         | ID del titolo su TheMovieDB (facoltativo, se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
+| Long       | Short | Default | Descrizione                                                                                                              |
+| ---------- | ----- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--type`   | `-t`  |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                          |
+| `--id`     | `-i`  |         | ID del titolo su TheMovieDB (facoltativo - se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
+| `--crew`   | `-c`  |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                    |
+| `--rename` | `-r`  | `False` | Rinomina in automatico il file seguendo il formato consigliato                                                           |
+| `--help`   | `-h`  |         | Mostra il messaggio di aiuto con le informazioni su come usare il comando                                                |
 
-## Autori
+## 🧑‍💻 Autori
 
--   Rick Sanchez
--   Norman
+- [Rick Sanchez](https://github.com/c137ricksanchez)
+- [Norman](https://github.com/Norman)
+
+### ❤️ Contributors
+
+- [AlbyGNinja](https://github.com/AlbyGNinja)
+- [whit3r0se](https://github.com/whit3r0se)
+
+## 📜 Licenza
+
+[MIT](LICENSE)
