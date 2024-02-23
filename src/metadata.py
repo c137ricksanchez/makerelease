@@ -1,7 +1,9 @@
 import json
+import os
 from datetime import datetime
 from typing import Dict, List, Tuple
 
+from src import constants
 from src.api import themoviedb as tmdb
 
 
@@ -81,7 +83,7 @@ def get(id: str, type: str) -> Dict[str, str]:
         print("Non esiste nessun film con questo ID.")
         exit(-1)
 
-    with open("src/countries_ISO_3166-1_alpha2.json") as file:
+    with open(os.path.join(constants.root, "src/countries_ISO_3166-1_alpha2.json")) as file:
         country_codes = json.load(file)
 
         countries: List[str] = []
