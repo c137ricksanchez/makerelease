@@ -1,0 +1,8 @@
+# Support Python 3.9+
+target-version = "py39"
+
+# Set the maximum line length to 120
+line-length = 120
+
+[lint]
+extend-select = ["I"]
