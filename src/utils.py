@@ -1,8 +1,8 @@
 import json
 import os
-import re
 from typing import List, Tuple
 
+import PTN
 from pymediainfo import MediaInfo
 
 from src import constants, post
@@ -18,17 +18,12 @@ def get_movies(path: str) -> List[str]:
     return [
         os.path.join(path, f)
         for f in os.listdir(path)
-        if os.path.isfile(os.path.join(path, f))
-        and f.lower().endswith(("avi", "mkv", "mp4"))
+        if os.path.isfile(os.path.join(path, f)) and f.lower().endswith(("avi", "mkv", "mp4"))
     ]
 
 
 def get_folders(path: str) -> List[str]:
-    return [
-        os.path.join(path, f)
-        for f in os.listdir(path)
-        if os.path.isdir(os.path.join(path, f))
-    ]
+    return [os.path.join(path, f) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 
 
 def get_size(path: str) -> int:
@@ -93,15 +88,10 @@ def read_file(file: str) -> str:
 
 
 def parse_title(filename: str) -> Tuple[str, str]:
-    title = filename.replace(".", " ").split("(")[0].strip()
-    title_year: List[str] = re.findall(r"\b\d{4}\b", filename)
-    year = ""
+    filename_parsed = PTN.parse(filename)
 
-    if len(title_year) == 1:
-        year = title_year[0]
-    elif len(title_year) == 2:
-        year = title_year[1]
-        title = title.split(year, 1)[0]
+    title = filename_parsed["title"]
+    year = filename_parsed["year"] if "year" in filename_parsed else ""
 
     return title, year
 
