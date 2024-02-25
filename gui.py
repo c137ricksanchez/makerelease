@@ -22,9 +22,9 @@ class MyApp(ctk.CTk):
         # Themes: blue (default), dark-blue, green
         ctk.set_default_color_theme("blue")
 
-        ctk.CTkLabel(
-            self, text="Select the type of release", fg_color="transparent"
-        ).grid(row=1, column=0, sticky="w", padx=10, pady=0)
+        ctk.CTkLabel(self, text="Select the type of release", fg_color="transparent").grid(
+            row=1, column=0, sticky="w", padx=10, pady=0
+        )
 
         self.option_map = {
             "Movie (File)": "movie",
@@ -34,43 +34,29 @@ class MyApp(ctk.CTk):
         }
         options = list(self.option_map.keys())
         self.var_type = StringVar(value=options[0])
-        self.option_menu = ctk.CTkOptionMenu(
-            self, variable=self.var_type, values=options
-        )
+        self.option_menu = ctk.CTkOptionMenu(self, variable=self.var_type, values=options)
         self.option_menu.grid(row=2, column=0, sticky="nsew", padx=10, pady=2)
 
-        self.select_button = ctk.CTkButton(
-            self, text="Select Path", command=self.select
-        )
-        self.select_button.grid(
-            row=3, column=0, sticky="nsew", padx=10, pady=2)
+        self.select_button = ctk.CTkButton(self, text="Select Path", command=self.select)
+        self.select_button.grid(row=3, column=0, sticky="nsew", padx=10, pady=2)
 
         self.selected_path = StringVar(value="")
-        self.selected_path_label = ctk.CTkLabel(
-            self,
-            text="Path not selected",
-            fg_color="transparent",
-        )
-        self.selected_path_label.grid(
-            row=4, column=0, sticky="w", padx=10, pady=0)
+        self.selected_path_label = ctk.CTkLabel(self, text="Path not selected", fg_color="transparent")
+        self.selected_path_label.grid(row=4, column=0, sticky="w", padx=10, pady=0)
 
         self.make_release_button = ctk.CTkButton(
             self, text="Make Release!", state="disabled", command=self.make_release
         )
-        self.make_release_button.grid(
-            row=5, column=0, sticky="nsew", padx=10, pady=2)
+        self.make_release_button.grid(row=5, column=0, sticky="nsew", padx=10, pady=2)
 
         self.var_rename = BooleanVar(value=False)
-        self.rename_option_menu = ctk.CTkSwitch(
-            self, text="Rename the file", variable=self.var_rename
-        )
-        self.rename_option_menu.grid(
-            row=6, column=0, sticky="nsew", padx=10, pady=2)
+        self.rename_option_menu = ctk.CTkSwitch(self, text="Rename the file", variable=self.var_rename)
+        self.rename_option_menu.grid(row=6, column=0, sticky="nsew", padx=10, pady=2)
 
         # Add custom crew name
-        ctk.CTkLabel(
-            self, text="Add custom crew name (optional)", fg_color="transparent"
-        ).grid(row=7, column=0, sticky="w", padx=10, pady=0)
+        ctk.CTkLabel(self, text="Add custom crew name (optional)", fg_color="transparent").grid(
+            row=7, column=0, sticky="w", padx=10, pady=0
+        )
         self.var_crew = StringVar(value="")
         self.crew_entry = ctk.CTkEntry(self, textvariable=self.var_crew)
         self.crew_entry.grid(row=8, column=0, sticky="nsew", padx=10, pady=2)
@@ -81,8 +67,7 @@ class MyApp(ctk.CTk):
         )
         self.var_idtmdb = StringVar(value="")
         self.idtmdb_entry = ctk.CTkEntry(self, textvariable=self.var_idtmdb)
-        self.idtmdb_entry.grid(
-            row=10, column=0, sticky="nsew", padx=10, pady=2)
+        self.idtmdb_entry.grid(row=10, column=0, sticky="nsew", padx=10, pady=2)
 
         self.author_label = ctk.CTkLabel(
             self,
@@ -101,8 +86,7 @@ class MyApp(ctk.CTk):
         )
         self.check_updates.bind(
             "<Button-1>",
-            lambda e: callback(
-                "https://github.com/c137ricksanchez/automatic-releaser"),
+            lambda e: callback("https://github.com/c137ricksanchez/automatic-releaser"),
         )
         self.check_updates.grid(row=12, column=0, sticky="w", padx=10, pady=0)
 
@@ -115,9 +99,7 @@ class MyApp(ctk.CTk):
             self.selected_path.set(file_path)
             self.make_release_button.configure(state="normal")
             self.select_button.configure(text="Change Path")
-            self.selected_path_label.configure(
-                text=f"Selected path: {self.selected_path.get()}"
-            )
+            self.selected_path_label.configure(text=f"Selected path: {self.selected_path.get()}")
 
     def make_release(self, debug: bool = False):
         if debug:

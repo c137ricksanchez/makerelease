@@ -25,20 +25,13 @@ def generate_text(
 ) -> None:
     bitrate_graph = ""
     if bitrate_img != {}:
-        bitrate_graph = (
-            f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]"
-        )
+        bitrate_graph = f"[url={bitrate_img['full']}][img]{bitrate_img['thumb']}[/img][/url]"
 
     plot = metadata["plot"] if metadata["plot"] != "" else "<NON TROVATO>"
 
-    trailer = (
-        metadata["trailer"]
-        if metadata["trailer"] != ""
-        else "<NON TROVATO>"
-    )
+    trailer = metadata["trailer"] if metadata["trailer"] != "" else "<NON TROVATO>"
 
-    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + \
-        tree + "\n[/code]" if tree != "" else ""
+    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
 
     ep_count_str = f"Numero episodi: [b]{ep_count}[/b]" if ep_count > 0 else ""
 
@@ -46,9 +39,7 @@ def generate_text(
     for key, val in metadata.items():
         if val == "":
             if is_first_empty:
-                print(
-                    "Queste informazioni sono da riempire manualmente perché non trovate su TMDB:"
-                )
+                print("Queste informazioni sono da riempire manualmente perché non trovate su TMDB:")
                 is_first_empty = False
 
             print("  -", key)
@@ -68,11 +59,7 @@ def generate_text(
         "PLOT": plot,
         "TRAILER": trailer,
         "SCREENSHOTS": "\n".join(
-            [
-                "[url=" + img["full"] + "][img]" +
-                img["thumb"] + "[/img][/url]"
-                for img in screenshots
-            ]
+            ["[url=" + img["full"] + "][img]" + img["thumb"] + "[/img][/url]" for img in screenshots]
         ),
         "BITRATE_GRAPH": bitrate_graph,
         "REPORT_MEDIAINFO": report,

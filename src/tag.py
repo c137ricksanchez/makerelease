@@ -30,9 +30,7 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                 tags["v"] += f"SD {t.internet_media_type.replace('video/', '')}"
             else:
                 scan_type = "i" if t.scan_type == "Interlaced" else "p"
-                tags[
-                    "v"
-                ] += f"{fake_height}{scan_type} {t.internet_media_type.replace('video/', '')}"
+                tags["v"] += f"{fake_height}{scan_type} {t.internet_media_type.replace('video/', '')}"
         elif t.track_type == "Audio":
             lang = (
                 t.other_language[3].upper()
@@ -40,11 +38,7 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                 else (t.language if t.language else "UND")
             )
 
-            channels = (
-                get_channels(t.channel_layout)
-                if t.channel_layout
-                else f"{t.channel_s}.0"
-            )
+            channels = get_channels(t.channel_layout) if t.channel_layout else f"{t.channel_s}.0"
 
             if t.format == "MPEG Audio" and t.format_profile == "Layer 3":
                 t.format = "MP3"
@@ -54,8 +48,7 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
             if len(t.other_language) > 3:
                 tags["s"].append(f"{t.other_language[3].title()}")
             else:
-                filtered_strings = filter(
-                    lambda x: len(x) == 3, t.other_language)
+                filtered_strings = filter(lambda x: len(x) == 3, t.other_language)
                 tag_s = next(filtered_strings, None)
                 tags["s"].append(tag_s)
 

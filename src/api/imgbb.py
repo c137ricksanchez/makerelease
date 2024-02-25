@@ -26,9 +26,7 @@ def upload_image(path: str) -> Dict[str, str]:
         resp = response.json()
 
         if "success" not in resp:
-            print(
-                "Si è verificato un errore durante il caricamento delle immagini su ImgBB"
-            )
+            print("Si è verificato un errore durante il caricamento delle immagini su ImgBB")
             print(
                 "errore ImgBB nel tentativo di caricare l'immagine: ",
                 path,

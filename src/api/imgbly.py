@@ -25,7 +25,7 @@ def upload_image(path: str) -> Dict[str, str]:
     full_res = upload(image_data)
     thumb_res = upload_thumb(original_image)
 
-    if (full_res and thumb_res):
+    if full_res and thumb_res:
         full_url = f"{BASE_URL}ib/{full_res['data']['id']}.png"
         thumb_url = f"{BASE_URL}ib/{thumb_res['data']['id']}.png"
         print(
@@ -58,8 +58,7 @@ def upload(image_data: bytes):
         else:
             print("Token CSRF non trovato nella pagina.")
     else:
-        print("Errore nella richiesta GET:",
-              f"{response.status_code}: {response.text}")
+        print("Errore nella richiesta GET:", f"{response.status_code}: {response.text}")
         exit(-1)
     conn = http.client.HTTPSConnection("www.imgbly.com")
 
@@ -93,8 +92,7 @@ def upload(image_data: bytes):
         return resp
     else:
         # Gestisci qui eventuali errori di stato della risposta
-        print(
-            f"Errore nella richiesta: {res.status} - Caricare questa immagine manualmente.")
+        print(f"Errore nella richiesta: {res.status} - Caricare questa immagine manualmente.")
         return False
 
 

@@ -32,9 +32,7 @@ def search(title: str, year: str, type: str) -> str:
     if results["total_results"] == 0:
         print("\nNessun risultato.")
 
-        id = input(
-            "Inserisci manualmente un ID di TMDB (lascia vuoto per terminare lo script): "
-        )
+        id = input("Inserisci manualmente un ID di TMDB (lascia vuoto per terminare lo script): ")
         return id if is_tmdb_id(id) else exit(0)
 
     if results["total_results"] == 1:
@@ -44,9 +42,7 @@ def search(title: str, year: str, type: str) -> str:
             f"({results['results'][0][release_date_key][:4]})",
         )
 
-        choice = input(
-            "\nSe il risultato è sbagliato, inserisci un ID di TMDB [lascia vuoto per confermare]: "
-        )
+        choice = input("\nSe il risultato è sbagliato, inserisci un ID di TMDB [lascia vuoto per confermare]: ")
         if is_tmdb_id(choice):
             return choice
 
@@ -56,9 +52,7 @@ def search(title: str, year: str, type: str) -> str:
 
     id = 1
     for result in results["results"]:
-        release_date = (
-            result[release_date_key] if result.get(release_date_key) else "n.d."
-        )
+        release_date = result[release_date_key] if result.get(release_date_key) else "n.d."
         print(f"[{id}] {result[title_key]} ({release_date[:4]})")
         id += 1
 
