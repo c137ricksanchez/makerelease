@@ -1,27 +1,28 @@
-import io
+import json
 import math
-import multiprocessing
 import os
 import subprocess
 from datetime import timedelta
 from pathlib import Path
-from typing import List
+from typing import Literal, TypedDict
 
-import ffmpeg
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from scipy.ndimage import gaussian_filter1d
-from tqdm import tqdm
 
 
-# https://github.com/InB4DevOps/bitrate-viewer
+class FrameEntry(TypedDict):
+    n: int
+    frame_type: Literal["I", "Non-I"]
+    pts: float | Literal["NaN"]
+    size: int
+    duration: float | Literal["NaN"]
+
+
+# https://github.com/slhck/ffmpeg-bitrate-stats
 class BitrateViewer:
     _path: str
     _filename: str
-
-    _seconds: List[int] = []
-    _bitrates_per_sec: List[float] = []
-    _avg_bitrate: List[float] = []
 
     def __init__(self, path: str):
         path = os.path.abspath(path)
@@ -31,91 +32,143 @@ class BitrateViewer:
         self._path = path
         self._filename = Path(path).stem
 
+        self._chunk_size = 1
+        self._frames: list[FrameEntry] = []
+        self._chunks: list[float] = []
+
     def analyze(self):
-        duration = self.get_duration()
-        fps = self.get_framerate()
-        self._fps_rounded = round(fps)
+        proc = subprocess.Popen(
+            [
+                "ffprobe",
+                "-v",
+                "quiet",
+                "-fflags",
+                "+genpts",
+                "-select_streams",
+                "v:0",
+                "-show_packets",
+                "-show_entries",
+                "packet=pts_time,dts_time,duration_time,size,flags",
+                "-of",
+                "json",
+                self._path,
+            ],
+            stdout=subprocess.PIPE,
+        )
 
-        total_frames = math.trunc(duration * fps) + 1
+        stdout, _ = proc.communicate()
+        data = stdout.decode("utf-8")
 
-        cpu_count = multiprocessing.cpu_count()
+        info = json.loads(data)["packets"]
 
-        bitrates: List[int] = []
+        ret: list[FrameEntry] = []
+        idx = 1
 
-        with tqdm(range(total_frames), unit=" frames", ncols=80) as progress:
-            proc = subprocess.Popen(
-                [
-                    "ffprobe",
-                    "-v",
-                    "quiet",
-                    "-threads",
-                    str(cpu_count),
-                    "-select_streams",
-                    "v:0",
-                    "-show_entries",
-                    "frame=pkt_size",
-                    "-print_format",
-                    "csv",
-                    self._path,
-                ],
-                stdout=subprocess.PIPE,
+        default_duration = next((x["duration_time"] for x in info if "duration_time" in x.keys()), "NaN")
+
+        for packet_info in info:
+            frame_type: Literal["I", "Non-I"] = (
+                # key frames are marked with a capital K (K_ or K__) in packet flags
+                "I" if "K" in packet_info["flags"] else "Non-I"
             )
 
-            if proc.stdout:
-                for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
-                    if line.strip() and "," in line:
-                        frame = line.split(",")[1]
-                        if frame.rstrip().isdigit():
-                            bitrates.append(int(frame) * 8)  # pkt_size is in byte
-                            progress.update()
+            pts: float | Literal["NaN"] = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
 
-            proc.poll()
+            duration: float | Literal["NaN"] = (
+                float(packet_info["duration_time"])
+                if "duration_time" in packet_info.keys()
+                else float(default_duration)
+                if default_duration != "NaN"
+                else "NaN"
+            )
 
-        self.calculate_bitrates_per_sec(bitrates)
+            ret.append(
+                {
+                    "n": idx,
+                    "frame_type": frame_type,
+                    "pts": pts,
+                    "size": int(packet_info["size"]),
+                    "duration": duration,
+                }
+            )
+            idx += 1
 
-    def get_duration(self) -> float:
-        duration: float = ffmpeg.probe(self._path)["format"]["duration"]
-        return float(duration)
+        # fix for missing durations, estimate it via PTS
+        if default_duration == "NaN":
+            ret = self._fix_durations(ret)
 
-    def get_framerate(self) -> float:
-        r_frame_rate: str = [
-            stream
-            for stream in ffmpeg.probe(self._path)["streams"]
-            if stream["codec_type"] == "video"
-        ][0]["r_frame_rate"]
+        # fix missing data in first packet (occurs occassionally when reading streams)
+        if ret[0]["duration"] == "NaN" and isinstance(ret[1]["duration"], float):
+            ret[0]["duration"] = ret[1]["duration"]
 
-        numerator, denominator = r_frame_rate.split("/")
-        return round(int(numerator) / int(denominator), 3)
+        if ret[0]["pts"] == "NaN" and isinstance(ret[1]["pts"], float) and isinstance(ret[0]["duration"], float):
+            ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
 
-    def calculate_bitrates_per_sec(self, bitrates: List[int]):
-        current_second = 0
-        current_bitrate = 0
-        frame_count = 0
+        self._frames = ret
 
-        for bitrate in bitrates:
-            current_bitrate += bitrate
-            frame_count += 1
+    def _fix_durations(self, ret: list[FrameEntry]) -> list[FrameEntry]:
+        last_duration = None
+        for i in range(len(ret) - 1):
+            curr_pts = ret[i]["pts"]
+            next_pts = ret[i + 1]["pts"]
+            if curr_pts == "NaN" or next_pts == "NaN":
+                continue
+            last_duration = next_pts - curr_pts
+            ret[i]["duration"] = last_duration
+        if last_duration is not None:
+            ret[-1]["duration"] = last_duration
+        return ret
 
-            if frame_count == self._fps_rounded:
-                self._seconds.append(current_second)
-                self._bitrates_per_sec.append(current_bitrate / 1_000)  # kilobit
-                # self._avg_bitrate.append(float(np.mean(self._bitrates_per_sec)))
+    def _collect_chunks(self) -> list[float]:
+        # this is where we will store the stats in buckets
+        aggregation_chunks: list[list[FrameEntry]] = []
+        curr_list: list[FrameEntry] = []
 
-                current_bitrate = 0
-                frame_count = 0
-                current_second += 1
+        agg_time: float = 0
+        for frame in self._frames:
+            if agg_time < self._chunk_size:
+                curr_list.append(frame)
+                agg_time += float(frame["duration"])
+            else:
+                if curr_list:
+                    aggregation_chunks.append(curr_list)
+                curr_list = [frame]
+                agg_time = float(frame["duration"])
+        aggregation_chunks.append(curr_list)
+
+        # calculate BR per group
+        self._chunks = [BitrateViewer._bitrate_for_frame_list(x) for x in aggregation_chunks]
+
+        return self._chunks
+
+    @staticmethod
+    def _bitrate_for_frame_list(frame_list: list[FrameEntry]) -> float:
+        if len(frame_list) < 2:
+            return math.nan
+
+        # sort frames by PTS in case they are unordered
+        frame_list.sort(key=lambda x: x["pts"])
+
+        duration = float(frame_list[-1]["pts"]) - float(frame_list[0]["pts"])
+        size = sum(f["size"] for f in frame_list)
+        bitrate = ((size * 8) / 1000) / duration
+
+        return bitrate
 
     def plot(self, outputdir: str):
+        chunks = self._collect_chunks()
+        x_values = [i * self._chunk_size for i in range(len(chunks))]
+
         fig, ax = plt.subplots(figsize=[16, 9])
         ax.set_title(self._filename)
 
-        ax.plot(self._seconds, self._bitrates_per_sec, label="Bitrate", color="#9e9e9e")
+        ax.plot(x_values, chunks, label="Bitrate", color="#9e9e9e")
 
         ax.plot(
-            self._seconds,
-            gaussian_filter1d(input=self._bitrates_per_sec, sigma=64),
+            x_values,
+            gaussian_filter1d(input=chunks, sigma=64),
             label="Bitrate (smoothed)",
-            color="red",
+            color="#f44336",
             lw=2,
         )
 
@@ -129,17 +182,13 @@ class BitrateViewer:
 
         ax.set_xlabel("Time")
         # mette 10 ticks sull'asse x
-        ax.set_xticks(range(0, self._seconds[-1] + 1, max(self._seconds[-1] // 9, 1)))
+        ax.set_xticks(range(0, x_values[-1] + 1, max(x_values[-1] // 9, 1)))
         # converte i secondi nel human-readable 0:01:44
-        ax.xaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x, _: timedelta(seconds=int(x)))
-        )
+        ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: timedelta(seconds=int(x))))
 
         ax.set_ylabel("Bitrate (Kbps)")
         # mettere il separatore delle migliaia
-        ax.yaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x, _: "{:,}".format(int(x)).replace(",", "."))
-        )
+        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: "{:,}".format(int(x)).replace(",", ".")))
 
         output = os.path.join(outputdir, "bitrate.png")
         fig.savefig(output, bbox_inches="tight")

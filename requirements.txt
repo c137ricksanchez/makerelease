@@ -8,4 +8,3 @@ pymediainfo==6.1.0
 Requests==2.31.0
 scipy==1.12.0
 torf==4.2.4
-tqdm==4.66.2
