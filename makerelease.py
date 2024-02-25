@@ -7,10 +7,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-p",
-        "--path",
+        "path",
+        metavar="PATH",
         type=str,
-        help="Indirizzo della cartella o del file",
+        help="Percorso del file o della cartella",
     )
 
     parser.add_argument(
@@ -26,7 +26,7 @@ if __name__ == "__main__":
         "--rename",
         default=False,
         action="store_true",
-        help="Rinomina in automatico il file seguendo il formato consigliato da MIRCrew",
+        help="Rinomina in automatico il file seguendo il formato consigliato",
     )
 
     parser.add_argument(
