@@ -18,7 +18,8 @@ if __name__ == "__main__":
         "--type",
         type=str,
         choices=[t.value for t in ReleaseType],
-        help="Tipo di release",
+        default=ReleaseType.MOVIE_FILE,
+        help="Tipo di release (default: movie)",
     )
 
     parser.add_argument(
