@@ -23,14 +23,24 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                 if abs(res - fake_height) < 10:
                     fake_height = res
 
-            if fake_height <= 576:
-                if "MP4V-ES" in t.internet_media_type:
-                    t.internet_media_type = "XviD"
+            if t.format == "MPEG Video":
+                t.format = "MPEG2"
+            elif t.format == "MPEG-4 Visual":
+                t.format = "XviD"
+            elif t.format == "AVC":
+                t.format = "H264"
+            elif t.format == "HEVC":
+                t.format = "H265"
+            elif t.format == "VP08":
+                t.format = "VP8"
+            elif t.format == "VP09":
+                t.format = "VP9"
 
-                tags["v"] += f"SD {t.internet_media_type.replace('video/', '')}"
+            if fake_height <= 576:
+                tags["v"] += f"SD {t.format}"
             else:
                 scan_type = "i" if t.scan_type == "Interlaced" else "p"
-                tags["v"] += f"{fake_height}{scan_type} {t.internet_media_type.replace('video/', '')}"
+                tags["v"] += f"{fake_height}{scan_type} {t.format}"
         elif t.track_type == "Audio":
             lang = (
                 t.other_language[3].upper()
