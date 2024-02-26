@@ -1,8 +1,8 @@
-[b][size=200]$TITLE ($YEAR) [$SIZE][/size][/b]
+[b][size=200]$TITLE ($YEAR)[/size][/b]
 
 [img]$POSTER_URL[/img]
 
-[b]INFORMAZIONI[/b]
+[b][size=150]INFORMAZIONI[/size][/b]
 
 TMDB: $TMDB_URL
 Titolo originale: [b]$ORIGINAL_TITLE[/b]
@@ -13,44 +13,42 @@ Durata: [b]$RUNTIME[/b]
 Regia: [b]$DIRECTOR[/b]
 $EP_COUNT
 
-[b]CAST[/b]
+[b][size=150]CAST[/size][/b]
 
 [list]
 $CAST
 [/list]
 
 
-[b]TRAMA[/b]
+[b][size=150]TRAMA[/size][/b]
 
 $PLOT
 
-[b]TRAILER[/b]
+[b][size=150]TRAILER[/size][/b]
 
 [media]$TRAILER[/media]
 
-[b]SCREENSHOTS[/b]
+[b][size=150]SCREENSHOT[/size][/b]
 
 [spoiler]
 $SCREENSHOTS
 [/spoiler]
 
 
-[b]REPORT[/b]
+[b][size=150]REPORT[/size][/b]
 
-[spoiler]
 [code]
 $REPORT_MEDIAINFO
 [/code]
-[/spoiler]
 
 $TREE
 
-[b]BITRATE[/b]
+[b][size=150]BITRATE[/size][/b]
 
-[spoiler]
 $BITRATE_GRAPH
-[/spoiler]
 
 
-[b]MAGNET[/b]
+[b][size=150]MAGNET[/size][/b]
+Dimensione: [b]$SIZE[/b]
+
 [magnet]$MAGNET[/magnet]
