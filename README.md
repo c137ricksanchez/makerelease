@@ -247,7 +247,7 @@ python makerelease.py [PATH] -t [TYPE]
 
 | Long       | Short | Default | Descrizione                                                                                                              |
 | ---------- | ----- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `--type`   | `-t`  |         | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                          |
+| `--type`   | `-t`  | `movie` | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                          |
 | `--id`     | `-i`  |         | ID del titolo su TheMovieDB (facoltativo - se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
 | `--crew`   | `-c`  |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                    |
 | `--rename` | `-r`  | `False` | Rinomina in automatico il file seguendo il formato consigliato                                                           |
