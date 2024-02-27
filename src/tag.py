@@ -53,7 +53,7 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
             if t.format == "MPEG Audio" and t.format_profile == "Layer 3":
                 t.format = "MP3"
 
-            tags["a"].append(f"{lang} {t.format.replace('-', '')} {channels}")
+            tags["a"].append((f"{lang}", f"{t.format.replace('-', '')} {channels}"))
         elif t.track_type == "Text":
             if len(t.other_language) > 3:
                 tags["s"].append(f"{t.other_language[3].title()}")
@@ -62,6 +62,16 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
                 tag_s = next(filtered_strings, None)
                 tags["s"].append(tag_s)
 
+    # Replace "ITA AC3 5.1 ENG AC3 5.1" with "ITA ENG AC3 5.1"
+    channel_lang_map = {}
+    for lang, channel in tags["a"]:
+        if channel in channel_lang_map:
+            channel_lang_map[channel].append(lang)
+        else:
+            channel_lang_map[channel] = [lang]
+
+    # Forming the final list of strings
+    tags["a"] = [" ".join([*langs, channel]) for channel, langs in channel_lang_map.items()]
     tags["a"] = list(dict.fromkeys(tags["a"]))
     tags["s"] = list(dict.fromkeys(tags["s"]))
 
