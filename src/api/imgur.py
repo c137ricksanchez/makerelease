@@ -1,3 +1,4 @@
+import base64
 from typing import Dict
 from urllib.parse import urlparse, urlunparse
 
@@ -13,12 +14,13 @@ def upload_image(path: str) -> Dict[str, str]:
 
     with open(path, "rb") as f:
         image = f.read()
+        b64_image = base64.b64encode(image)
 
         response = requests.request(
             "POST",
             url,
             headers={"Authorization": f"Client-ID {client_id}"},
-            data={"image": image},
+            data={"image": b64_image},
         )
 
         resp = response.json()
