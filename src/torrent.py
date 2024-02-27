@@ -5,13 +5,13 @@ from torf import Torrent
 from src import constants, utils
 
 
-def generate(filename: str, outputdir: str, outputfile: str) -> str:
+def generate(path: str, outputdir: str, outputfile: str) -> str:
     trackers = utils.read_file(constants.trackers).splitlines()
 
-    filesize = utils.get_size(filename)
+    filesize = utils.get_size(path)
     piece_size = calculate_piece_size(filesize)
 
-    t = Torrent(path=filename, trackers=trackers, piece_size=piece_size)
+    t = Torrent(path=path, trackers=trackers, piece_size=piece_size)
     t.generate(callback=cb, interval=1)
     t.write(os.path.join(outputdir, outputfile + ".torrent"))
 

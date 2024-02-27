@@ -156,7 +156,7 @@ class MakeRelease:
             print("  |---> File Torrent già presente, skip step")
             magnet = torrent.get_magnet(outputdir, filename)
         else:
-            magnet = torrent.generate(movie, outputdir, filename)
+            magnet = torrent.generate(self.path, outputdir, filename)
 
         print("\n4. Estrazione degli screenshot...")
         screenshots = images.extract_screenshots(movie, outputdir)
