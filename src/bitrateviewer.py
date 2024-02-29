@@ -4,7 +4,7 @@ import os
 import subprocess
 from datetime import timedelta
 from pathlib import Path
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, Union
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -14,9 +14,9 @@ from scipy.ndimage import gaussian_filter1d
 class FrameEntry(TypedDict):
     n: int
     frame_type: Literal["I", "Non-I"]
-    pts: float | Literal["NaN"]
+    pts: Union[float, Literal["NaN"]]
     size: int
-    duration: float | Literal["NaN"]
+    duration: Union[float, Literal["NaN"]]
 
 
 # https://github.com/slhck/ffmpeg-bitrate-stats
@@ -72,9 +72,9 @@ class BitrateViewer:
                 "I" if "K" in packet_info["flags"] else "Non-I"
             )
 
-            pts: float | Literal["NaN"] = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
+            pts: Union[float, Literal["NaN"]] = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
 
-            duration: float | Literal["NaN"] = (
+            duration: Union[float, Literal["NaN"]] = (
                 float(packet_info["duration_time"])
                 if "duration_time" in packet_info.keys()
                 else float(default_duration)
