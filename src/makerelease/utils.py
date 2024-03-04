@@ -5,7 +5,7 @@ from typing import List, Tuple
 import PTN
 from pymediainfo import MediaInfo
 
-from src import constants, post
+from . import constants, post
 
 
 def get_api_key(key: str) -> str:

@@ -4,8 +4,8 @@ import shutil
 from enum import Enum
 from pathlib import Path
 
-import src.bitrateviewer as bv
-from src import constants, images, metadata, post, tag, torrent, utils
+from . import constants, images, metadata, post, tag, torrent, utils
+from .bitrateviewer import BitrateViewer
 
 
 class ReleaseType(Enum):
@@ -170,7 +170,7 @@ class MakeRelease:
             if os.path.exists(os.path.join(outputdir, "bitrate.png")):
                 print("  |---> Grafico già generato, skip step")
             else:
-                bitrate = bv.BitrateViewer(movie)
+                bitrate = BitrateViewer(movie)
                 bitrate.analyze()
                 bitrate.plot(outputdir)
 

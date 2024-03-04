@@ -1,6 +1,6 @@
 import argparse
 
-from src.app import MakeRelease, ReleaseType
+from src.makerelease import MakeRelease, ReleaseType
 
 if __name__ == "__main__":
     # Instantiate the parser

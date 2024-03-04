@@ -184,7 +184,7 @@ class BitrateViewer:
         # mette 10 ticks sull'asse x
         ax.set_xticks(range(0, x_values[-1] + 1, max(x_values[-1] // 9, 1)))
         # converte i secondi nel human-readable 0:01:44
-        ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: timedelta(seconds=int(x))))
+        ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: str(timedelta(seconds=int(x)))))
 
         ax.set_ylabel("Bitrate (Kbps)")
         # mettere il separatore delle migliaia

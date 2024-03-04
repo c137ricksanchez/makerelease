@@ -2,7 +2,7 @@ import os
 
 from torf import Torrent
 
-from src import constants, utils
+from . import constants, utils
 
 
 def generate(path: str, outputdir: str, outputfile: str) -> str:
