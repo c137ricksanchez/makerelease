@@ -123,16 +123,16 @@ class MakeRelease:
         report = ""
         report_avinaptic = ""
         # Salta la generazione del grafico del bitrate se non è presente
-        # la variabile $BITRATE_GRAPH nel file template.txt
+        # la variabile {{ BITRATE_GRAPH }} nel file template.txt
         # controllo in anticipo skip_chart per evitare cicli sui template successivi
         skip_chart = True
         for t in constants.templates:
             template = utils.read_file(os.path.join(constants.config, t))
 
-            if "$BITRATE_GRAPH" in template:
+            if "{{ BITRATE_GRAPH }}" in template:
                 skip_chart = False
 
-            if "$REPORT_MEDIAINFO" in template and report == "":
+            if "{{ REPORT_MEDIAINFO }}" in template and report == "":
                 print("\n2. Generazione del report con MediaInfo...")
                 if os.path.exists(os.path.join(outputdir, "report_mediainfo.txt")):
                     print("  |---> File Mediainfo già presente, skip step")
@@ -140,7 +140,7 @@ class MakeRelease:
                 else:
                     report = post.generate_report(movie, outputdir)
 
-            if "$REPORT_AVINAPTIC" in template and os.name == "nt" and report_avinaptic == "":
+            if "{{ REPORT_AVINAPTIC }}" in template and os.name == "nt" and report_avinaptic == "":
                 print("2. Generazione del report con AVInaptic...")
                 if shutil.which("avinaptic2-cli"):
                     if os.path.exists(os.path.join(outputdir, "report_avinaptic.txt")):
@@ -162,7 +162,7 @@ class MakeRelease:
         screenshots = images.extract_screenshots(movie, outputdir)
 
         # Salta la generazione del grafico del bitrate se non è presente
-        # la variabile $BITRATE_GRAPH nel file template.txt
+        # la variabile {{ BITRATE_GRAPH }} nel file template.txt
         print("\n5. Generazione del grafico del bitrate...")
         if skip_chart:
             print("Operazione saltata.")

@@ -2,9 +2,9 @@ import math
 import os
 import subprocess
 from pathlib import Path
-from string import Template
 from typing import Dict, List
 
+from jinja2 import Template
 from pymediainfo import MediaInfo
 
 from . import constants, utils
@@ -73,10 +73,10 @@ def generate_text(
     for t in constants.templates:
         template_path = os.path.join(constants.config, t)
         template_text = utils.read_file(template_path)
-        template = Template(template_text).substitute(**values)
+        template = Template(template_text).render(**values)
 
         post_filename = "post.txt"
-        if t != "template.txt":
+        if t != "template.jinja":
             post_filename = f"post_{t.replace('template_','')}"
         with open(os.path.join(outputdir, post_filename), "wb") as t:
             t.write(str.encode(template))
