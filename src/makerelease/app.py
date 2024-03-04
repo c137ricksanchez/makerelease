@@ -79,9 +79,11 @@ class MakeRelease:
         if not self.type == ReleaseType.MOVIE_FILE:
             self.remove_temporary_files()
 
-        # file = Path(movie).name
-        filename = Path(self.path).stem
-        ext = Path(self.path).suffix
+        if os.path.isdir(self.path):
+            filename = Path(self.path).name
+        elif os.path.isfile(self.path):
+            filename = Path(self.path).stem
+            ext = Path(self.path).suffix
 
         movie = self.get_file()
 
@@ -102,10 +104,10 @@ class MakeRelease:
 
         data = metadata.get(movie_id, self.type_id)
 
-        outputdir = os.path.join(Path(self.path).parent, filename + "_files")
+        outputdir = os.path.join(Path(self.path).parent, f"{filename}_files")
         if os.path.exists(outputdir):
             print("ERRORE: Esiste già una cartella chiamata", outputdir)
-            # return
+            exit(1)
         else:
             os.mkdir(outputdir)
 
@@ -152,7 +154,7 @@ class MakeRelease:
                     print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
         print("\n3. Generazione del file torrent...")
-        if os.path.exists(os.path.join(outputdir, filename + ".torrent")):
+        if os.path.exists(os.path.join(outputdir, f"{filename}.torrent")):
             print("  |---> File Torrent già presente, skip step")
             magnet = torrent.get_magnet(outputdir, filename)
         else:
