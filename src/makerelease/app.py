@@ -123,7 +123,7 @@ class MakeRelease:
         report = ""
         report_avinaptic = ""
         # Salta la generazione del grafico del bitrate se non è presente
-        # la variabile {{ BITRATE_GRAPH }} nel file template.txt
+        # la variabile {{ BITRATE_GRAPH }} nel file template.jinja
         # controllo in anticipo skip_chart per evitare cicli sui template successivi
         skip_chart = True
         for t in constants.templates:
@@ -162,7 +162,7 @@ class MakeRelease:
         screenshots = images.extract_screenshots(movie, outputdir)
 
         # Salta la generazione del grafico del bitrate se non è presente
-        # la variabile {{ BITRATE_GRAPH }} nel file template.txt
+        # la variabile {{ BITRATE_GRAPH }} nel file template.jinja
         print("\n5. Generazione del grafico del bitrate...")
         if skip_chart:
             print("Operazione saltata.")
