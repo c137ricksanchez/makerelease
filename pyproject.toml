@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "makerelease"
+version = "0.1.0"
+authors = [
+    { name = "Rick Sanchez" },
+    { name = "Norman" },
+]
+description = "script per velocizzare la pubblicazione di film e serie tv sui forum P2P italiani"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "beautifulsoup4==4.12.3",
+    "customtkinter==5.2.2",
+    "ffmpeg_python==0.2.0",
+    "matplotlib==3.8.3",
+    "parse-torrent-title==2.8.1",
+    "pillow==10.2.0",
+    "pymediainfo==6.1.0",
+    "Requests==2.31.0",
+    "scipy==1.12.0",
+    "torf==4.2.4",
+]
+
+[project.urls]
+Repository = "https://github.com/c137ricksanchez/makerelease"
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "pytest-cov",
+    #"setuptools",
+    #"wheel",
+    #"twine",
+    #"build",
+]
