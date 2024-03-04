@@ -73,7 +73,11 @@ def generate_text(
     for t in constants.templates:
         template_path = os.path.join(constants.config, t)
         template_text = utils.read_file(template_path)
-        template = Template(template_text).render(**values)
+        template = Template(
+            source=template_text,
+            trim_blocks=True,
+            lstrip_blocks=True,
+        ).render(**values)
 
         post_filename = "post.txt"
         if t != "template.jinja":
