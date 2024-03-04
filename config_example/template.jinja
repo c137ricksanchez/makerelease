@@ -11,12 +11,16 @@ Genere: [b]{{ GENRE }}[/b]
 Anno: [b]{{ YEAR }}[/b]
 Durata: [b]{{ RUNTIME }}[/b]
 Regia: [b]{{ DIRECTOR }}[/b]
-{{ EP_COUNT }}
+{% if EP_COUNT is defined %}
+Numero episodi: [b]{{ EP_COUNT }}[/b]
+{% endif %}
 
 [b][size=150]CAST[/size][/b]
 
 [list]
-{{ CAST }}
+{% for person in CAST %}
+[*] {{ person.actor }}: {{ person.character }}
+{% endfor %}
 [/list]
 
 [b][size=150]TRAMA[/size][/b]
@@ -39,7 +43,13 @@ Regia: [b]{{ DIRECTOR }}[/b]
 {{ REPORT_MEDIAINFO }}
 [/code]
 
+{% if TREE is defined %}
+[b]CONTENUTO[/b]
+
+[code]
 {{ TREE }}
+[/code]
+{% endif %}
 
 [b][size=150]BITRATE[/size][/b]
 

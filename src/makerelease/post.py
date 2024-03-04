@@ -31,10 +31,6 @@ def generate_text(
 
     trailer = metadata["trailer"] if metadata["trailer"] != "" else "<NON TROVATO>"
 
-    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
-
-    ep_count_str = f"Numero episodi: [b]{ep_count}[/b]" if ep_count > 0 else ""
-
     is_first_empty = True
     for key, val in metadata.items():
         if val == "":
@@ -44,7 +40,7 @@ def generate_text(
 
             print("  -", key)
 
-    values: Dict[str, str] = {
+    values: Dict = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
         "YEAR": metadata["year"],
@@ -65,9 +61,13 @@ def generate_text(
         "REPORT_MEDIAINFO": report,
         "REPORT_AVINAPTIC": report_avinaptic,
         "MAGNET": magnet,
-        "TREE": tree,
-        "EP_COUNT": ep_count_str,
     }
+
+    if tree != "":
+        values["TREE"] = tree
+
+    if ep_count > 0:
+        values["EP_COUNT"] = str(ep_count)
 
     # ciclo di generazione dei template
     for t in constants.templates:

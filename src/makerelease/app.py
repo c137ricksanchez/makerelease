@@ -193,13 +193,12 @@ class MakeRelease:
                 bitrate_img = images.upload_to_imgur(os.path.join(outputdir, "bitrate.png"))
 
         ep_count = 0
+        tree = ""
 
         if self.folder_release:
             tree = utils.get_tree(self.path)
             if self.type == ReleaseType.TV_SINGLE or self.type == ReleaseType.TV_MULTI:
                 ep_count = utils.get_ep_count(self.path)
-        else:
-            tree = ""
 
         print("\n7. Generazione del post...")
         post.generate_text(
