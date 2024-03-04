@@ -6,8 +6,8 @@ from typing import Dict, List
 import ffmpeg
 from pymediainfo import MediaInfo
 
-from src import constants
-from src.api import imgbb, imgbly, imgur
+from . import constants
+from .api import imgbb, imgbly, imgur
 
 
 def extract_screenshots(path: str, outputdir: str) -> List[str]:

@@ -7,7 +7,7 @@ from typing import Dict, List
 
 from pymediainfo import MediaInfo
 
-from src import constants, utils
+from . import constants, utils
 
 
 def generate_text(
