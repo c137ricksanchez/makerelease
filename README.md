@@ -190,36 +190,49 @@ Crea una copia della cartella `config_example` chiamandola `config` e modifica i
 
 Inserisci i timestamp dove lo script andrà ad estrarre gli screenshot (nel formato `HH:MM:SS`).
 
-### `template.txt`
+### `template.jinja`
 
 Modifica il template del post in base alle tue preferenze. Le variabili verranno sostituite in automatico con i dati del film o della serie tv.
 
 #### Variabili supportate
 
-- `$TITLE` - Titolo
-- `$ORIGINAL_TITLE` - Titolo originale
-- `$YEAR` - Anno di uscita
-- `$RUNTIME` - Durata
-- `$PLOT` - Trama
-- `$GENRE` - Genere
-- `$DIRECTOR` - Regista
-- `$CAST` - Cast
-- `$COUNTRY` - Paese di produzione
-- `$POSTER_URL` - URL del poster
-- `$TMDB_URL` - URL della pagina TheMovieDB
-- `$TRAILER` - URL al trailer su YouTube
-- `$SCREENSHOTS` - URL degli screenshot
-- `$BITRATE_GRAPH` - URL del grafico del bitrate (se non presente, la generazione del grafico verrà saltata)
-- `$REPORT_MEDIAINFO` - Report generato con MediaInfo
-- `$REPORT_AVINAPTIC` - Report generato con AVInaptic
-- `$SIZE` - Dimensione del torrent
-- `$MAGNET` - Link magnet
-- `$TREE` - Elenco dei file (verrà stampato solo se la release è di tipo `movie_folder`, `tv_single` oppure `tv_multi`)
-- `$EP_COUNT` - Numero degli episodi (verrà stampato solo se la release è una serie tv)
+- `{{ TITLE }}` - Titolo
+- `{{ ORIGINAL_TITLE }}` - Titolo originale
+- `{{ YEAR }}` - Anno di uscita
+- `{{ RUNTIME }}` - Durata
+- `{{ PLOT }}` - Trama
+- `{{ GENRE }}` - Genere
+- `{{ DIRECTOR }}` - Regista
+- `{{ CAST }}` - Cast
+- `{{ COUNTRY }}` - Paese di produzione
+- `{{ POSTER_URL }}` - URL del poster
+- `{{ TMDB_URL }}` - URL della pagina TheMovieDB
+- `{{ TRAILER }}` - URL al trailer su YouTube
+- `{{ SCREENSHOTS }}` - URL degli screenshot
+- `{{ BITRATE_GRAPH }}` - URL del grafico del bitrate (se non presente, la generazione del grafico verrà saltata)
+- `{{ REPORT_MEDIAINFO }}` - Report generato con MediaInfo
+- `{{ REPORT_AVINAPTIC }}` - Report generato con AVInaptic
+- `{{ SIZE }}` - Dimensione del torrent
+- `{{ MAGNET }}` - Link magnet
+- `{{ TREE }}` - Elenco dei file, di default è incluso in una formula che lo stampa solo se la release è di tipo `movie_folder`, `tv_single` oppure `tv_multi`
+    ```jinja
+    {% if TREE is defined %}
+    [b][size=150]CONTENUTO[/size][/b]
+
+    [code]
+    {{ TREE }}
+    [/code]
+    {% endif %}
+- `{{ EP_COUNT }}` - Numero degli episodi, di default è incluso in una formula che lo stampa solo se la release è di tipo `tv_single` oppure `tv_multi`
+    ```jinja
+    {% if EP_COUNT is defined %}
+    Numero episodi: [b]{{ EP_COUNT }}[/b]
+    {% endif %}
+    ```
 
 #### Multi-template
 
-Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere underscore (`_`). Esempio: `template_a.txt` oppure `template_b.txt`. Il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_a.txt` oppure `post_b.txt`.
+Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere underscore (`_`). Esempio: `template_a.jinja` oppure `template_b.jinja`. Il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_a.txt` oppure `post_b.txt`.
 
 ### `trackers.txt`
 

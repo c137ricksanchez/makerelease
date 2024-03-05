@@ -8,4 +8,4 @@ screenshots = os.path.join(config, "screenshots.txt")
 trackers = os.path.join(config, "trackers.txt")
 
 # Trova tutti i file che iniziano con "template" nella cartella config
-templates = [file for file in os.listdir(config) if file.startswith("template") and file.endswith(".txt")]
+templates = [file for file in os.listdir(config) if file.startswith("template") and file.endswith(".jinja")]
