@@ -68,7 +68,7 @@ def search(title: str, year: str, type: str) -> str:
     return results["results"][value - 1]["id"]
 
 
-def get(id: str, type: str) -> Dict[str, str]:
+def get(id: str, type: str) -> Dict:
     title_key, release_date_key = get_keys(type)
 
     try:
@@ -88,9 +88,9 @@ def get(id: str, type: str) -> Dict[str, str]:
     for genre in data["genres"]:
         genres.append(genre["name"])
 
-    cast: List[str] = []
+    cast: List[Dict[str, str]] = []
     for actor in data["credits"]["cast"][:10]:
-        cast.append(f"[*]{actor['name']}: {actor['character']}")
+        cast.append(actor)  # each actor is a dict with keys 'name' and 'character'
 
     director: List[str] = []
     for crew in data["credits"]["crew"]:
@@ -118,7 +118,7 @@ def get(id: str, type: str) -> Dict[str, str]:
         "director": ", ".join(director),
         "country": ", ".join(countries),
         "genre": ", ".join(genres),
-        "cast": "\n".join(cast),
+        "cast": cast,
         "plot": data["overview"],
         "trailer": trailer,
     }

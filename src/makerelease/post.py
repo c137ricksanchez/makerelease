@@ -2,9 +2,9 @@ import math
 import os
 import subprocess
 from pathlib import Path
-from string import Template
 from typing import Dict, List
 
+from jinja2 import Template
 from pymediainfo import MediaInfo
 
 from . import constants, utils
@@ -31,10 +31,6 @@ def generate_text(
 
     trailer = metadata["trailer"] if metadata["trailer"] != "" else "<NON TROVATO>"
 
-    tree = "[b]CONTENUTO[/b]\n\n[code]\n" + tree + "\n[/code]" if tree != "" else ""
-
-    ep_count_str = f"Numero episodi: [b]{ep_count}[/b]" if ep_count > 0 else ""
-
     is_first_empty = True
     for key, val in metadata.items():
         if val == "":
@@ -44,7 +40,7 @@ def generate_text(
 
             print("  -", key)
 
-    values: Dict[str, str] = {
+    values: Dict = {
         "TMDB_URL": metadata["tmdb_url"],
         "TITLE": metadata["title"],
         "YEAR": metadata["year"],
@@ -65,18 +61,26 @@ def generate_text(
         "REPORT_MEDIAINFO": report,
         "REPORT_AVINAPTIC": report_avinaptic,
         "MAGNET": magnet,
-        "TREE": tree,
-        "EP_COUNT": ep_count_str,
     }
+
+    if tree != "":
+        values["TREE"] = tree
+
+    if ep_count > 0:
+        values["EP_COUNT"] = str(ep_count)
 
     # ciclo di generazione dei template
     for t in constants.templates:
         template_path = os.path.join(constants.config, t)
         template_text = utils.read_file(template_path)
-        template = Template(template_text).substitute(**values)
+        template = Template(
+            source=template_text,
+            trim_blocks=True,
+            lstrip_blocks=True,
+        ).render(**values)
 
         post_filename = "post.txt"
-        if t != "template.txt":
+        if t != "template.jinja":
             post_filename = f"post_{t.replace('template_','')}"
         with open(os.path.join(outputdir, post_filename), "wb") as t:
             t.write(str.encode(template))

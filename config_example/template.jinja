@@ -1,0 +1,61 @@
+[b][size=200]{{ TITLE }} ({{ YEAR }})[/size][/b]
+
+[img]{{ POSTER_URL }}[/img]
+
+[b][size=150]INFORMAZIONI[/size][/b]
+
+TMDB: {{ TMDB_URL }}
+Titolo originale: [b]{{ ORIGINAL_TITLE }}[/b]
+Paese di produzione: [b]{{ COUNTRY }}[/b]
+Genere: [b]{{ GENRE }}[/b]
+Anno: [b]{{ YEAR }}[/b]
+Durata: [b]{{ RUNTIME }}[/b]
+Regia: [b]{{ DIRECTOR }}[/b]
+{% if EP_COUNT is defined %}
+Numero episodi: [b]{{ EP_COUNT }}[/b]
+{% endif %}
+
+[b][size=150]CAST[/size][/b]
+
+[list]
+{% for person in CAST %}
+[*] {{ person.actor }}: {{ person.character }}
+{% endfor %}
+[/list]
+
+[b][size=150]TRAMA[/size][/b]
+
+{{ PLOT }}
+
+[b][size=150]TRAILER[/size][/b]
+
+[media]{{ TRAILER }}[/media]
+
+[b][size=150]SCREENSHOT[/size][/b]
+
+[spoiler]
+{{ SCREENSHOTS }}
+[/spoiler]
+
+[b][size=150]REPORT[/size][/b]
+
+[code]
+{{ REPORT_MEDIAINFO }}
+[/code]
+
+{% if TREE is defined %}
+[b][size=150]CONTENUTO[/size][/b]
+
+[code]
+{{ TREE }}
+[/code]
+{% endif %}
+
+[b][size=150]BITRATE[/size][/b]
+
+{{ BITRATE_GRAPH }}
+
+[b][size=150]MAGNET[/size][/b]
+Dimensione: [b]{{ SIZE }}[/b]
+
+[magnet]{{ MAGNET }}[/magnet]
