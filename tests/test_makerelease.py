@@ -10,6 +10,11 @@ def test_make_release():
 
     for video_filename in video_filenames:
         print(f"Testing {video_filename}...")
+        basename = os.path.splitext(video_filename)[0]
+        dir_path = os.path.join(test_videos_folder, basename + "_files")
+        if os.path.exists(dir_path):
+            shutil.rmtree(dir_path)
+
         release_maker = MakeRelease(
             crew="TestCrew",
             rename=False,
@@ -19,7 +24,3 @@ def test_make_release():
         )
 
         release_maker.make_release()
-
-        print("Cleaning up...")
-        basename = os.path.splitext(video_filename)[0]
-        shutil.rmtree(os.path.join(test_videos_folder, basename + "_files"))
