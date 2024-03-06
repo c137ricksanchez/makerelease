@@ -3,7 +3,7 @@ from tkinter import BooleanVar, StringVar, filedialog
 
 import customtkinter as ctk
 
-from src.app import MakeRelease
+from makerelease import MakeRelease
 
 
 def callback(url):
