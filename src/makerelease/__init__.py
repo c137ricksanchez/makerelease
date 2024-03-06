@@ -1,1 +1,1 @@
-from .app import MakeRelease, ReleaseType
+from .app import MakeRelease, ReleaseType  # noqa: F401
