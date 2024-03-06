@@ -85,12 +85,12 @@ Sono supportati diversi tipi di release:
     cd makerelease
     ```
 
-6. Installa le dipendenze
+6. Installa il pacchetto e le dipendenze
 
     > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
 
     ```bash
-    pip install -r requirements.txt
+    pip install -e .
     ```
 
 ### 🍎 macOS
@@ -131,12 +131,12 @@ Sono supportati diversi tipi di release:
     cd makerelease
     ```
 
-7. Installa le dipendenze
+7. Installa il pacchetto e le dipendenze
 
     > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
 
     ```bash
-    pip install -r requirements.txt
+    pip install -e .
     ```
 
 ### 🐧 Linux
@@ -154,12 +154,12 @@ Sono supportati diversi tipi di release:
     cd makerelease
     ```
 
-4. Installa le dipendenze
+4. Installa il pacchetto e le dipendenze
 
     > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
 
     ```bash
-    pip install -r requirements.txt
+    pip install -e .
     ```
 
 ## 🔄 Aggiornamento
@@ -173,7 +173,7 @@ Sono supportati diversi tipi di release:
 2. Aggiorna eventuali dipendenze
 
     ```bash
-    pip install --upgrade -r requirements.txt
+    pip install -e .
     ```
 
 ## ⚙️ Configurazione
