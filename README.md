@@ -203,7 +203,14 @@ Modifica il template del post in base alle tue preferenze. Le variabili verranno
 - `{{ PLOT }}` - Trama
 - `{{ GENRE }}` - Genere
 - `{{ DIRECTOR }}` - Regista
-- `{{ CAST }}` - Cast
+- Il `CAST` è una lista di persone, ciascuna con due attributi: `actor`, cioè il nome dell'attore, e `character`, cioè il nome del suo personaggio, e va mostrato con una formula di questo tipo che consente flessibilità nel come si vuole la lista di output:
+    ```jinja
+    [list]
+    {% for person in CAST %}
+    [*] {{ person.actor }}: {{ person.character }}
+    {% endfor %}
+    [/list]
+    ```
 - `{{ COUNTRY }}` - Paese di produzione
 - `{{ POSTER_URL }}` - URL del poster
 - `{{ TMDB_URL }}` - URL della pagina TheMovieDB
