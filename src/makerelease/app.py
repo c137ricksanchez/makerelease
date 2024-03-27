@@ -58,9 +58,7 @@ class MakeRelease:
         # Switch between the cases of type
         if self.type == ReleaseType.MOVIE_FILE:
             return self.path
-        elif self.type == ReleaseType.MOVIE_FOLDER:
-            return utils.get_movies(self.path)[0]
-        elif self.type == ReleaseType.TV_SINGLE:
+        elif self.type == ReleaseType.MOVIE_FOLDER or self.type == ReleaseType.TV_SINGLE:
             return utils.get_movies(self.path)[0]
         elif self.type == ReleaseType.TV_MULTI:
             # self.path should contain a directory with multiple seasons
