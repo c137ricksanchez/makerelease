@@ -74,7 +74,7 @@ class MakeRelease:
                     os.remove(os.path.join(root, file))
 
     def make_release(self):
-        if not self.type == ReleaseType.MOVIE_FILE:
+        if self.folder_release:
             self.remove_temporary_files()
 
         if os.path.isdir(self.path):
