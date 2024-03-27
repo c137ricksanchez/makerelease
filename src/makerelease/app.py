@@ -78,20 +78,23 @@ class MakeRelease:
             self.remove_temporary_files()
 
         if os.path.isdir(self.path):
-            filename = Path(self.path).name
+            name = Path(self.path).name
         elif os.path.isfile(self.path):
-            filename = Path(self.path).stem
+            name = Path(self.path).stem
             ext = Path(self.path).suffix
 
-        movie = self.get_file()
+        # Get the file to analyze
+        file = self.get_file()
 
-        print("Name:", filename)
+        print("Name:", name)
 
-        title, year = utils.parse_title(filename)
-        duration = utils.get_duration(movie)
-
-        # Get the size of a directory
+        title, year = utils.parse_title(name)
+        duration = utils.get_duration(file)
         releasesize = utils.get_size(self.path)
+
+        # name = original name of the file
+        # file = path of the file to analyze
+        # title = parsed title of the movie
 
         print("\n1. Ricezione dei metadati da TheMovieDB...")
 
@@ -102,23 +105,28 @@ class MakeRelease:
 
         data = metadata.get(movie_id, self.type_id)
 
-        outputdir = os.path.join(Path(self.path).parent, f"{filename}_files")
+        new_name = tag.parse(file, data["title"], data["year"], self.crew)
+        new_name = re.sub(r'[\\/*?:"<>|]', "", new_name)
+
+        # Only rename the file if it is a movie file
+        if self.rename and (self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER):
+            os.rename(
+                src=file,
+                dst=os.path.join(Path(self.path).parent, f"{new_name}{ext}" if ext else new_name),
+            )
+            name = new_name
+
+            # In the movie_file case, we've just renamed the file to analyze, update it
+            if self.type == ReleaseType.MOVIE_FILE:
+                self.path = os.path.join(Path(self.path).parent, f"{new_name}{ext}")
+                file = self.get_file()
+
+        outputdir = os.path.join(Path(self.path).parent, f"{name}_files")
         if os.path.exists(outputdir):
             print("ERRORE: Esiste già una cartella chiamata", outputdir)
             exit(1)
         else:
             os.mkdir(outputdir)
-
-        title = tag.parse(movie, data["title"], data["year"], self.crew)
-
-        # Only rename the file if it is a movie file
-        if self.rename and (self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER):
-            old_movie = movie
-
-            filename = re.sub(r'[\\/*?:"<>|]', "", title)
-            movie = str(os.path.join(Path(self.path).parent, filename + ext))
-
-            os.rename(old_movie, movie)
 
         report = ""
         report_avinaptic = ""
@@ -138,7 +146,7 @@ class MakeRelease:
                     print("  |---> File Mediainfo già presente, skip step")
                     report = utils.read_file(os.path.join(outputdir, "report_mediainfo.txt"))
                 else:
-                    report = post.generate_report(movie, outputdir)
+                    report = post.generate_report(file, outputdir)
 
             if "{{ REPORT_AVINAPTIC }}" in template and os.name == "nt" and report_avinaptic == "":
                 print("2. Generazione del report con AVInaptic...")
@@ -147,19 +155,19 @@ class MakeRelease:
                         print("  |---> File AVInaptic già presente, skip step")
                         report_avinaptic = utils.read_file(os.path.join(outputdir, "report_avinaptic.txt"))
                     else:
-                        report_avinaptic = post.generate_avinaptic_report(movie, outputdir)
+                        report_avinaptic = post.generate_avinaptic_report(file, outputdir)
                 else:
                     print("Errore: avinaptic2-cli.exe non è stato trovato.")
 
         print("\n3. Generazione del file torrent...")
-        if os.path.exists(os.path.join(outputdir, f"{filename}.torrent")):
+        if os.path.exists(os.path.join(outputdir, f"{name}.torrent")):
             print("  |---> File Torrent già presente, skip step")
-            magnet = torrent.get_magnet(outputdir, filename)
+            magnet = torrent.get_magnet(outputdir, name)
         else:
-            magnet = torrent.generate(self.path, outputdir, filename)
+            magnet = torrent.generate(self.path, outputdir, name)
 
         print("\n4. Estrazione degli screenshot...")
-        screenshots = images.extract_screenshots(movie, outputdir)
+        screenshots = images.extract_screenshots(file, outputdir)
 
         # Salta la generazione del grafico del bitrate se non è presente
         # la variabile {{ BITRATE_GRAPH }} nel file template.jinja
@@ -170,7 +178,7 @@ class MakeRelease:
             if os.path.exists(os.path.join(outputdir, "bitrate.png")):
                 print("  |---> Grafico già generato, skip step")
             else:
-                bitrate = BitrateViewer(movie)
+                bitrate = BitrateViewer(file)
                 bitrate.analyze()
                 bitrate.plot(outputdir)
 
@@ -220,5 +228,5 @@ class MakeRelease:
         if self.rename:
             print("\nIl file è stato rinominato con successo.")
 
-        print("\nTITOLO\n->", title + "\n")
+        print("\nTITOLO\n->", new_name + "\n")
         return
