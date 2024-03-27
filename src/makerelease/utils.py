@@ -17,13 +17,13 @@ def get_api_key(key: str) -> str:
 def get_movies(path: str) -> List[str]:
     return [
         os.path.join(path, f)
-        for f in os.listdir(path)
+        for f in sorted(os.listdir(path))
         if os.path.isfile(os.path.join(path, f)) and f.lower().endswith(("avi", "mkv", "mp4"))
     ]
 
 
 def get_folders(path: str) -> List[str]:
-    return [os.path.join(path, f) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+    return [os.path.join(path, f) for f in sorted(os.listdir(path)) if os.path.isdir(os.path.join(path, f))]
 
 
 def get_size(path: str) -> int:
