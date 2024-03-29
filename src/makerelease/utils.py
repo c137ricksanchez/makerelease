@@ -45,6 +45,8 @@ def get_tree(path: str) -> str:
     # and output them in a tree structure
     tree = []
     for root, dirs, files in os.walk(path):
+        dirs.sort()
+        files.sort()
         level = root.replace(path, "").count(os.sep)
         indent = " " * 4 * level
         tree.append(f"{indent}{os.path.basename(root)}/")
