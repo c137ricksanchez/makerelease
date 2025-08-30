@@ -53,14 +53,71 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
             if t.format == "MPEG Audio" and t.format_profile == "Layer 3":
                 t.format = "MP3"
 
-            tags["a"].append((f"{lang}", f"{t.format.replace('-', '')} {channels}"))
+            tags["a"].append((f"{lang.upper()}", f"{t.format.replace('-', '')} {channels}"))
         elif t.track_type == "Text":
-            if len(t.other_language) > 3:
-                tags["s"].append(f"{t.other_language[3].title()}")
-            else:
+            # Enhanced subtitle handling, including NU (non-hearing) subtitles
+            subtitle_lang = None
+            
+            # Try t.other_language first
+            if t.other_language and len(t.other_language) > 3:
+                subtitle_lang = t.other_language[3].upper()
+            elif t.other_language:
+                # Look for 3-character language codes in other_language
                 filtered_strings = filter(lambda x: len(x) == 3, t.other_language)
                 tag_s = next(filtered_strings, None)
-                tags["s"].append(tag_s)
+                if tag_s:
+                    subtitle_lang = tag_s.upper()
+            
+            # If other_language doesn't work, use t.language directly
+            if not subtitle_lang and t.language:
+                # Handle codes like "nu-eng", "nu-ita", "nu-fra", etc.
+                lang_code = t.language.upper()
+                if lang_code.startswith('NU'):
+                    # Extract the part after NU- (e.g., "NU-ENG" -> "ENG")
+                    if '-' in lang_code:
+                        subtitle_lang = lang_code.split('-')[1]
+                    else:
+                        # Case "NUENG", "NUITA", "NUFRA" without hyphen
+                        if len(lang_code) > 2:
+                            subtitle_lang = lang_code[2:]
+                else:
+                    # Normal language code (ITA, ENG, FRA, etc.)
+                    subtitle_lang = lang_code
+            
+            # If still no language found, use t.language directly  
+            if not subtitle_lang and t.language:
+                # ISO 639-2/T language code mapping (most common languages)
+                language_map = {
+                    "italian": "ITA", "english": "ENG", "french": "FRA", "spanish": "SPA",
+                    "german": "GER", "portuguese": "POR", "russian": "RUS", "chinese": "CHI",
+                    "japanese": "JPN", "korean": "KOR", "arabic": "ARA", "dutch": "DUT",
+                    "swedish": "SWE", "norwegian": "NOR", "danish": "DAN", "finnish": "FIN",
+                    "polish": "POL", "czech": "CZE", "hungarian": "HUN", "turkish": "TUR",
+                    "greek": "GRE", "hebrew": "HEB", "thai": "THA", "hindi": "HIN"
+                }
+                
+                lang_lower = t.language.lower()
+                if lang_lower in language_map:
+                    subtitle_lang = language_map[lang_lower]
+                elif len(t.language) <= 3:
+                    # Already a short code
+                    subtitle_lang = t.language.upper()
+                # If language not in map and not a short code, skip it
+            
+            # Check if this is a non-hearing subtitle (SDH, CC, etc.)
+            # Note: "Forced" subtitles are NOT for non-hearing, they're for foreign language dialogue
+            is_non_hearing = False
+            if hasattr(t, 'title') and t.title:
+                title_upper = t.title.upper()
+                if any(keyword in title_upper for keyword in ['SDH', 'CC']):
+                    is_non_hearing = True
+            
+            # Add language code with NU prefix if it's a non-hearing subtitle
+            if subtitle_lang:
+                if is_non_hearing:
+                    tags["s"].append(f"NU{subtitle_lang}")
+                else:
+                    tags["s"].append(subtitle_lang)
 
     # Replace "ITA AC3 5.1 ENG AC3 5.1" with "ITA ENG AC3 5.1"
     channel_lang_map = {}
@@ -85,7 +142,13 @@ def parse(filename: str, title: str, year: str, crew: str) -> str:
     if crew:
         tag += f" [{crew}]"
 
-    return f"{title} ({year}) {tag}"
+    final_name = f"{title} ({year}) {tag}"
+    
+    # Remove quotes around language codes (ITA, ENG, etc.)
+    import re
+    final_name = re.sub(r"'([A-Z]{2,3})'", r'\1', final_name)
+    
+    return final_name
 
 
 # https://discord.com/channels/507666522756349963/519567517069344768/971753081115136021
