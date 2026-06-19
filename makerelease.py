@@ -44,10 +44,19 @@ if __name__ == "__main__":
         help="ID del titolo su TheMovieDB",
     )
 
+    parser.add_argument(
+        "-T",
+        "--template",
+        type=str,
+        metavar="TEMPLATE",
+        default=None,
+        help="Template .jinja da usare, es. template_nomecrew.jinja (default: tutti quelli in config/)",
+    )
+
     args = parser.parse_args()
 
     # Instantiate the class
-    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path, args.id)
+    release_maker = MakeRelease(args.crew, args.rename, args.type, args.path, args.id, args.template)
 
     # Call the make_release method with the movie argument
     release_maker.make_release()

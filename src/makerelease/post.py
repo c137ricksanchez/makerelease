@@ -22,6 +22,7 @@ def generate_text(
     outputdir: str,
     tree: str,
     ep_count: int,
+    templates: List[str] = None,
 ) -> None:
     bitrate_graph = ""
     if bitrate_img != {}:
@@ -69,8 +70,11 @@ def generate_text(
     if ep_count > 0:
         values["EP_COUNT"] = str(ep_count)
 
-    # ciclo di generazione dei template
-    for t in constants.templates:
+    # ciclo di generazione dei template (templates=None -> tutti quelli in config/)
+    if templates is None:
+        templates = constants.templates
+
+    for t in templates:
         template_path = os.path.join(constants.config, t)
         template_text = utils.read_file(template_path)
         template = Template(

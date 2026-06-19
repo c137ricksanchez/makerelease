@@ -11,6 +11,7 @@ from .bitrateviewer import BitrateViewer
 class ReleaseType(Enum):
     MOVIE_FILE = "movie"
     MOVIE_FOLDER = "movie_folder"
+    TV_EPISODE = "tv_episode"
     TV_SINGLE = "tv_single"
     TV_MULTI = "tv_multi"
 
@@ -26,11 +27,20 @@ def parse_release_type(type_str: str) -> ReleaseType:
 
 
 class MakeRelease:
-    def __init__(self, crew: str, rename: bool, type: str, path: str, id: str):
+    def __init__(self, crew: str, rename: bool, type: str, path: str, id: str, template: str = None, chooser=None):
         self.crew = crew
         self.rename = rename
         self.type = parse_release_type(type)
         self.id = id
+        # Callback per la selezione del titolo TMDB; None = selezione da console (CLI)
+        self.chooser = chooser
+
+        # template=None -> usa tutti i template presenti in config/ (comportamento storico)
+        if template is not None and template not in constants.templates:
+            raise ValueError(
+                f"Invalid template: {template}. Must be one of: {', '.join(constants.templates)}"
+            )
+        self.templates = [template] if template else constants.templates
 
         if (
             self.type == ReleaseType.MOVIE_FOLDER
@@ -46,17 +56,32 @@ class MakeRelease:
         else:
             self.type_id = "tv"
 
-        # Check if the path exists and is a file or directory
+        # Controllo esistenza e coerenza del percorso con il tipo di release
         if not os.path.exists(path):
-            raise ValueError(f"Invalid path: {path}. Path does not exist.")
-        if not os.path.isfile(path) and not os.path.isdir(path):
-            raise ValueError(f"Invalid path: {path}. Path is not a file or directory.")
+            raise ValueError(
+                f"Percorso non trovato: {path}\n"
+                "Verifica che esista e sia raggiungibile. Per i percorsi di rete (\\\\server\\...): "
+                "controlla connessione e credenziali e assicurati che il terminale NON sia avviato come "
+                "Amministratore (le connessioni di rete dell'utente non sono visibili al processo elevato)."
+            )
+
+        # I tipi 'movie_folder', 'tv_single' e 'tv_multi' lavorano su una cartella; 'movie' su un file
+        if self.folder_release and not os.path.isdir(path):
+            raise ValueError(
+                f"Il tipo '{type}' richiede una CARTELLA, ma il percorso indicato è un file:\n{path}\n"
+                "Indica la cartella (es. quella della stagione) oppure usa '-t movie' per un singolo file."
+            )
+        if not self.folder_release and not os.path.isfile(path):
+            raise ValueError(
+                f"Il tipo '{type}' richiede un FILE, ma il percorso indicato è una cartella:\n{path}\n"
+                "Indica il file video oppure usa '-t movie_folder' / '-t tv_single' per una cartella."
+            )
 
         self.path = path
 
     def get_file(self) -> str:
         # Switch between the cases of type
-        if self.type == ReleaseType.MOVIE_FILE:
+        if self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.TV_EPISODE:
             return self.path
         elif self.type == ReleaseType.MOVIE_FOLDER or self.type == ReleaseType.TV_SINGLE:
             return utils.get_movies(self.path)[0]
@@ -101,30 +126,33 @@ class MakeRelease:
         if self.id and metadata.is_tmdb_id(self.id):
             movie_id = self.id
         else:
-            movie_id = metadata.search(title, year, self.type_id)
+            movie_id = metadata.search(title, year, self.type_id, self.chooser)
 
         data = metadata.get(movie_id, self.type_id)
 
         new_name = tag.parse(file, data["title"], data["year"], self.crew)
         new_name = re.sub(r'[\\/*?:"<>|]', "", new_name)
 
-        # Only rename the file if it is a movie file
-        if self.rename and (self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.MOVIE_FOLDER):
+        # Rinomina solo per i tipi a file singolo o per il film in cartella
+        if self.rename and (
+            self.type == ReleaseType.MOVIE_FILE
+            or self.type == ReleaseType.MOVIE_FOLDER
+            or self.type == ReleaseType.TV_EPISODE
+        ):
             os.rename(
                 src=file,
                 dst=os.path.join(Path(self.path).parent, f"{new_name}{ext}" if ext else new_name),
             )
             name = new_name
 
-            # In the movie_file case, we've just renamed the file to analyze, update it
-            if self.type == ReleaseType.MOVIE_FILE:
+            # Per i tipi a file singolo abbiamo appena rinominato il file da analizzare, aggiorniamolo
+            if self.type == ReleaseType.MOVIE_FILE or self.type == ReleaseType.TV_EPISODE:
                 self.path = os.path.join(Path(self.path).parent, f"{new_name}{ext}")
                 file = self.get_file()
 
         outputdir = os.path.join(Path(self.path).parent, f"{name}_files")
         if os.path.exists(outputdir):
-            print("ERRORE: Esiste già una cartella chiamata", outputdir)
-            exit(1)
+            print("La cartella", outputdir, "esiste già: riprendo riutilizzando i file già presenti.")
         else:
             os.mkdir(outputdir)
 
@@ -134,7 +162,7 @@ class MakeRelease:
         # la variabile {{ BITRATE_GRAPH }} nel file template.jinja
         # controllo in anticipo skip_chart per evitare cicli sui template successivi
         skip_chart = True
-        for t in constants.templates:
+        for t in self.templates:
             template = utils.read_file(os.path.join(constants.config, t))
 
             if "{{ BITRATE_GRAPH }}" in template:
@@ -221,6 +249,7 @@ class MakeRelease:
             outputdir,
             tree,
             ep_count,
+            templates=self.templates,
         )
 
         print("\n8. Fine!")

@@ -42,12 +42,14 @@ Sono supportati diversi tipi di release:
     1. **Film**: seleziona un singolo file `mkv`, `mp4` o `avi`
     2. **Film + Extra**: seleziona una directory contenente un file video e un numero arbitrario di cartelle `Extra`, `Featurettes`, ecc. La procedura è identica al caso precedente, l'unica differenza è l'aggiunta della directory nel torrent.
 - **Serie TV**
-    1. **Stagione singola**: seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
-    2. **Serie completa**: seleziona una directory contenente più cartelle. Lo script identifica la serie dal nome della cartella principale.
+    1. **Episodio singolo**: seleziona un singolo file video `mkv`, `mp4` o `avi`. Lo script identifica la serie dal nome del file.
+    2. **Stagione singola**: seleziona una directory contenente più file video. Lo script identifica la serie dal nome della cartella.
+    3. **Serie completa**: seleziona una directory contenente più cartelle. Lo script identifica la serie dal nome della cartella principale.
 
 ## 📦 Requisiti
 
-- [Python](https://www.python.org) (3.9 o più recente)
+- [Python](https://www.python.org) (3.11 o più recente)
+- [uv](https://docs.astral.sh/uv/) (gestore di pacchetti e ambienti virtuali)
 - [FFmpeg](https://ffmpeg.org)
 - [MediaInfo](https://mediaarea.net/MediaInfo) / [AVInaptic](http://fsinapsi.altervista.org/code/avinaptic/)
 
@@ -58,7 +60,7 @@ Sono supportati diversi tipi di release:
 1. Installa Python
 
     ```bash
-    winget install Python.Python.3.12
+    winget install Python.Python.3.13
     ```
 
 2. Installa Git
@@ -73,24 +75,31 @@ Sono supportati diversi tipi di release:
     winget install Gyan.FFmpeg
     ```
 
-4. Clona il repository
+4. Installa uv
+
+    ```bash
+    winget install astral-sh.uv
+    ```
+
+5. Clona il repository
 
     ```bash
     git clone https://github.com/c137ricksanchez/makerelease.git
     ```
 
-5. Entra nella directory
+6. Entra nella directory
 
     ```bash
     cd makerelease
     ```
 
-6. Installa il pacchetto e le dipendenze
+7. Crea l'ambiente virtuale e installa il pacchetto e le dipendenze
 
-    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+    > ⚠️ `uv venv` crea un ambiente virtuale isolato nella cartella `.venv`, evitando conflitti con altri script.
 
     ```bash
-    pip install -e .
+    uv venv
+    uv pip install -e .
     ```
 
 ### 🍎 macOS
@@ -119,47 +128,61 @@ Sono supportati diversi tipi di release:
     brew install ffmpeg
     ```
 
-5. Clona il repository
+5. Installa uv
+
+    ```bash
+    brew install uv
+    ```
+
+6. Clona il repository
 
     ```bash
     git clone https://github.com/c137ricksanchez/makerelease.git
     ```
 
-6. Entra nella directory
+7. Entra nella directory
 
     ```bash
     cd makerelease
     ```
 
-7. Installa il pacchetto e le dipendenze
+8. Crea l'ambiente virtuale e installa il pacchetto e le dipendenze
 
-    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+    > ⚠️ `uv venv` crea un ambiente virtuale isolato nella cartella `.venv`, evitando conflitti con altri script.
 
     ```bash
-    pip install -e .
+    uv venv
+    uv pip install -e .
     ```
 
 ### 🐧 Linux
 
 1. Installa Git, FFmpeg e MediaInfo
-2. Clona il repository
+2. Installa uv
+
+    ```bash
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
+
+3. Clona il repository
 
     ```bash
     git clone https://github.com/c137ricksanchez/makerelease.git
     ```
 
-3. Entra nella directory
+4. Entra nella directory
 
     ```bash
     cd makerelease
     ```
 
-4. Installa il pacchetto e le dipendenze
+5. Crea l'ambiente virtuale e installa il pacchetto e le dipendenze
 
-    > ⚠️ Installa le dipendenze all'interno di un [ambiente virtuale (venv)](https://pytutorial-it.readthedocs.io/it/python3.12/venv.html#creare-un-virtual-environment) per evitare conflitti con altri script.
+    > ⚠️ `uv venv` crea un ambiente virtuale isolato nella cartella `.venv`, evitando conflitti con altri script.
 
     ```bash
-    pip install -e .
+    uv venv
+    uv pip install -e .
     ```
 
 ## 🔄 Aggiornamento
@@ -173,7 +196,7 @@ Sono supportati diversi tipi di release:
 2. Aggiorna eventuali dipendenze
 
     ```bash
-    pip install -e .
+    uv pip install -e .
     ```
 
 ## ⚙️ Configurazione
@@ -241,6 +264,8 @@ Modifica il template del post in base alle tue preferenze. Le variabili verranno
 
 Puoi creare molteplici file template, sarà sufficiente differenziarli utilizzando il carattere underscore (`_`). Esempio: `template_a.jinja` oppure `template_b.jinja`. Il risultato sarà un file `post.txt` differente per ciascun template, nominato come il file template, quindi `post_a.txt` oppure `post_b.txt`.
 
+Di default vengono generati i post per **tutti** i template presenti in `config/`. Per usarne uno solo, selezionalo dal menu **Template** nella GUI oppure passa il flag `-T`/`--template` da riga di comando.
+
 ### `trackers.txt`
 
 Inserisci la _trackers list_ da usare durante la creazione del torrent.
@@ -252,7 +277,7 @@ Inserisci la _trackers list_ da usare durante la creazione del torrent.
 Apri il terminale ed esegui:
 
 ```bash
-python gui.py
+uv run python gui.py
 ```
 
 <img src=".github/assets/gui.png" alt="Screenshot" width="300px">
@@ -262,16 +287,17 @@ python gui.py
 Apri il terminale ed esegui il comando utilizzando i flag riportati sotto per scegliere le opzioni:
 
 ```bash
-python makerelease.py [PATH] -t [TYPE]
+uv run python makerelease.py [PATH] -t [TYPE]
 ```
 
-| Long       | Short | Default | Descrizione                                                                                                              |
-| ---------- | ----- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `--type`   | `-t`  | `movie` | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_single`, `tv_multi`                                          |
-| `--id`     | `-i`  |         | ID del titolo su TheMovieDB (facoltativo - se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
-| `--crew`   | `-c`  |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                    |
-| `--rename` | `-r`  | `False` | Rinomina in automatico il file seguendo il formato consigliato                                                           |
-| `--help`   | `-h`  |         | Mostra il messaggio di aiuto con le informazioni su come usare il comando                                                |
+| Long         | Short | Default | Descrizione                                                                                                              |
+| ------------ | ----- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--type`     | `-t`  | `movie` | Tipo di release, a scelta tra: `movie`, `movie_folder`, `tv_episode`, `tv_single`, `tv_multi`                            |
+| `--template` | `-T`  |         | Template `.jinja` da usare, es. `template_nomecrew.jinja` (facoltativo - se non passato, vengono usati tutti quelli in `config/`) |
+| `--id`       | `-i`  |         | ID del titolo su TheMovieDB (facoltativo - se non passato, verrà fatta una ricerca e chiesto quale risultato utilizzare) |
+| `--crew`     | `-c`  |         | Nome della crew da inserire alla fine del nome del file (facoltativo)                                                    |
+| `--rename`   | `-r`  | `False` | Rinomina in automatico il file seguendo il formato consigliato                                                           |
+| `--help`     | `-h`  |         | Mostra il messaggio di aiuto con le informazioni su come usare il comando                                                |
 
 ## 🧑‍💻 Autori
 

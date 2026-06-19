@@ -19,7 +19,11 @@ def get_keys(type: str) -> Tuple[str, str]:
     return title_key, release_date_key
 
 
-def search(title: str, year: str, type: str) -> str:
+class SearchCancelled(Exception):
+    """Sollevata quando l'utente annulla la selezione del titolo TMDB (es. dalla GUI)."""
+
+
+def search(title: str, year: str, type: str, chooser=None) -> str:
     results = tmdb.search_movie(title, year, type)
 
     title_key, release_date_key = get_keys(type)
@@ -29,32 +33,50 @@ def search(title: str, year: str, type: str) -> str:
     if results["total_results"] == 0 and "-" in title:
         results = tmdb.search_movie(title.split("-")[0], year, type)
 
-    if results["total_results"] == 0:
-        print("\nNessun risultato.")
+    # Normalizza i risultati in una lista semplice, indipendente dal frontend
+    candidates: List[Dict[str, str]] = []
+    for result in results["results"]:
+        release_date = result[release_date_key] if result.get(release_date_key) else ""
+        candidates.append(
+            {
+                "id": str(result["id"]),
+                "title": result[title_key],
+                "year": release_date[:4] if release_date else "n.d.",
+            }
+        )
 
+    # Il chooser decide quale id usare; di default si usa la console (comportamento CLI)
+    chooser = chooser or _console_chooser
+    selected = chooser(candidates)
+
+    if not selected:
+        raise SearchCancelled()
+
+    return selected
+
+
+def _console_chooser(candidates: List[Dict[str, str]]) -> str:
+    """Selezione del titolo TMDB da terminale (default per la CLI)."""
+    total = len(candidates)
+
+    if total == 0:
+        print("\nNessun risultato.")
         id = input("Inserisci manualmente un ID di TMDB (lascia vuoto per terminare lo script): ")
         return id if is_tmdb_id(id) else exit(0)
 
-    if results["total_results"] == 1:
-        print(
-            "Risultato:",
-            results["results"][0][title_key],
-            f"({results['results'][0][release_date_key][:4]})",
-        )
+    if total == 1:
+        print("Risultato:", candidates[0]["title"], f"({candidates[0]['year']})")
 
         choice = input("\nSe il risultato è sbagliato, inserisci un ID di TMDB [lascia vuoto per confermare]: ")
         if is_tmdb_id(choice):
             return choice
 
-        return results["results"][0]["id"]
+        return candidates[0]["id"]
 
-    print("\nHo trovato", results["total_results"], "risultati:\n")
+    print("\nHo trovato", total, "risultati:\n")
 
-    id = 1
-    for result in results["results"]:
-        release_date = result[release_date_key] if result.get(release_date_key) else "n.d."
-        print(f"[{id}] {result[title_key]} ({release_date[:4]})")
-        id += 1
+    for index, candidate in enumerate(candidates, start=1):
+        print(f"[{index}] {candidate['title']} ({candidate['year']})")
 
     choice = input(
         "\nSeleziona un film inserendo il numero della scelta (1, 2, ...) o un ID di TMDB con prefisso id: (es. id:123) [default: 1]: "
@@ -62,10 +84,10 @@ def search(title: str, year: str, type: str) -> str:
     if choice.startswith("id:") and is_tmdb_id(choice[3:], True):
         return choice[3:]
 
-    value = check_input(choice, id)
-    print("Film selezionato:", results["results"][value - 1][title_key] + "\n")
+    value = check_input(choice, total + 1)
+    print("Film selezionato:", candidates[value - 1]["title"] + "\n")
 
-    return results["results"][value - 1]["id"]
+    return candidates[value - 1]["id"]
 
 
 def get(id: str, type: str) -> Dict:
